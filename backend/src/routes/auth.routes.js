@@ -7,11 +7,11 @@ const authRoutes = express.Router()
 
 // Define auth routes
 
-// Test route
-authRoutes.get("/test", authController.test)
 
-// Check email route
+
+// Authentication Routes
 authRoutes.post("/check-email", authController.checkEmail)
+
 
 
 module.exports = authRoutes;
