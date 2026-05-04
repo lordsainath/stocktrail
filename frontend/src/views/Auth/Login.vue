@@ -1,0 +1,161 @@
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { toast } from 'vue-sonner';
+import apiClient from '../../services/axios';
+import useUserStore from '../../stores/userStore';
+import { storeToRefs } from 'pinia';
+import { useThemeStore } from '../../stores/themeStore';
+
+const router = useRouter();
+const userStore = useUserStore();
+const themeStore = useThemeStore();
+const { theme } = storeToRefs(themeStore);
+
+const email = ref('');
+const password = ref('');
+const pin = ref('');
+const loading = ref(false);
+const step = ref('credentials');
+const tempToken = ref(userStore.tempToken || '');
+
+const handleCredentials = async () => {
+  if (!email.value || !password.value) {
+    toast.error('Email and password are required');
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const response = await apiClient.post('/auth/login', {
+      email: email.value,
+      password: password.value,
+    });
+
+    tempToken.value = response.data.data.tempToken;
+    userStore.setTempToken(tempToken.value);
+    step.value = 'pin';
+    toast.success('Password verified. Enter your PIN to continue.');
+  } catch (e) {
+    const message = e?.response?.data?.message || e?.message || 'Login failed';
+    toast.error(message);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handlePin = async () => {
+  if (!pin.value) {
+    toast.error('PIN is required');
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const response = await apiClient.post('/auth/verify-pin', {
+      tempToken: tempToken.value,
+      pin: pin.value,
+    });
+
+    userStore.setSession(response.data.data);
+    userStore.setTempToken('');
+    toast.success('Login successful');
+    router.push('/');
+  } catch (e) {
+    const message = e?.response?.data?.message || e?.message || 'PIN verification failed';
+    toast.error(message);
+  } finally {
+    loading.value = false;
+  }
+}
+</script>
+
+<template>
+  <div class="min-h-screen bg-linear-to-br from-slate-50 via-white to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-6 transition-colors duration-300">
+    <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Left info card -->
+      <div class="bg-white/80 dark:bg-slate-800/60 backdrop-blur-md rounded-2xl shadow-2xl p-8 md:p-12 flex flex-col justify-between border border-slate-200 dark:border-slate-700">
+        <div>
+          <div class="text-sm text-cyan-600 dark:text-cyan-400 font-semibold tracking-widest uppercase">StockTrail Access</div>
+          <h2 class="mt-4 text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">Market-ready workspace for focused investors.</h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-300 leading-relaxed">Continue with secure sign in, then verify PIN to unlock your dashboard, watchlists, and portfolio controls.</p>
+        </div>
+
+        <div class="mt-8 grid grid-cols-2 gap-4">
+          <div class="bg-linear-to-br from-cyan-50 to-cyan-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 border border-cyan-200 dark:border-slate-600">
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Security</div>
+            <div class="font-semibold text-slate-900 dark:text-white">2-step Login</div>
+          </div>
+          <div class="bg-linear-to-br from-indigo-50 to-indigo-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 border border-indigo-200 dark:border-slate-600">
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Access</div>
+            <div class="font-semibold text-slate-900 dark:text-white">PIN Protected</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right form card -->
+      <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-12 border border-slate-200 dark:border-slate-700">
+        <div class="flex flex-col items-center mb-8">
+          <div class="w-14 h-14 bg-linear-to-br from-cyan-400 to-indigo-600 dark:from-cyan-500 dark:to-indigo-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14" />
+            </svg>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">{{ step === 'credentials' ? 'Welcome Back' : 'Verify PIN' }}</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">{{ step === 'credentials' ? 'Sign in to continue with StockTrail.' : 'Enter the 4-digit PIN linked to your account.' }}</p>
+        </div>
+
+        <form v-if="step === 'credentials'" @submit.prevent="handleCredentials" class="space-y-5">
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-200">Email Address</label>
+            <input v-model="email" type="email" placeholder="you@example.com" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" required />
+          </div>
+
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-200">Password</label>
+            <input v-model="password" type="password" placeholder="••••••••" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" required />
+          </div>
+
+          <button :disabled="loading" type="submit" class="w-full mt-6 py-3 px-4 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            <span v-if="!loading">Continue To PIN</span>
+            <span v-else class="flex items-center justify-center gap-2">
+              <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Signing in...
+            </span>
+          </button>
+
+          <div class="text-center text-slate-600 dark:text-slate-400 text-sm mt-4">
+            New to StockTrail? <router-link to="/auth/register/email" class="text-cyan-600 dark:text-cyan-400 font-semibold hover:underline">Create account</router-link>
+          </div>
+        </form>
+
+        <form v-else @submit.prevent="handlePin" class="space-y-5">
+          <div>
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-200">4-digit PIN</label>
+            <input v-model="pin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all tracking-[0.4em] text-center text-2xl font-bold" required />
+          </div>
+
+          <button :disabled="loading" type="submit" class="w-full mt-6 py-3 px-4 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            <span v-if="!loading">Unlock Dashboard</span>
+            <span v-else class="flex items-center justify-center gap-2">
+              <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Verifying PIN...
+            </span>
+          </button>
+
+          <button type="button" @click="step = 'credentials'; userStore.setTempToken('')" class="w-full py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all font-semibold">
+            Back to login
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped></style>

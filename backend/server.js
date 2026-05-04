@@ -1,35 +1,37 @@
-// injecting environment variables from .env file
-const dotenv = require("dotenv")
+import dotenv from "dotenv";
 dotenv.config();
 
+import app from "./src/app.js";
+import connectDB from "./src/config/db.js";
 
-// importing necessary modules
-const app = require('./src/app');
-const connectDB = require('./src/config/db');
+const PORT = process.env.PORT || 5000;
 
-
-
-// Port configuration
-const port = process.env.PORT || 5000;
-
-
-// function to start the server
 const startServer = async () => {
-    try {
+  try {
+    // Connect to database
+    await connectDB();
 
-        // connect to the database
-        await connectDB();
-        app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
-        });
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`[SERVER] 🚀 Server running on port ${PORT}`);
+      console.log(`[SERVER] Environment: ${process.env.NODE_ENV || "development"}`);
+    });
+  } catch (error) {
+    console.error("[SERVER] ❌ Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
 
-    } catch (error) {
-        console.error("Failed to connect to the database:", error);
-        process.exit(1);
-    }
-}
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (error) => {
+  console.error("[PROCESS] ❌ Unhandled Rejection:", error.message);
+  process.exit(1);
+});
 
-// Start the server
+// Handle uncaught exceptions
+process.on("uncaughtException", (error) => {
+  console.error("[PROCESS] ❌ Uncaught Exception:", error.message);
+  process.exit(1);
+});
+
 startServer();
-
-

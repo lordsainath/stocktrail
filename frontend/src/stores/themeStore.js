@@ -9,7 +9,7 @@ export const useThemeStore = defineStore("theme", () => {
 
     // watcher to update theme in localstorage and add dark tailwind css class to document root
     watch(theme, (value) => {
-        console.log('Theme changed to : ', value);
+        
         localStorage.setItem('theme', value);
 
         if (value === 'dark') {
