@@ -67,9 +67,33 @@ const routes = [
         component: () => import('../layout/AppLayout.vue'),
         children: [
             {
-                path: '',
+                path: 'dashboard',
                 name: 'Dashboard',
                 component: () => import('../views/App/Dashboard.vue')
+            }, {
+                path: 'portfolio',
+                name: 'Portfolio',
+                component: () => import('../views/App/Portfolio.vue')
+            }, {
+                path: 'profile',
+                name: 'Profile',
+                component: () => import('../views/App/Profile.vue')
+            }, {
+                path: 'settings',
+                name: 'Settings',
+                component: () => import('../views/App/Settings.vue')
+            }, {
+                path: 'watchlist',
+                name: 'WatchList',
+                component: () => import('../views/App/WatchList.vue')
+            }, {
+                path: 'bank-details',
+                name: 'BankDetails',
+                component: () => import('../views/App/BankDetails.vue')
+            }, {
+                path: 'company/:symbol',
+                name: 'CompanyDetails',
+                component: () => import('../views/App/CompanyDetails.vue')
             }
         ]
     },

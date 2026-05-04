@@ -8,7 +8,7 @@ import { useRegister } from '../../composables/useRegister';
 const router = useRouter();
 const { formData } = useRegister();
 const loading = ref(false);
-const panStatus = ref('idle'); // idle | checking | valid | invalid
+const panStatus = ref('idle'); 
 const panMessage = ref('');
 const aadhaarStatus = ref('idle');
 const aadhaarMessage = ref('');
@@ -75,13 +75,16 @@ const debouncedCheckAadhaar = () => {
 watch(() => formData.panNumber, debouncedCheckPan);
 watch(() => formData.aadhaarNumber, debouncedCheckAadhaar);
 
+
+
+// Final Registration Submission
 const handleContinue = async () => {
   if (!formData.panNumber || !formData.aadhaarNumber) {
     toast.error('PAN number and Aadhaar number are required');
     return;
   }
 
-  // Client-side format validation
+
   const pan = String(formData.panNumber || '').toUpperCase().trim();
   if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan)) {
     toast.error('PAN format is invalid (expected: ABCDE1234F)');
@@ -124,6 +127,8 @@ const handleContinue = async () => {
     loading.value = false;
   }
 };
+
+
 </script>
 
 <template>
@@ -138,9 +143,7 @@ const handleContinue = async () => {
       <input v-model.trim="formData.aadhaarNumber" type="text" maxlength="12" placeholder="123412341234" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
       <p v-if="aadhaarMessage" class="mt-2 text-sm" :class="aadhaarStatus === 'valid' ? 'text-emerald-600' : aadhaarStatus === 'checking' ? 'text-sky-600' : 'text-slate-500'">{{ aadhaarMessage }}</p>
     </div>
-    <div class="rounded-xl border border-cyan-100 bg-cyan-50/70 p-4 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-700/60 dark:text-slate-200">
-      This step submits your account details to the backend and sends the OTP to your email.
-    </div>
+   
     <div class="mt-6 flex gap-4">
       <button @click="handleBack" class="flex-1 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all font-medium">Back</button>
       <button :disabled="loading" @click="handleContinue" class="flex-1 py-3 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50">Continue</button>

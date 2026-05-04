@@ -91,7 +91,7 @@ const stepTitles = {
           </div>
 
           <!-- Step content -->
-          <div class="mt-8">
+          <div class="mt-8 h-[25vh] overflow-x-scroll p-5">
             <router-view />
           </div>
 

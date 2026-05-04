@@ -1,4 +1,4 @@
-<!-- <script setup>
+  <script setup>
 import { onMounted, ref } from 'vue';
 import { toast } from 'vue-sonner';
 import apiClient from '../../services/axios';
@@ -111,18 +111,7 @@ const formatCurrency = (value) => new Intl.NumberFormat('en-IN', {
       </aside>
     </section>
   </div>
-</template> -->
+</template> 
 
 
 
-<script setup>
-
-</script>
-
-<template>
-  <h1>HEllo from dashboard</h1>
-</template>
-
-<style scoped>
-
-</style>
