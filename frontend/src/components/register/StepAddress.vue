@@ -1,11 +1,14 @@
 <script setup>
 import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router';
-import { useRegister } from '../../composables/useRegister';
+
 import { hasRequiredAddress } from '../../utils/registration';
+import useRegisterStore from '../../stores/registerStore';
 
 const router = useRouter();
-const { formData } = useRegister();
+const registerStore = useRegisterStore();
+const formData = registerStore.formData;
+
 
 const handleBack = () => router.back();
 const handleContinue = () => {

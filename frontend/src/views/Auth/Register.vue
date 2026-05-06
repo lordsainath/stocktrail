@@ -16,7 +16,7 @@ const currentIndex = computed(() => {
   return idx >= 0 ? idx : 0;
 });
 
-const progressWidth = computed(() => ((currentIndex.value + 1) / steps.length) * 100 + '%');
+const progressWidth = computed(() => (currentIndex.value / (steps.length - 1)) * 100 + '%');
 const stepTitles = {
   'RegisterEmail': 'Enter Your Email',
   'RegisterBasic': 'Basic Details',
@@ -46,7 +46,7 @@ const stepTitles = {
           </div>
           <div class="bg-linear-to-br from-indigo-50 to-indigo-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-4 border border-indigo-200 dark:border-slate-600 transition-all">
             <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Progress</div>
-            <div class="font-semibold text-slate-900 dark:text-white text-lg">{{ Math.round(((currentIndex+1)/steps.length)*100) }}% Complete</div>
+            <div class="font-semibold text-slate-900 dark:text-white text-lg">{{ Math.round((currentIndex/(steps.length-1))*100) }}% Complete</div>
           </div>
         </div>
       </div>

@@ -1,16 +1,18 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
-import { useRegister } from '../../composables/useRegister';
+
+import useRegisterStore from '../../stores/registerStore';
 const router = useRouter();
-const { formData, checkUsername } = useRegister();
+const registerStore = useRegisterStore();
+const formData = registerStore.formData;
 
 const handleBack = () => router.back();
 const handleContinue = async () => {
   if (!formData.username) return toast.error('Username is required');
   if (formData.username.length < 3) return toast.error('Username must be at least 3 characters long');
   try {
-    await checkUsername();
+    await registerStore.checkUsername();
     router.push({ name: 'RegisterKYC' });
   } catch (e) {
     toast.error(e?.message || 'Username check failed');

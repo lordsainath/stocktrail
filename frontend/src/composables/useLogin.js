@@ -25,7 +25,8 @@ export function useLogin() {
     loading.value = true;
     try {
       const response = await loginRequest(email.value, password.value);
-      tempToken.value = response?.data?.data?.tempToken || '';
+      const temp = response?.data?.tempToken || response?.tempToken || response?.data?.data?.tempToken || '';
+      tempToken.value = temp;
       userStore.setTempToken(tempToken.value);
       step.value = 'pin';
       toast.success('Password verified. Enter your PIN to continue.');
@@ -45,7 +46,8 @@ export function useLogin() {
     loading.value = true;
     try {
       const response = await verifyLoginPin(tempToken.value, pin.value);
-      userStore.setSession(response?.data || null);
+      const sessionPayload = response?.data?.data || response?.data || response || null;
+      userStore.setSession(sessionPayload);
       userStore.setTempToken('');
       toast.success('Login successful');
       router.push('/');
