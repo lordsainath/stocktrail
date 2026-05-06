@@ -1,14 +1,17 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { toast } from 'vue-sonner';
 import { useRegister } from '../../composables/useRegister';
+import { isValidPassword } from '../../utils/registration';
+
 const router = useRouter();
 const { formData } = useRegister();
 
 const handleBack = () => router.back();
 const handleContinue = () => {
-  if (!formData.name) return;
-  if (!formData.password) return;
-  if (formData.password !== formData.confirmPassword) return;
+  if (!formData.name) return toast.error('Full name is required');
+  if (!isValidPassword(formData.password)) return toast.error('Password must be at least 8 characters');
+  if (formData.password !== formData.confirmPassword) return toast.error('Passwords do not match');
   router.push({ name: 'RegisterAddress' });
 }
 </script>

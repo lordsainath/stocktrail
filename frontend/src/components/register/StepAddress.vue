@@ -2,14 +2,14 @@
 import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router';
 import { useRegister } from '../../composables/useRegister';
+import { hasRequiredAddress } from '../../utils/registration';
+
 const router = useRouter();
 const { formData } = useRegister();
 
 const handleBack = () => router.back();
 const handleContinue = () => {
-  const { line1, city, state, country } = formData.address;
-
-  if (!line1 || !city || !state || !country) {
+  if (!hasRequiredAddress(formData.address)) {
     toast.error('Address line, city, state, and country are required');
     return;
   }

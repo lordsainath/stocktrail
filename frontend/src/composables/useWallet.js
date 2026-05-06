@@ -1,6 +1,8 @@
 import { computed, ref } from 'vue';
 import { toast } from 'vue-sonner';
-import apiClient from '../services/axios';
+import { fetchWalletSummary, verifyTransactionPin as verifyTransactionPinRequest } from '../services/wallet.service';
+import { formatCurrency } from '../utils/wallet';
+import { getErrorMessage } from '../utils/error';
 
 
 export function useWallet() {
@@ -17,23 +19,19 @@ export function useWallet() {
         if (!walletVisible.value) return 'USD •••••';
         if (!walletLoaded.value) return 'Loading...';
 
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            maximumFractionDigits: 2,
-        }).format(walletBalance.value || 0);
+        return formatCurrency(walletBalance.value);
     });
 
     const fetchWalletBalance = async () => {
         try {
             walletLoading.value = true;
 
-            const response = await apiClient.get('/wallet/summary');
+            const response = await fetchWalletSummary();
 
-            walletBalance.value = response?.data?.balance || 0;
+            walletBalance.value = response?.data?.data?.balance || 0;
             walletLoaded.value = true;
         } catch (error) {
-            toast.error(error);
+            toast.error(getErrorMessage(error, 'Failed to fetch wallet balance'));
         } finally {
             walletLoading.value = false;
         }
@@ -58,9 +56,7 @@ export function useWallet() {
         try {
             verifyingWalletPin.value = true;
 
-            await apiClient.post('/auth/verify-transaction-pin', {
-                pin: walletPin.value,
-            });
+            await verifyTransactionPinRequest(walletPin.value);
 
             await fetchWalletBalance();
 
@@ -69,7 +65,7 @@ export function useWallet() {
 
             toast.success('Wallet amount is now visible');
         } catch (error) {
-            toast.error(error);
+            toast.error(getErrorMessage(error, 'Wallet PIN verification failed'));
         } finally {
             verifyingWalletPin.value = false;
         }

@@ -2,27 +2,18 @@
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router';
-import apiClient from '../../services/axios';
 import { useRegister } from '../../composables/useRegister';
 
 const router = useRouter();
-const { formData } = useRegister();
+const { formData, verifyOtpCode } = useRegister();
 const loading = ref(false);
 
 const handleBack = () => router.back();
 
 const handleContinue = async () => {
-  if (!formData.otp) {
-    toast.error('OTP is required');
-    return;
-  }
-
   loading.value = true;
   try {
-    await apiClient.post('/auth/verify-otp', {
-      email: formData.email,
-      otp: formData.otp,
-    });
+    await verifyOtpCode();
 
     toast.success('Email verified. Set your PIN to finish registration.');
     router.push({ name: 'RegisterPIN' });

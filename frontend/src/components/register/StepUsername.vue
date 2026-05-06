@@ -13,7 +13,6 @@ const handleContinue = async () => {
     await checkUsername();
     router.push({ name: 'RegisterKYC' });
   } catch (e) {
-    console.error(e);
     toast.error(e?.message || 'Username check failed');
   }
 }

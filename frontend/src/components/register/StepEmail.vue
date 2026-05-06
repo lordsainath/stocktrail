@@ -1,17 +1,16 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
-import apiClient from '../../services/axios';
 import { useRegister } from '../../composables/useRegister';
 
 const router = useRouter();
-const { formData } = useRegister();
+const { formData, checkEmail } = useRegister();
 
 const checkValid = async () => {
     if (!formData.email) return toast.error('Email is required');
     try {
-        const response = await apiClient.post('/auth/check-email', { email: formData.email });
-        const status = response.data.data.status;
+    const response = await checkEmail(formData.email);
+    const status = response?.data?.data?.status;
         if (status === 'NEW_USER') return router.push({ name: 'RegisterBasic' });
         if (status === 'NOT_VERIFIED') return router.push({ name: 'RegisterOTP' });
         if (status === 'NO_PIN') return router.push({ name: 'RegisterPIN' });
@@ -21,7 +20,7 @@ const checkValid = async () => {
         }
     } catch (e) {
         console.error(e);
-        toast.error('Failed to check email');
+      toast.error(e?.message || 'Failed to check email');
     }
 }
 </script>

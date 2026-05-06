@@ -1,73 +1,21 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { toast } from 'vue-sonner';
-import apiClient from '../../services/axios';
-import useUserStore from '../../stores/userStore';
 import { storeToRefs } from 'pinia';
 import { useThemeStore } from '../../stores/themeStore';
+import { useLogin } from '../../composables/useLogin';
 
-const router = useRouter();
-const userStore = useUserStore();
 const themeStore = useThemeStore();
 const { theme } = storeToRefs(themeStore);
 
-const email = ref('');
-const password = ref('');
-const pin = ref('');
-const loading = ref(false);
-const step = ref('credentials');
-const tempToken = ref(userStore.tempToken || '');
-
-const handleCredentials = async () => {
-  if (!email.value || !password.value) {
-    toast.error('Email and password are required');
-    return;
-  }
-
-  loading.value = true;
-  try {
-    const response = await apiClient.post('/auth/login', {
-      email: email.value,
-      password: password.value,
-    });
-
-    tempToken.value = response.data.data.tempToken;
-    userStore.setTempToken(tempToken.value);
-    step.value = 'pin';
-    toast.success('Password verified. Enter your PIN to continue.');
-  } catch (e) {
-    const message = e?.response?.data?.message || e?.message || 'Login failed';
-    toast.error(message);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handlePin = async () => {
-  if (!pin.value) {
-    toast.error('PIN is required');
-    return;
-  }
-
-  loading.value = true;
-  try {
-    const response = await apiClient.post('/auth/verify-pin', {
-      tempToken: tempToken.value,
-      pin: pin.value,
-    });
-
-    userStore.setSession(response.data.data);
-    userStore.setTempToken('');
-    toast.success('Login successful');
-    router.push('/');
-  } catch (e) {
-    const message = e?.response?.data?.message || e?.message || 'PIN verification failed';
-    toast.error(message);
-  } finally {
-    loading.value = false;
-  }
-}
+const {
+  email,
+  password,
+  pin,
+  loading,
+  step,
+  handleCredentials,
+  handlePin,
+  backToCredentials,
+} = useLogin();
 </script>
 
 <template>
@@ -149,7 +97,7 @@ const handlePin = async () => {
             </span>
           </button>
 
-          <button type="button" @click="step = 'credentials'; userStore.setTempToken('')" class="w-full py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all font-semibold">
+          <button type="button" @click="backToCredentials" class="w-full py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all font-semibold">
             Back to login
           </button>
         </form>

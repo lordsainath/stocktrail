@@ -2,7 +2,9 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { toast } from 'vue-sonner';
 import VOtpInput from 'vue3-otp-input';
-import apiClient from '../../services/axios';
+import { addBankAccount as addBankAccountRequest, addMoneyToWallet as addMoneyToWalletRequest, fetchWalletSummary } from '../../services/wallet.service';
+import { getErrorMessage } from '../../utils/error';
+import { formatCurrency, maskAccountNumber } from '../../utils/wallet';
 
 
 const loading = ref(false);
@@ -29,37 +31,23 @@ const addMoneyForm = reactive({
   loading: false,
 });
 
-const formattedBalance = computed(() => new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 2,
-}).format(walletBalance.value || 0));
+const formattedBalance = computed(() => formatCurrency(walletBalance.value));
 
-const formatTransferAmount = (value) => new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 2,
-}).format(Number(value || 0));
+const formatTransferAmount = (value) => formatCurrency(value);
 
 const verifiedCount = computed(() => linkedAccounts.value.filter((item) => item.status === 'VERIFIED').length);
 const pendingCount = computed(() => linkedAccounts.value.filter((item) => item.status === 'PENDING').length);
 
-const maskedAccount = (accountNumber) => {
-  const last4 = String(accountNumber || '').slice(-4);
-  return `XXXXXX${last4}`;
-};
-
 const fetchSummary = async () => {
   try {
     loading.value = true;
-    const response = await apiClient.get('/wallet/summary');
-  
-    
-    walletBalance.value = response?.data?.data?.balance || 0;
-    linkedAccounts.value = response?.data?.data?.bankAccounts || [];
-    recentTransfers.value = response?.data?.data?.transactions || [];
+    const response = await fetchWalletSummary();
+
+    walletBalance.value = response?.data?.balance || 0;
+    linkedAccounts.value = response?.data?.bankAccounts || [];
+    recentTransfers.value = response?.data?.transactions || [];
   } catch (error) {
-    toast.error(error);
+    toast.error(getErrorMessage(error, 'Failed to fetch wallet summary'));
   } finally {
     loading.value = false;
   }
@@ -73,7 +61,7 @@ const addBankAccount = async () => {
 
   try {
     addBankForm.loading = true;
-    const response = await apiClient.post('/wallet/banks', {
+    const response = await addBankAccountRequest({
       bankName: addBankForm.bankName,
       accountHolder: addBankForm.accountHolder,
       accountNumber: addBankForm.accountNumber,
@@ -90,7 +78,7 @@ const addBankAccount = async () => {
     showAddBankModal.value = false;
     await fetchSummary();
   } catch (error) {
-    toast.error(error);
+    toast.error(getErrorMessage(error, 'Failed to add bank account'));
   } finally {
     addBankForm.loading = false;
   }
@@ -132,7 +120,7 @@ const addMoney = async () => {
 
   try {
     addMoneyForm.loading = true;
-    const response = await apiClient.post('/wallet/add-money', {
+    const response = await addMoneyToWalletRequest({
       amount,
       bankAccountId: addMoneyForm.bankAccountId || null,
       pin: addMoneyForm.pin,
@@ -142,7 +130,7 @@ const addMoney = async () => {
     showAddMoneyModal.value = false;
     await fetchSummary();
   } catch (error) {
-    toast.error(error);
+    toast.error(getErrorMessage(error, 'Failed to add money'));
   } finally {
     addMoneyForm.loading = false;
   }
@@ -210,7 +198,7 @@ onMounted(fetchSummary);
                   </div>
                   <div>
                     <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">{{ account.bankName }}</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ account.accountHolder }} • {{ maskedAccount(account.accountNumber) }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ account.accountHolder }} • {{ maskAccountNumber(account.accountNumber) }}</p>
                     <p class="mt-1 text-xs text-slate-600 dark:text-slate-300">IFSC: {{ account.ifsc }} • Type: {{ account.accountType }}</p>
                   </div>
                 </div>
@@ -280,7 +268,7 @@ onMounted(fetchSummary);
           <select v-model="addMoneyForm.bankAccountId" class="mt-4 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <option value="">Select bank account</option>
             <option v-for="account in linkedAccounts" :key="account._id" :value="account._id">
-              {{ account.bankName }} • {{ maskedAccount(account.accountNumber) }}
+              {{ account.bankName }} • {{ maskAccountNumber(account.accountNumber) }}
             </option>
           </select>
 

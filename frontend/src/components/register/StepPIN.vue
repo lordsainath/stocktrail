@@ -2,27 +2,18 @@
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router';
-import apiClient from '../../services/axios';
 import { useRegister } from '../../composables/useRegister';
 
 const router = useRouter();
-const { formData } = useRegister();
+const { formData, setPinCode } = useRegister();
 const loading = ref(false);
 
 const handleBack = () => router.back();
 
 const handleFinish = async () => {
-  if (!formData.pin) {
-    toast.error('PIN is required');
-    return;
-  }
-
   loading.value = true;
   try {
-    await apiClient.post('/auth/set-pin', {
-      email: formData.email,
-      pin: formData.pin,
-    });
+    await setPinCode();
 
     toast.success('PIN set successfully. Please login to continue.');
     router.push('/auth/login');
