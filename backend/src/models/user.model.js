@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     pin: { type: String },
 
-    photoUrl: { type: String },
+    photoUrl: { type: String  , 
+       default : 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg'
+    },
 
     panNumber: { type: String, uppercase: true, trim: true },
     aadhaarNumber: { type: String, trim: true },

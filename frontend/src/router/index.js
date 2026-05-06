@@ -65,6 +65,7 @@ const routes = [
     }, {
         path: '/',
         component: () => import('../layout/AppLayout.vue'),
+        redirect: '/dashboard',
         children: [
             {
                 path: 'dashboard',
@@ -123,7 +124,7 @@ router.beforeEach(to => {
     const token = localStorage.getItem('token');
 
     if (to.path.startsWith('/auth')) {
-        if (token) return '/';
+        if (token) return '/dashboard';
     } else {
         if (!token) return '/auth/login';
     }

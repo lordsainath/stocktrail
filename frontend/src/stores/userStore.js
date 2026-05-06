@@ -45,6 +45,11 @@ const useUserStore = defineStore('user', () => {
 			sessionStorage.removeItem('tempToken');
 		}
 	};
+	 const updateUser = (payload) => {
+        const current = user.value || {};
+        user.value = { ...current, ...payload };
+        localStorage.setItem('user', JSON.stringify(user.value));
+    };
 
 	const setUser = (profile) => {
 		user.value = profile || null;
@@ -76,6 +81,7 @@ const useUserStore = defineStore('user', () => {
 		setTempToken,
 		setUser,
 		clearSession,
+		updateUser
 	};
 })
 
