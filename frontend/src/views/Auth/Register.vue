@@ -29,7 +29,7 @@ const stepTitles = {
 </script>
 
 <template>
-  <div class="min-h-screen bg-linear-to-br from-slate-50 via-white to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-6 transition-colors duration-300">
+  <div class="min-h-[calc(100vh-65px)] bg-linear-to-br from-slate-50 via-white to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-6 transition-colors duration-300">
     <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Left info card -->
       <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-12 flex flex-col justify-between border border-slate-200 dark:border-slate-700 transition-all">

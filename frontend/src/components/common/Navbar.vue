@@ -120,7 +120,7 @@ const goTo = async (path) => {
                 <template v-else>
 
                     <!-- WALLET -->
-                    <button
+                    <!-- <button
                         @click="toggleWalletVisibility"
                         class="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
 
@@ -141,7 +141,7 @@ const goTo = async (path) => {
                                 : 'fa-regular fa-eye'"
                             class="text-slate-500">
                         </i>
-                    </button>
+                    </button> -->
 
                     <!-- USER -->
                     <div class="text-right hidden sm:block">
@@ -236,7 +236,7 @@ const goTo = async (path) => {
     </div>
 
     <!-- WALLET MODAL -->
-    <div
+    <!-- <div
         v-if="showWalletPinModal"
         class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
 
@@ -283,5 +283,5 @@ const goTo = async (path) => {
                 </button>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
