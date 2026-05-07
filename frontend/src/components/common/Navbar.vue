@@ -78,7 +78,7 @@ const goTo = async (path) => {
                     S
                 </p>
 
-                <h1 class="font-semibold tracking-wide">
+                <h1 class="font-semibold tracking-wide dark:text-white">
                     StockTrail
                 </h1>
             </div>
@@ -89,7 +89,7 @@ const goTo = async (path) => {
                 <!-- THEME -->
                 <div
                     @click="themeStore.toggleTheme"
-                    class="dark:bg-darksecondary bg-secondary px-3 py-2 rounded-md border border-[#e2e8f0] dark:border-[#30363d] cursor-pointer">
+                    class="dark:bg-darksecondary bg-secondary px-3 py-2 rounded-md border dark:text-white border-[#e2e8f0] dark:border-[#30363d] cursor-pointer">
 
                     <Sun size="18" v-show="theme === 'dark'" />
 
@@ -194,7 +194,7 @@ const goTo = async (path) => {
 
                             <button
                                 @click="goTo('/profile')"
-                                class="w-full px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3">
+                                class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3">
 
                                 <i class="fa-regular fa-user text-slate-500"></i>
 
@@ -203,7 +203,7 @@ const goTo = async (path) => {
 
                             <button
                                 @click="goTo('/bank-details')"
-                                class="w-full px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3">
+                                class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3">
 
                                 <i class="fa-solid fa-id-card text-slate-500"></i>
 
@@ -212,7 +212,7 @@ const goTo = async (path) => {
 
                             <button
                                 @click="goTo('/settings')"
-                                class="w-full px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3">
+                                class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3">
 
                                 <i class="fa-solid fa-gear text-slate-500"></i>
 
@@ -221,7 +221,7 @@ const goTo = async (path) => {
 
                             <button
                                 @click="handleLogout"
-                                class="w-full px-4 py-3 text-sm text-left font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition flex items-center gap-3 rounded-b-2xl">
+                                class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition flex items-center gap-3 rounded-b-2xl">
 
                                 <i
                                     class="fa-solid fa-arrow-right-from-bracket"></i>

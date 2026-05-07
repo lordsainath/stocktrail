@@ -37,6 +37,10 @@ export function useLogin() {
     }
   };
 
+   const resetPin = () => {
+    pin.value = '';
+  }
+
   const handlePin = async () => {
     if (!pin.value) {
       toast.error('PIN is required');
@@ -46,17 +50,21 @@ export function useLogin() {
     loading.value = true;
     try {
       const response = await verifyLoginPin(tempToken.value, pin.value);
+      console.log(response)
       const sessionPayload = response?.data?.data || response?.data || response || null;
       userStore.setSession(sessionPayload);
       userStore.setTempToken('');
       toast.success('Login successful');
       router.push('/');
     } catch (error) {
+        resetPin();
       toast.error(getErrorMessage(error, 'PIN verification failed'));
     } finally {
       loading.value = false;
     }
   };
+
+ 
 
   const backToCredentials = () => {
     step.value = 'credentials';
@@ -73,6 +81,7 @@ export function useLogin() {
     handleCredentials,
     handlePin,
     backToCredentials,
+    resetPin
   };
 }
 

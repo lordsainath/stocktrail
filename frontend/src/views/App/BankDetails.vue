@@ -170,10 +170,7 @@ onMounted(fetchSummary);
             <button @click="openAddMoneyModal" class="px-4 py-2.5 cursor-pointer rounded-xl bg-linear-to-r from-emerald-500 to-teal-600 text-white font-semibold shadow-lg hover:opacity-95 transition">
             + Add Money
           </button>
-          <!-- Add new click event -->
-          <button class="px-4 py-2.5 cursor-pointer rounded-xl bg-linear-to-r from-red-500 to-red-600 text-white font-semibold shadow-lg hover:opacity-95 transition">
-           Withdraw
-          </button>
+          
         
         </div>
       </section>

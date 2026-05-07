@@ -108,12 +108,12 @@ onMounted(fetchProfile);
           <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage your login protection from here.</p>
 
           <div class="mt-5 space-y-3">
-            <button @click="openPasswordModal" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-3 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+            <button @click="openPasswordModal" class="w-full rounded-xl border cursor-pointer border-slate-200 dark:border-slate-700 p-3 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition">
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Change Password</p>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Open secure form to update your password.</p>
             </button>
 
-            <button @click="openPinModal" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-3 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+            <button @click="openPinModal" class="w-full rounded-xl border cursor-pointer border-slate-200 dark:border-slate-700 p-3 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition">
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Change PIN</p>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Update your 4-digit transaction PIN.</p>
             </button>
