@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useThemeStore } from '../../stores/themeStore';
 import { storeToRefs } from 'pinia';
@@ -26,6 +26,10 @@ const stepTitles = {
   'RegisterOTP': 'Enter OTP',
   'RegisterPIN': 'Set a PIN'
 };
+
+onUnmounted(()=>{
+  
+})
 </script>
 
 <template>

@@ -1,21 +1,39 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref, nextTick } from 'vue';
 import { toast } from 'vue-sonner';
 import useRegisterStore from '../../stores/registerStore';
+import BaseInput from '../base/BaseInput.vue';
+import BaseButton from '../base/BaseButton.vue';
+import { registerEmailSchema, validateForm } from '../../utils/validationSchemas';
 
 
 const router = useRouter();
 
 const registerStore = useRegisterStore();
 const formData = registerStore.formData;
+const errors = ref({});
+const emailRef = ref(null)
 
 
 const checkValid = async () => {
+  // Validate email format first
+  const { isValid, errors: validationErrors } = await validateForm(registerEmailSchema, {
+    email: formData.email,
+  });
 
-  if (!formData.email) return toast.error('Email is required');
+  if (!isValid) {
+    errors.value = validationErrors;
+    await nextTick()
+    if (emailRef.value?.focus) emailRef.value.focus()
+    return;
+  }
+
+  errors.value = {};
+  
   try {
     const response = await registerStore.checkEmail(formData.email);
-    
+
     const status = response?.data?.status;
     if (status === 'NEW_USER') return router.push({ name: 'RegisterBasic' });
     if (status === 'NOT_VERIFIED') return router.push({ name: 'RegisterOTP' });
@@ -33,14 +51,13 @@ const checkValid = async () => {
 
 <template>
   <div class="space-y-4">
-    <div>
-      <label class="text-sm font-medium text-slate-700 dark:text-slate-200">Email Address</label>
-      <input @keydown.enter="checkValid" v-model="formData.email" type="email" placeholder="you@example.com"
-        class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    </div>
+    <BaseInput ref="emailRef" v-model="formData.email" label="Email Address" type="email" placeholder="you@example.com"
+      :error="errors.email"  @input="errors.email = null"
+      @keydown.enter="checkValid" required />
     <div class="mt-6 flex justify-end gap-3">
-      <button @click="checkValid"
-        class="px-6 py-3 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all">Continue</button>
+      <BaseButton variant="primary" @click="checkValid">
+        Continue
+      </BaseButton>
     </div>
   </div>
 </template>

@@ -4,6 +4,7 @@ import { toast } from 'vue-sonner';
 import { login as loginRequest, verifyLoginPin } from '../services/auth.service';
 import useUserStore from '../stores/userStore';
 import { getErrorMessage } from '../utils/error';
+import { loginCredentialsSchema, loginPinSchema, validateForm } from '../utils/validationSchemas';
 
 export function useLogin() {
   const router = useRouter();
@@ -15,13 +16,22 @@ export function useLogin() {
   const loading = ref(false);
   const step = ref('credentials');
   const tempToken = ref(userStore.tempToken || '');
+  const errors = ref({});
 
   const handleCredentials = async () => {
-    if (!email.value || !password.value) {
-      toast.error('Email and password are required');
-      return;
+    // Validate form data
+    const { isValid, errors: validationErrors } = await validateForm(loginCredentialsSchema, {
+      email: email.value,
+      password: password.value,
+    });
+
+    if (!isValid) {
+      errors.value = validationErrors;
+      const firstKey = Object.keys(validationErrors)[0];
+      return { success: false, firstError: firstKey };
     }
 
+    errors.value = {};
     loading.value = true;
     try {
       const response = await loginRequest(email.value, password.value);
@@ -35,6 +45,7 @@ export function useLogin() {
     } finally {
       loading.value = false;
     }
+    return { success: true };
   };
 
    const resetPin = () => {
@@ -42,11 +53,18 @@ export function useLogin() {
   }
 
   const handlePin = async () => {
-    if (!pin.value) {
-      toast.error('PIN is required');
-      return;
+    // Validate PIN
+    const { isValid, errors: validationErrors } = await validateForm(loginPinSchema, {
+      pin: pin.value,
+    });
+
+    if (!isValid) {
+      errors.value = validationErrors;
+      const firstKey = Object.keys(validationErrors)[0];
+      return { success: false, firstError: firstKey };
     }
 
+    errors.value = {};
     loading.value = true;
     try {
       const response = await verifyLoginPin(tempToken.value, pin.value);
@@ -62,6 +80,7 @@ export function useLogin() {
     } finally {
       loading.value = false;
     }
+    return { success: true };
   };
 
  
@@ -78,6 +97,7 @@ export function useLogin() {
     loading,
     step,
     tempToken,
+    errors,
     handleCredentials,
     handlePin,
     backToCredentials,

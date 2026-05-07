@@ -21,7 +21,15 @@ const createFormData = () => ({
   aadhaarNumber: '',
   otp: '',
   pin: '',
+  confirmPin: '',
 });
+
+const normalizeDigitCode = (value) => {
+  if (Array.isArray(value)) {
+    return value.join('').replace(/\D/g, '').trim();
+  }
+  return String(value || '').replace(/\D/g, '').trim();
+};
 
 let panTimer = null;
 let aadhaarTimer = null;
@@ -194,19 +202,25 @@ export const useRegisterStore = defineStore('register', () => {
   };
 
   const verifyOtpCode = async () => {
-    if (!formData.otp) {
+    const otp = normalizeDigitCode(formData.otp);
+    formData.otp = otp;
+
+    if (!otp) {
       throw new Error('OTP is required');
     }
 
-    return verifyOtpRequest(formData.email, formData.otp);
+    return verifyOtpRequest(formData.email, otp);
   };
 
   const setPinCode = async () => {
-    if (!isValidPin(formData.pin)) {
+    const pin = normalizeDigitCode(formData.pin);
+    formData.pin = pin;
+
+    if (!isValidPin(pin)) {
       throw new Error('PIN must be exactly 4 digits');
     }
 
-    return setPinRequest(formData.email, formData.pin);
+    return setPinRequest(formData.email, pin);
   };
 
   return {

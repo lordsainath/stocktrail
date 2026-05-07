@@ -1,37 +1,71 @@
 <script setup>
-import { toast } from 'vue-sonner';
+import { ref, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { hasRequiredAddress } from '../../utils/registration';
 import useRegisterStore from '../../stores/registerStore';
+import BaseInput from '../base/BaseInput.vue';
+import BaseButton from '../base/BaseButton.vue';
+import { registerAddressSchema, validateForm } from '../../utils/validationSchemas';
 
 const router = useRouter();
 const registerStore = useRegisterStore();
 const formData = registerStore.formData;
+const errors = ref({});
+const countryRef = ref(null)
+const stateRef = ref(null)
+const cityRef = ref(null)
+const line1Ref = ref(null)
+const pincodeRef = ref(null)
 
 
 const handleBack = () => router.back();
-const handleContinue = () => {
-  if (!hasRequiredAddress(formData.address)) {
-    toast.error('Address line, city, state, and country are required');
+const handleContinue = async () => {
+  // Validate form data
+  const { isValid, errors: validationErrors } = await validateForm(registerAddressSchema, {
+    address: formData.address,
+  });
+
+  if (!isValid) {
+    errors.value = validationErrors.address || {};
+    const firstKey = Object.keys(validationErrors.address || {})[0];
+    const refMap = { country: countryRef, state: stateRef, city: cityRef, line1: line1Ref, pincode: pincodeRef };
+    await nextTick();
+    const target = refMap[firstKey];
+    if (target?.value?.focus) target.value.focus();
     return;
   }
 
+  errors.value = {};
   router.push({ name: 'RegisterUsername' });
 };
 </script>
 
 <template>
   <div class="space-y-4">
-    <input v-model="formData.address.country" placeholder="Country" class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    <input v-model="formData.address.state" placeholder="State" class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    <input v-model="formData.address.city" placeholder="City" class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    <input v-model="formData.address.line1" placeholder="Address line" class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    <input v-model="formData.address.pincode" placeholder="Pincode (optional)" maxlength="6" class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
+    <BaseInput ref="countryRef" v-model="formData.address.country" label="Country" placeholder="Country" :error="errors.country"
+      @input="errors.country = null" required />
 
+    <BaseInput ref="stateRef" v-model="formData.address.state" label="State" placeholder="State" :error="errors.state"
+      @input="errors.state = null" required />
+
+    <BaseInput ref="cityRef" v-model="formData.address.city" label="City" placeholder="City" :error="errors.city"
+      @input="errors.city = null" required />
+
+    <BaseInput ref="line1Ref" v-model="formData.address.line1" label="Address Line" placeholder="Address line" :error="errors.line1"
+      @input="errors.line1 = null" required />
+
+    <BaseInput ref="pincodeRef" v-model="formData.address.pincode" label="Pincode" placeholder="Pincode (optional)" maxlength="6"
+      :error="errors.pincode" @input="errors.pincode = null" />
     <div class="mt-6 flex gap-4">
-      <button @click="handleBack" class="flex-1 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all font-medium">Back</button>
-      <button @click="handleContinue" class="flex-1 py-3 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all">Continue</button>
+
+      <BaseButton variant="secondary" @click="handleBack">
+        Back
+      </BaseButton>
+
+      <BaseButton variant="primary" @click="handleContinue">
+        Continue
+      </BaseButton>
+
     </div>
   </div>
 </template>

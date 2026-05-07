@@ -4,7 +4,6 @@ import { useRegisterStore } from '../stores/registerStore';
 export function useRegister() {
     const registerStore = useRegisterStore();
     const {
-        formData,
         panStatus,
         panMessage,
         aadhaarStatus,
@@ -13,7 +12,8 @@ export function useRegister() {
     } = storeToRefs(registerStore);
 
     return {
-        formData,
+        // Expose reactive object directly so consumers can use formData.field in script/template.
+        formData: registerStore.formData,
         panStatus,
         panMessage,
         aadhaarStatus,

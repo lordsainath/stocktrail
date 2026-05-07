@@ -1,16 +1,35 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref, nextTick } from 'vue';
 import { toast } from 'vue-sonner';
 
 import useRegisterStore from '../../stores/registerStore';
+import BaseInput from '../base/BaseInput.vue';
+import BaseButton from '../base/BaseButton.vue';
+import { registerUsernameSchema, validateForm } from '../../utils/validationSchemas';
+
 const router = useRouter();
 const registerStore = useRegisterStore();
 const formData = registerStore.formData;
+const errors = ref({});
+const usernameRef = ref(null)
 
 const handleBack = () => router.back();
 const handleContinue = async () => {
-  if (!formData.username) return toast.error('Username is required');
-  if (formData.username.length < 3) return toast.error('Username must be at least 3 characters long');
+  // Validate username format first
+  const { isValid, errors: validationErrors } = await validateForm(registerUsernameSchema, {
+    username: formData.username,
+  });
+
+  if (!isValid) {
+    errors.value = validationErrors;
+    await nextTick();
+    const firstKey = Object.keys(validationErrors)[0];
+    if (firstKey === 'username' && usernameRef.value?.focus) usernameRef.value.focus();
+    return;
+  }
+
+  errors.value = {};
   try {
     await registerStore.checkUsername();
     router.push({ name: 'RegisterKYC' });
@@ -22,13 +41,22 @@ const handleContinue = async () => {
 
 <template>
   <div class="space-y-4">
-    <div>
-      <label class="text-sm font-medium text-slate-700 dark:text-slate-200">Choose username</label>
-      <input v-model="formData.username" type="text" placeholder="Enter your username" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    </div>
+  <BaseInput
+  ref="usernameRef"
+  v-model="formData.username"
+  @input="errors.username = null"
+  label="Choose username"
+  type="text"
+  placeholder="Enter your username"
+  :error="errors.username"
+/>
     <div class="mt-6 flex gap-4">
-      <button @click="handleBack" class="flex-1 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all font-medium">Back</button>
-      <button @click="handleContinue" class="flex-1 py-3 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all">Continue</button>
+      <BaseButton variant="secondary" @click="handleBack">
+        Back
+      </BaseButton>
+      <BaseButton variant="primary" @click="handleContinue">
+        Continue
+      </BaseButton>
     </div>
   </div>
 </template>

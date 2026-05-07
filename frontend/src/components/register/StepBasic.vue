@@ -1,38 +1,94 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { toast } from 'vue-sonner';
+import { ref, nextTick } from 'vue';
 
-import { isValidPassword } from '../../utils/registration';
 import useRegisterStore from '../../stores/registerStore';
+import BaseInput from '../base/BaseInput.vue';
+import BaseButton from '../base/BaseButton.vue';
+import { registerBasicSchema, validateForm } from '../../utils/validationSchemas';
 
 const router = useRouter();
 const registerStore = useRegisterStore();
 const formData = registerStore.formData;
+const errors = ref({});
+const nameRef = ref(null)
+const passwordRef = ref(null)
+const confirmRef = ref(null)
 
 const handleBack = () => router.back();
-const handleContinue = () => {
-  if (!formData.name) return toast.error('Full name is required');
-  if (!isValidPassword(formData.password)) return toast.error('Password must be at least 8 characters');
-  if (formData.password !== formData.confirmPassword) return toast.error('Passwords do not match');
+const handleContinue = async () => {
+  // Validate form data
+  const { isValid, errors: validationErrors } = await validateForm(registerBasicSchema, {
+    name: formData.name,
+    password: formData.password,
+    confirmPassword: formData.confirmPassword,
+  });
+
+  if (!isValid) {
+    errors.value = validationErrors;
+    const firstKey = Object.keys(validationErrors)[0];
+    const refMap = { name: nameRef, password: passwordRef, confirmPassword: confirmRef };
+    await nextTick();
+    const target = refMap[firstKey];
+    if (target?.value?.focus) target.value.focus();
+    return;
+  }
+
+  errors.value = {};
   router.push({ name: 'RegisterAddress' });
 }
 </script>
 
 <template>
   <div class="space-y-4">
-    <input v-model="formData.name" placeholder="Full name" type="text"
-      class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    <input v-model="formData.password" type="password" placeholder="Password"
-      class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
-    <input v-model="formData.confirmPassword" type="password" placeholder="Confirm password"
-      class="w-full border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" />
+   <BaseInput
+    ref="nameRef"
+    v-model="formData.name"
+    @input="errors.name = null"
+    label="Full Name"
+    placeholder="Full name"
+    :error="errors.name"
+    required
+  />
 
+  <BaseInput
+    ref="passwordRef"
+    v-model="formData.password"
+    @input="errors.password = null"
+    label="Password"
+    type="password"
+    placeholder="Password"
+    :error="errors.password"
+    required
+  />
+
+  <BaseInput
+    ref="confirmRef"
+    v-model="formData.confirmPassword"
+    @input="errors.confirmPassword = null"
+    label="Confirm Password"
+    type="password"
+    placeholder="Confirm password"
+    :error="errors.confirmPassword"
+    required
+  />
     <div class="mt-6 flex gap-4">
-      <button @click="handleBack"
-        class="flex-1 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-all font-medium">Back</button>
-      <button @click="handleContinue"
-        class="flex-1 py-3 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all">Continue</button>
-    </div>
+
+  <BaseButton
+    variant="secondary"
+    @click="handleBack"
+  >
+    Back
+  </BaseButton>
+
+  <BaseButton
+    variant="primary"
+    @click="handleContinue"
+  >
+    Continue
+  </BaseButton>
+
+</div>
   </div>
 </template>
 

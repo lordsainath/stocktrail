@@ -2,6 +2,8 @@
 import { storeToRefs } from 'pinia';
 import { useThemeStore } from '../../stores/themeStore';
 import { useLogin } from '../../composables/useLogin';
+import BaseInput from '../../components/base/BaseInput.vue';
+import { ref, nextTick } from 'vue';
 
 const themeStore = useThemeStore();
 const { theme } = storeToRefs(themeStore);
@@ -12,10 +14,40 @@ const {
   pin,
   loading,
   step,
+  errors,
   handleCredentials,
   handlePin,
   backToCredentials,
 } = useLogin();
+
+const emailRef = ref(null)
+const passwordRef = ref(null)
+const pinRef = ref(null)
+
+async function onCredentialsSubmit() {
+  const res = await handleCredentials()
+  if (res && res.success === false && res.firstError) {
+    const refMap = {
+      email: emailRef,
+      password: passwordRef,
+    }
+    await nextTick()
+    const target = refMap[res.firstError]
+    if (target?.value?.focus) target.value.focus()
+  }
+}
+
+async function onPinSubmit() {
+  const res = await handlePin()
+  if (res && res.success === false && res.firstError) {
+    const refMap = {
+      pin: pinRef,
+    }
+    await nextTick()
+    const target = refMap[res.firstError]
+    if (target?.value?.focus) target.value.focus()
+  }
+}
 </script>
 
 <template>
@@ -53,16 +85,26 @@ const {
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">{{ step === 'credentials' ? 'Sign in to continue with StockTrail.' : 'Enter the 4-digit PIN linked to your account.' }}</p>
         </div>
 
-        <form v-if="step === 'credentials'" @submit.prevent="handleCredentials" class="space-y-5">
-          <div>
-            <label class="text-sm font-medium text-slate-700 dark:text-slate-200">Email Address</label>
-            <input v-model="email" type="email" placeholder="you@example.com" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" required />
-          </div>
+        <form v-if="step === 'credentials'" @submit.prevent="onCredentialsSubmit" class="space-y-5">
+           <BaseInput
+    ref="emailRef"
+    v-model="email"
+    label="Email Address"
+    type="email"
+    placeholder="you@example.com"
+    :error="errors.email"
+    required
+  />
 
-          <div>
-            <label class="text-sm font-medium text-slate-700 dark:text-slate-200">Password</label>
-            <input v-model="password" type="password" placeholder="••••••••" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all" required />
-          </div>
+          <BaseInput
+            ref="passwordRef"
+            v-model="password"
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            :error="errors.password"
+            required
+          />
 
           <button :disabled="loading" type="submit" class="w-full mt-6 py-3 px-4 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
             <span v-if="!loading">Continue To PIN</span>
@@ -80,11 +122,18 @@ const {
           </div>
         </form>
 
-        <form v-else @submit.prevent="handlePin" class="space-y-5">
-          <div>
-            <label class="text-sm font-medium text-slate-700 dark:text-slate-200">4-digit PIN</label>
-            <input v-model="pin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full mt-2 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all tracking-[0.4em] text-center text-2xl font-bold" required />
-          </div>
+        <form v-else @submit.prevent="onPinSubmit" class="space-y-5">
+          <BaseInput
+            ref="pinRef"
+            v-model="pin"
+            label="4-digit PIN"
+            type="password"
+            placeholder="••••"
+            inputmode="numeric"
+            maxlength="4"
+            :error="errors.pin"
+            required
+          />
 
           <button :disabled="loading" type="submit" class="w-full mt-6 py-3 px-4 rounded-xl bg-linear-to-r from-cyan-400 to-indigo-600 hover:from-cyan-500 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
             <span v-if="!loading">Unlock Dashboard</span>
