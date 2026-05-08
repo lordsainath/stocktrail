@@ -1,17 +1,33 @@
-import { createApp } from 'vue'
-import './style.css'
-import 'vue-sonner/style.css'
-import App from './App.vue'
-import { createPinia } from 'pinia'
-import { Toaster } from 'vue-sonner'
-import router from './router'
+// ===================================
+// IMPORTS
+// ===================================
 
-const app = createApp(App)
-const pinia = createPinia()
+import './style.css';
+import 'vue-sonner/style.css';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { Toaster } from 'vue-sonner';
+import App from './App.vue';
+import router from './router';
 
-app.component('Toaster', Toaster)
+// ===================================
+// APP SETUP
+// ===================================
+const app = createApp(App);
 
-app.use(pinia)
-app.use(router)
+// ===================================
+// PINIA SETUP
+// ===================================
+const pinia = createPinia();
 
-app.mount('#app')
+// ===================================
+// GLOBAL COMPONENTS
+// ===================================
+app.component('Toaster', Toaster);
+
+// Register pinia for state maanagement and router for navigation
+app.use(pinia);
+app.use(router);
+
+// mount the app to #app element in index.html
+app.mount('#app');
