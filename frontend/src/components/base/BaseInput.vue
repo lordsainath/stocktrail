@@ -1,114 +1,94 @@
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 defineOptions({
-    inheritAttrs: false
-})
+  inheritAttrs: false,
+});
 
 const props = defineProps({
-    modelValue: [String, Number],
+  modelValue: [String, Number],
 
-    label: String,
+  label: String,
 
-    type: {
-        type: String,
-        default: 'text'
-    },
+  type: {
+    type: String,
+    default: 'text',
+  },
 
-    placeholder: String,
+  placeholder: String,
 
-    error: String,
+  error: String,
 
-    message: String,
+  message: String,
 
-    messageClass: String,
+  messageClass: String,
 
-    inputClass: String,
+  inputClass: String,
 
-    required: Boolean,
+  required: Boolean,
 
-    disabled: Boolean
-})
+  disabled: Boolean,
+});
 
-import { ref as vueRef, nextTick } from 'vue'
+import { ref as vueRef, nextTick } from 'vue';
 
-const inputRef = vueRef(null)
+const inputRef = vueRef(null);
 
 defineExpose({
-    focus: async () => {
-        await nextTick()
-        inputRef.value?.focus()
-    }
-})
-const emit = defineEmits([
-    'update:modelValue',
-    'input'
-])
+  focus: async () => {
+    await nextTick();
+    inputRef.value?.focus();
+  },
+});
+const emit = defineEmits(['update:modelValue', 'input']);
 
 const handleInput = (event) => {
-    emit('update:modelValue', event.target.value)
-    emit('input')
-}
+  emit('update:modelValue', event.target.value);
+  emit('input');
+};
 
 const inputClasses = computed(() => [
-    'w-full mt-2 border-2 rounded-xl px-4 py-3 outline-none transition-all',
-    'bg-white dark:bg-slate-700',
-    'text-slate-900 dark:text-white',
-    'placeholder-slate-400 dark:placeholder-slate-500',
+  'w-full mt-2 border-2 rounded-xl px-4 py-3 outline-none transition-all',
+  'bg-white dark:bg-slate-700',
+  'text-slate-900 dark:text-white',
+  'placeholder-slate-400 dark:placeholder-slate-500',
 
-    props.error
-        ? 'border-red-500 focus:ring-2 focus:ring-red-400'
-        : 'border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-cyan-400 focus:border-transparent',
+  props.error
+    ? 'border-red-500 focus:ring-2 focus:ring-red-400'
+    : 'border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-primary focus:border-transparent',
 
-    props.disabled && 'opacity-50 cursor-not-allowed',
+  props.disabled && 'opacity-50 cursor-not-allowed',
 
-    props.inputClass
-])
+  props.inputClass,
+]);
 </script>
 
 <template>
-    <div>
+  <div>
+    <label v-if="label" class="text-sm font-medium text-slate-700 dark:text-slate-200">
+      {{ label }}
 
-        <label
-            v-if="label"
-            class="text-sm font-medium text-slate-700 dark:text-slate-200"
-        >
-            {{ label }}
+      <span v-if="required" class="text-red-500 ml-1"> * </span>
+    </label>
 
-            <span
-                v-if="required"
-                class="text-red-500 ml-1"
-            >
-                *
-            </span>
-        </label>
+    <input
+      ref="inputRef"
+      :value="modelValue"
+      :type="type"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :required="required"
+      :class="inputClasses"
+      v-bind="$attrs"
+      @input="handleInput"
+    />
 
-        <input
-            ref="inputRef"
-            :value="modelValue"
-            @input="handleInput"
-            :type="type"
-            :placeholder="placeholder"
-            :disabled="disabled"
-            :required="required"
-            :class="inputClasses"
-            v-bind="$attrs"
-        />
+    <p v-if="error" class="mt-1 text-sm text-red-500">
+      {{ error }}
+    </p>
 
-        <p
-            v-if="error"
-            class="mt-1 text-sm text-red-500"
-        >
-            {{ error }}
-        </p>
-
-        <p
-            v-else-if="message"
-            class="mt-2 text-sm"
-            :class="messageClass"
-        >
-            {{ message }}
-        </p>
-
-    </div>
+    <p v-else-if="message" class="mt-2 text-sm" :class="messageClass">
+      {{ message }}
+    </p>
+  </div>
 </template>

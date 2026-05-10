@@ -1,18 +1,17 @@
-import { onMounted } from "vue";
-import useMarketStore from "../stores/marketStore";
-
+import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import useMarketStore from '@stores/marketStore';
 
 export function useDashboard() {
-    const marketNews = useMarketStore();
-    const { marketNews: news } = marketNews;
-    const { fetchMarketNews } = marketNews;
-    
+  const marketStore = useMarketStore();
+  const { marketNews: news } = storeToRefs(marketStore);
+  const { fetchMarketNews } = marketStore;
 
-    const loadDashboardData = async () => {
-        await marketNews.fetchMarketNews();
-    }
+  const loadDashboardData = async () => {
+    await fetchMarketNews();
+  };
 
-    onMounted(loadDashboardData)
+  onMounted(loadDashboardData);
 
-    return { loadDashboardData, news }
+  return { loadDashboardData, news };
 }

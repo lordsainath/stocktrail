@@ -6,22 +6,32 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint \"src/**/*.{js,vue}\" --ext .vue,.js",
+    "format": "prettier --write \"src/**/*.{js,vue,css,scss,md,json}\""
   },
   "dependencies": {
     "@lucide/vue": "^1.11.0",
     "@tailwindcss/vite": "^4.2.4",
+    "apexcharts": "^5.11.0",
     "axios": "^1.15.2",
     "pinia": "^3.0.4",
+    "vee-validate": "^4.15.1",
     "vue": "^3.5.17",
     "vue-debounce": "^5.0.1",
     "vue-router": "^5.0.6",
     "vue-sonner": "^2.0.9",
+    "vue3-apexcharts": "^1.11.1",
     "vue3-otp-input": "^0.5.40",
     "yup": "^1.7.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-vue": "^9.13.0",
+    "prettier": "^3.0.0",
     "vite": "^7.0.0"
   }
 }

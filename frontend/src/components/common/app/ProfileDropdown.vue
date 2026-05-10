@@ -63,8 +63,8 @@ const goTo = (path) => {
 
       <!-- PROFILE -->
       <button
-        @click="goTo('/profile')"
         class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3"
+        @click="goTo('/profile')"
       >
         <i class="fa-solid fa-user text-slate-500"></i>
 
@@ -73,8 +73,8 @@ const goTo = (path) => {
 
       <!-- BANK -->
       <button
-        @click="goTo('/bank-details')"
         class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3"
+        @click="goTo('/bank-details')"
       >
         <i class="fa-solid fa-building-columns text-slate-500"></i>
 
@@ -83,8 +83,8 @@ const goTo = (path) => {
 
       <!-- SETTINGS -->
       <button
-        @click="goTo('/settings')"
         class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-3"
+        @click="goTo('/settings')"
       >
         <i class="fa-solid fa-gear text-slate-500"></i>
 
@@ -93,8 +93,8 @@ const goTo = (path) => {
 
       <!-- LOGOUT -->
       <button
-        @click="handleLogout"
         class="w-full cursor-pointer px-4 py-3 text-sm text-left font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition flex items-center gap-3 rounded-b-2xl"
+        @click="handleLogout"
       >
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
 

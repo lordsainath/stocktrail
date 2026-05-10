@@ -1,11 +1,26 @@
+<!--  ===================================
+      Script Started
+      =================================== -->
 <script setup>
-import Navbar from '../components/common/Navbar.vue';
+// imports
 
-
+import AuthNavbar from '@/components/common/auth/AuthNavbar.vue';
 </script>
 
+<!--  ===================================
+      Script Ended
+      =================================== -->
+
+<!--  ===================================
+      Template Started
+      =================================== -->
+
 <template>
-    <Navbar variant="auth" />
-    
-    <router-view></router-view>
+  <AuthNavbar />
+
+  <router-view></router-view>
 </template>
+
+<!--  ===================================
+      Template Ended
+      =================================== -->

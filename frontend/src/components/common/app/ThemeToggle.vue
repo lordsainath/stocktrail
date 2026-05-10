@@ -12,11 +12,11 @@ const { theme } = storeToRefs(themeStore);
 
 <template>
   <div
-    @click="themeStore.toggleTheme"
     class="dark:bg-darksecondary bg-secondary px-3 py-2 rounded-md border dark:text-white border-[#e2e8f0] dark:border-[#30363d] cursor-pointer"
+    @click="themeStore.toggleTheme"
   >
-    <i class="fa-regular fa-sun text-amber-500" v-show="theme === 'dark'"></i>
+    <i v-show="theme === 'dark'" class="fa-regular fa-sun text-amber-500"></i>
 
-    <i class="fa-regular fa-moon text-primary" v-show="theme === 'light'"></i>
+    <i v-show="theme === 'light'" class="fa-regular fa-moon text-primary"></i>
   </div>
 </template>

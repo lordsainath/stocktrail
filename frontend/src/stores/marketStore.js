@@ -1,28 +1,357 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
-import { toast } from "vue-sonner";
-import finnhubApi from "../services/finnhubApi";
+import { computed, ref } from 'vue';
+import { defineStore } from 'pinia';
+import { toast } from 'vue-sonner';
 
+import { finnhubApi } from '@stores/httpClients';
 
-export const useMarketStore = defineStore("market", () => {
-    const marketNews = ref([]);
+import { getErrorMessage } from '@composables/useErrorMessage';
+import { generateMockCandleData } from '@/composables/generateMockCandleData';
+import router from '@/router';
 
-    const fetchMarketNews = async (category = 'general') => {
-        try {
-            const response = await finnhubApi.get("/news", { params: { category } });
-            marketNews.value = response.data;
-        }
-        catch (error) {
-            toast.error("Failed to fetch market news. Please try again later." , error);
-          
-        }
+export const useMarketStore = defineStore('market', () => {
+  const marketNews = ref([]);
 
+  const quote = ref(null);
+  const profile = ref(null);
+  const companyNews = ref([]);
 
+  const chartData = ref(null);
 
+  const candleData = ref(null);
+
+  const loading = ref(false);
+
+  const selectedCompany = computed(() => ({
+    quote: quote.value,
+    profile: profile.value,
+    news: companyNews.value,
+  }));
+
+  // =========================
+  // CHART SERIES
+  // ApexCharts compatible
+  // =========================
+  const chartSeries = computed(() => {
+    if (!chartData.value) return [];
+
+    return [
+      {
+        name: 'Price',
+
+        data: chartData.value.c,
+      },
+    ];
+  });
+
+  // =========================
+  // X-AXIS CATEGORIES
+  // Time labels
+  // =========================
+  const chartCategories = computed(() => {
+    if (!chartData.value) return [];
+
+    return chartData.value.t.map((timestamp) => {
+      return new Date(timestamp).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    });
+  });
+
+  const formatMarketCap = (value) => {
+    if (!value) return '-';
+
+    if (value >= 1_000_000) {
+      return `${(value / 1_000_000).toFixed(2)}T`;
     }
-    
-    return { marketNews, fetchMarketNews }
-})
 
+    if (value >= 1_000) {
+      return `${(value / 1_000).toFixed(2)}B`;
+    }
+
+    return value;
+  };
+
+  const fetchMarketNews = async (category = 'general') => {
+    try {
+      const response = await finnhubApi.get('/news', {
+        params: { category },
+      });
+
+      marketNews.value = response.data || [];
+
+      return marketNews.value;
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to fetch market news'));
+
+      marketNews.value = [];
+
+      return [];
+    }
+  };
+
+  const fetchQuote = async (symbol) => {
+    try {
+      const response = await finnhubApi.get('/quote', {
+        params: { symbol },
+      });
+
+      quote.value = response.data || null;
+
+      return quote.value;
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to fetch quote'));
+
+      quote.value = null;
+
+      return null;
+    }
+  };
+
+  const fetchProfile = async (symbol) => {
+    try {
+      const response = await finnhubApi.get('/stock/profile2', {
+        params: { symbol },
+      });
+
+      profile.value = response.data || null;
+
+      return profile.value;
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to fetch company profile'));
+      return router.push('/');
+
+      profile.value = null;
+
+      return null;
+    }
+  };
+
+  const fetchCompanyNews = async (symbol, from, to) => {
+    try {
+      const response = await finnhubApi.get('/company-news', {
+        params: {
+          symbol,
+          from,
+          to,
+        },
+      });
+
+      companyNews.value = response.data || [];
+
+      return companyNews.value;
+    } catch (error) {
+      router.push('/');
+      // toast.error(getErrorMessage(error, 'Failed to fetch company news'));
+
+      companyNews.value = [];
+
+      return [];
+    }
+  };
+
+  const getHistoricalData = async (
+    symbol,
+    resolution,
+    from,
+    to
+  ) => {
+    try {
+      /*
+      // =========================
+      // REAL FINNHUB API
+      // =========================
+  
+      const response = await finnhubApi.get(
+        '/stock/candle',
+        {
+          params: {
+            symbol,
+            resolution,
+            from,
+            to,
+          },
+        }
+      );
+  
+      if (response.data.s !== 'ok') {
+        throw new Error(
+          'Failed to fetch historical data'
+        );
+      }
+  
+      chartData.value = response.data;
+  
+      return response.data;
+      */
+
+      // =========================
+      // MOCK CANDLE DATA
+      // =========================
+
+      if (!quote.value) {
+        throw new Error('Quote data not found');
+      }
+
+      const mockData = generateMockCandleData(
+        quote.value
+      );
+
+      // Save chart data
+      chartData.value = mockData;
+
+      // Save full candle data
+      candleData.value = mockData;
+
+      console.log('Using mock candle data');
+
+      return mockData;
+    } catch (e) {
+      console.log(e);
+
+      toast.error('Failed to load historical data');
+
+      chartData.value = null;
+
+      candleData.value = null;
+
+      return null;
+    }
+  };
+
+  const searchSymbols = async (query) => {
+  try {
+    if (!query?.trim()) {
+      return [];
+    }
+
+    const response = await finnhubApi.get('/search', {
+      params: {
+        q: query,
+      },
+    });
+
+    return response.data.result || [];
+  } catch (error) {
+    console.log(error);
+
+    // FALLBACK MOCK DATA
+    const fallbackStocks = [
+      {
+        symbol: 'AAPL',
+        displaySymbol: 'AAPL',
+        description: 'Apple Inc.',
+        type: 'Equity',
+      },
+
+      {
+        symbol: 'MSFT',
+        displaySymbol: 'MSFT',
+        description: 'Microsoft Corp.',
+        type: 'Equity',
+      },
+
+      {
+        symbol: 'GOOGL',
+        displaySymbol: 'GOOGL',
+        description: 'Alphabet Inc.',
+        type: 'Equity',
+      },
+
+      {
+        symbol: 'TSLA',
+        displaySymbol: 'TSLA',
+        description: 'Tesla Inc.',
+        type: 'Equity',
+      },
+
+      {
+        symbol: 'NVDA',
+        displaySymbol: 'NVDA',
+        description: 'NVIDIA Corp.',
+        type: 'Equity',
+      },
+    ];
+
+    return fallbackStocks.filter(
+      (stock) =>
+        stock.symbol
+          .toLowerCase()
+          .includes(query.toLowerCase()) ||
+
+        stock.description
+          .toLowerCase()
+          .includes(query.toLowerCase())
+    );
+  }
+};
+
+  const fetchCompanyDetails = async (symbol) => {
+    loading.value = true;
+
+    try {
+      const to = Math.floor(Date.now() / 1000);
+
+      const from =
+        to - 30 * 24 * 60 * 60;
+
+      // Fetch quote first
+      // because mock candle generation depends on it
+      await fetchQuote(symbol);
+
+      await Promise.all([
+        fetchProfile(symbol),
+
+        fetchCompanyNews(
+          symbol,
+          new Date(from * 1000)
+            .toISOString()
+            .split('T')[0],
+
+          new Date(to * 1000)
+            .toISOString()
+            .split('T')[0]
+        ),
+
+        getHistoricalData(
+          symbol,
+          '15',
+          from,
+          to
+        ),
+      ]);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    marketNews,
+
+    quote,
+    profile,
+    companyNews,
+
+    selectedCompany,
+
+    chartData,
+    candleData,
+
+    chartSeries,
+    chartCategories,
+
+    loading,
+
+    formatMarketCap,
+
+    fetchMarketNews,
+    fetchQuote,
+    fetchProfile,
+    fetchCompanyNews,
+    fetchCompanyDetails,
+    getHistoricalData,
+    searchSymbols,
+  };
+});
 
 export default useMarketStore;

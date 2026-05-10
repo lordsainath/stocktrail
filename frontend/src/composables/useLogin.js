@@ -1,89 +1,107 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
-import { login as loginRequest, verifyLoginPin } from '../services/auth.service';
-import useUserStore from '../stores/userStore';
-import { getErrorMessage } from '../utils/error';
-import { loginCredentialsSchema, loginPinSchema, validateForm } from '../utils/validationSchemas';
+import { useForm } from 'vee-validate';
+import useUserStore from '@stores/userStore';
+import useAuthStore from '@stores/authStore';
+import { getErrorMessage } from '@composables/useErrorMessage';
+import { loginCredentialsSchema, loginPinSchema } from '@composables/useValidationSchemas';
 
 export function useLogin() {
   const router = useRouter();
   const userStore = useUserStore();
+  const authStore = useAuthStore();
 
-  const email = ref('');
-  const password = ref('');
-  const pin = ref('');
-  const loading = ref(false);
   const step = ref('credentials');
+
+  const validationSchema = computed(() => {
+    if (step.value === 'credentials') {
+      return loginCredentialsSchema;
+    }
+
+    return loginPinSchema;
+  });
+
+  const { errors, defineField, validate, setFieldValue, setFieldError } = useForm({
+    validationSchema,
+    initialValues: {
+      email: '',
+      password: '',
+      pin: '',
+    },
+  });
+
+  const [email] = defineField('email');
+  const [password] = defineField('password');
+  const [pin] = defineField('pin');
+
+  const loading = ref(false);
   const tempToken = ref(userStore.tempToken || '');
-  const errors = ref({});
 
   const handleCredentials = async () => {
-    // Validate form data
-    const { isValid, errors: validationErrors } = await validateForm(loginCredentialsSchema, {
-      email: email.value,
-      password: password.value,
-    });
+    step.value = 'credentials';
+    const { valid, errors: validationErrors } = await validate();
 
-    if (!isValid) {
-      errors.value = validationErrors;
-      const firstKey = Object.keys(validationErrors)[0];
+    if (!valid) {
+      const firstKey = Object.keys(validationErrors || {})[0];
       return { success: false, firstError: firstKey };
     }
 
-    errors.value = {};
     loading.value = true;
     try {
-      const response = await loginRequest(email.value, password.value);
-      const temp = response?.data?.tempToken || response?.tempToken || response?.data?.data?.tempToken || '';
+      const response = await authStore.login({
+        email: email.value,
+        password: password.value,
+      });
+      const temp =
+        response?.data?.tempToken || response?.tempToken || response?.data?.data?.tempToken || '';
       tempToken.value = temp;
       userStore.setTempToken(tempToken.value);
       step.value = 'pin';
       toast.success('Password verified. Enter your PIN to continue.');
     } catch (error) {
       toast.error(getErrorMessage(error, 'Login failed'));
+      return { success: false };
     } finally {
       loading.value = false;
     }
     return { success: true };
   };
 
-   const resetPin = () => {
-    pin.value = '';
-  }
+  const resetPin = () => {
+    setFieldValue('pin', '');
+  };
 
   const handlePin = async () => {
-    // Validate PIN
-    const { isValid, errors: validationErrors } = await validateForm(loginPinSchema, {
-      pin: pin.value,
-    });
+    step.value = 'pin';
+    const { valid, errors: validationErrors } = await validate();
 
-    if (!isValid) {
-      errors.value = validationErrors;
-      const firstKey = Object.keys(validationErrors)[0];
+    if (!valid) {
+      const firstKey = Object.keys(validationErrors || {})[0];
       return { success: false, firstError: firstKey };
     }
 
-    errors.value = {};
     loading.value = true;
     try {
-      const response = await verifyLoginPin(tempToken.value, pin.value);
-      console.log(response)
+      const response = await authStore.verifyLoginPin({
+        tempToken: tempToken.value,
+        pin: pin.value,
+      });
       const sessionPayload = response?.data?.data || response?.data || response || null;
       userStore.setSession(sessionPayload);
       userStore.setTempToken('');
       toast.success('Login successful');
       router.push('/');
     } catch (error) {
-        resetPin();
+      resetPin();
+      setFieldError('pin', getErrorMessage(error, 'PIN verification failed'));
       toast.error(getErrorMessage(error, 'PIN verification failed'));
+      return { success: false };
     } finally {
       loading.value = false;
     }
     return { success: true };
   };
-
- 
 
   const backToCredentials = () => {
     step.value = 'credentials';
@@ -101,7 +119,7 @@ export function useLogin() {
     handleCredentials,
     handlePin,
     backToCredentials,
-    resetPin
+    resetPin,
   };
 }
 
