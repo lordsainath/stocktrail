@@ -48,31 +48,19 @@ export function generateMockCandleData(quote, count = 30) {
     c: closePrices,
 
     // High prices
-    h: closePrices.map((price) =>
-      Number((price + Math.random() * 2).toFixed(2))
-    ),
+    h: closePrices.map((price) => Number((price + Math.random() * 2).toFixed(2))),
 
     // Low prices
-    l: closePrices.map((price) =>
-      Number((price - Math.random() * 2).toFixed(2))
-    ),
+    l: closePrices.map((price) => Number((price - Math.random() * 2).toFixed(2))),
 
     // Open prices
-    o: closePrices.map((price) =>
-      Number((price + (Math.random() - 0.5) * 2).toFixed(2))
-    ),
+    o: closePrices.map((price) => Number((price + (Math.random() - 0.5) * 2).toFixed(2))),
 
     // Time labels
-    t: Array.from(
-      { length: count },
-      (_, i) => from + (i * (to - from)) / count
-    ),
+    t: Array.from({ length: count }, (_, i) => from + (i * (to - from)) / count),
 
     // Volume data
-    v: Array.from(
-      { length: count },
-      () => Math.floor(Math.random() * 1000000)
-    ),
+    v: Array.from({ length: count }, () => Math.floor(Math.random() * 1000000)),
 
     // Status
     s: 'ok',

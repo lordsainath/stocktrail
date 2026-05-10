@@ -12,10 +12,7 @@ export function useDashboard() {
   const { fetchMarketNews, fetchDashboardCompanies } = marketStore;
 
   const loadDashboardData = async () => {
-    await Promise.all([
-      fetchDashboardCompanies(),
-      fetchMarketNews(),
-    ]);
+    await Promise.all([fetchDashboardCompanies(), fetchMarketNews()]);
   };
 
   onMounted(loadDashboardData);

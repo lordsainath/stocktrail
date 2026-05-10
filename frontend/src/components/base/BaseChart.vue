@@ -171,11 +171,6 @@ const chartOptions = computed(() => ({
 
 <template>
   <div class="w-full">
-    <apexchart
-      :type="type"
-      :height="height"
-      :options="chartOptions"
-      :series="series"
-    />
+    <apexchart :type="type" :height="height" :options="chartOptions" :series="series" />
   </div>
 </template>

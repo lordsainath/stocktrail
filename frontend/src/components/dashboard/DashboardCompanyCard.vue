@@ -36,9 +36,7 @@ const priceLabel = computed(() => {
 });
 
 const chartColor = computed(() => {
-  return Number(props.company?.change) < 0
-    ? '#f43f5e'
-    : '#22c55e';
+  return Number(props.company?.change) < 0 ? '#f43f5e' : '#22c55e';
 });
 
 const openCompany = () => {
@@ -52,31 +50,24 @@ const openCompany = () => {
 </script>
 
 <template>
-  <article   @click="openCompany"
+  <article
     class="group cursor-pointer flex flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900"
+    @click="openCompany"
   >
     <!-- Header -->
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
-        <h2
-          class="truncate text-lg font-bold text-slate-900 dark:text-white"
-        >
+        <h2 class="truncate text-lg font-bold text-slate-900 dark:text-white">
           {{ company.symbol }}
         </h2>
 
-        <p
-          class="truncate text-xs text-slate-500 dark:text-slate-400"
-        >
+        <p class="truncate text-xs text-slate-500 dark:text-slate-400">
           {{ company.name }}
         </p>
       </div>
 
       <span
-        :class="
-          isUp
-            ? 'bg-emerald-500/10 text-emerald-600'
-            : 'bg-rose-500/10 text-rose-600'
-        "
+        :class="isUp ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'"
         class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold"
       >
         {{ changeLabel }}%
@@ -86,29 +77,20 @@ const openCompany = () => {
     <!-- Price -->
     <div class="mt-4 flex items-end justify-between">
       <div>
-        <p class="text-xs text-slate-400">
-          Price
-        </p>
+        <p class="text-xs text-slate-400">Price</p>
 
-        <h3
-          class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white"
-        >
+        <h3 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
           {{ priceLabel }}
         </h3>
       </div>
 
-      <span
-        :class="isUp ? 'text-emerald-500' : 'text-rose-500'"
-        class="text-sm font-medium"
-      >
+      <span :class="isUp ? 'text-emerald-500' : 'text-rose-500'" class="text-sm font-medium">
         {{ isUp ? '▲ Up' : '▼ Down' }}
       </span>
     </div>
 
     <!-- Chart -->
-    <div
-      class="mt-4 overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800/50"
-    >
+    <div class="mt-4 overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800/50">
       <BaseChart
         type="area"
         :height="80"
@@ -128,4 +110,4 @@ const openCompany = () => {
       Details →
     </button>
   </article>
-</template> 
+</template>

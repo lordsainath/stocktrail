@@ -59,11 +59,12 @@ export const useMarketStore = defineStore('market', () => {
       symbol: 'META',
       name: 'Meta Platforms Inc.',
       accent: 'cyan',
-    },{
+    },
+    {
       symbol: 'NFLX',
       name: 'Netflix Inc.',
       accent: 'orange',
-    }
+    },
   ];
 
   const selectedCompany = computed(() => ({
@@ -260,12 +261,7 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
-  const getHistoricalData = async (
-    symbol,
-    resolution,
-    from,
-    to
-  ) => {
+  const getHistoricalData = async (symbol, resolution, from, to) => {
     try {
       /*
       // =========================
@@ -303,9 +299,7 @@ export const useMarketStore = defineStore('market', () => {
         throw new Error('Quote data not found');
       }
 
-      const mockData = generateMockCandleData(
-        quote.value
-      );
+      const mockData = generateMockCandleData(quote.value);
 
       // Save chart data
       chartData.value = mockData;
@@ -330,71 +324,66 @@ export const useMarketStore = defineStore('market', () => {
   };
 
   const searchSymbols = async (query) => {
-  try {
-    if (!query?.trim()) {
-      return [];
+    try {
+      if (!query?.trim()) {
+        return [];
+      }
+
+      const response = await finnhubApi.get('/search', {
+        params: {
+          q: query,
+        },
+      });
+
+      return response.data.result || [];
+    } catch (error) {
+      console.log(error);
+
+      // FALLBACK MOCK DATA
+      const fallbackStocks = [
+        {
+          symbol: 'AAPL',
+          displaySymbol: 'AAPL',
+          description: 'Apple Inc.',
+          type: 'Equity',
+        },
+
+        {
+          symbol: 'MSFT',
+          displaySymbol: 'MSFT',
+          description: 'Microsoft Corp.',
+          type: 'Equity',
+        },
+
+        {
+          symbol: 'GOOGL',
+          displaySymbol: 'GOOGL',
+          description: 'Alphabet Inc.',
+          type: 'Equity',
+        },
+
+        {
+          symbol: 'TSLA',
+          displaySymbol: 'TSLA',
+          description: 'Tesla Inc.',
+          type: 'Equity',
+        },
+
+        {
+          symbol: 'NVDA',
+          displaySymbol: 'NVDA',
+          description: 'NVIDIA Corp.',
+          type: 'Equity',
+        },
+      ];
+
+      return fallbackStocks.filter(
+        (stock) =>
+          stock.symbol.toLowerCase().includes(query.toLowerCase()) ||
+          stock.description.toLowerCase().includes(query.toLowerCase())
+      );
     }
-
-    const response = await finnhubApi.get('/search', {
-      params: {
-        q: query,
-      },
-    });
-
-    return response.data.result || [];
-  } catch (error) {
-    console.log(error);
-
-    // FALLBACK MOCK DATA
-    const fallbackStocks = [
-      {
-        symbol: 'AAPL',
-        displaySymbol: 'AAPL',
-        description: 'Apple Inc.',
-        type: 'Equity',
-      },
-
-      {
-        symbol: 'MSFT',
-        displaySymbol: 'MSFT',
-        description: 'Microsoft Corp.',
-        type: 'Equity',
-      },
-
-      {
-        symbol: 'GOOGL',
-        displaySymbol: 'GOOGL',
-        description: 'Alphabet Inc.',
-        type: 'Equity',
-      },
-
-      {
-        symbol: 'TSLA',
-        displaySymbol: 'TSLA',
-        description: 'Tesla Inc.',
-        type: 'Equity',
-      },
-
-      {
-        symbol: 'NVDA',
-        displaySymbol: 'NVDA',
-        description: 'NVIDIA Corp.',
-        type: 'Equity',
-      },
-    ];
-
-    return fallbackStocks.filter(
-      (stock) =>
-        stock.symbol
-          .toLowerCase()
-          .includes(query.toLowerCase()) ||
-
-        stock.description
-          .toLowerCase()
-          .includes(query.toLowerCase())
-    );
-  }
-};
+  };
 
   const fetchCompanyDetails = async (symbol) => {
     loading.value = true;
@@ -402,8 +391,7 @@ export const useMarketStore = defineStore('market', () => {
     try {
       const to = Math.floor(Date.now() / 1000);
 
-      const from =
-        to - 30 * 24 * 60 * 60;
+      const from = to - 30 * 24 * 60 * 60;
 
       // Fetch quote first
       // because mock candle generation depends on it
@@ -414,21 +402,12 @@ export const useMarketStore = defineStore('market', () => {
 
         fetchCompanyNews(
           symbol,
-          new Date(from * 1000)
-            .toISOString()
-            .split('T')[0],
+          new Date(from * 1000).toISOString().split('T')[0],
 
-          new Date(to * 1000)
-            .toISOString()
-            .split('T')[0]
+          new Date(to * 1000).toISOString().split('T')[0]
         ),
 
-        getHistoricalData(
-          symbol,
-          '15',
-          from,
-          to
-        ),
+        getHistoricalData(symbol, '15', from, to),
       ]);
     } finally {
       loading.value = false;

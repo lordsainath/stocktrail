@@ -34,9 +34,7 @@ watch(
 
 <template>
   <BaseModal :show="show" @close="emit('close')">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
-      Edit Profile Image
-    </h3>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Edit Profile Image</h3>
 
     <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
       Update your display photo using an image URL.
@@ -51,11 +49,7 @@ watch(
     </div>
 
     <div class="mt-4 flex justify-end gap-2">
-      <BaseButton
-        variant="secondary"
-        :full-width="false"
-        @click="emit('close')"
-      >
+      <BaseButton variant="secondary" :full-width="false" @click="emit('close')">
         Cancel
       </BaseButton>
 

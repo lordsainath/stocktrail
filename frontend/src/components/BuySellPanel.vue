@@ -1,5 +1,4 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
   <div
@@ -7,13 +6,9 @@
   >
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">
-          Trade
-        </h2>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Trade</h2>
 
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Buy or sell stock
-        </p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Buy or sell stock</p>
       </div>
     </div>
 
@@ -35,11 +30,7 @@
     <!-- FORM -->
     <div class="mt-5 space-y-4">
       <div>
-        <label
-          class="text-sm font-medium text-slate-700 dark:text-slate-300"
-        >
-          Quantity
-        </label>
+        <label class="text-sm font-medium text-slate-700 dark:text-slate-300"> Quantity </label>
 
         <input
           type="number"
@@ -49,11 +40,7 @@
       </div>
 
       <div>
-        <label
-          class="text-sm font-medium text-slate-700 dark:text-slate-300"
-        >
-          Order Type
-        </label>
+        <label class="text-sm font-medium text-slate-700 dark:text-slate-300"> Order Type </label>
 
         <select
           class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500"

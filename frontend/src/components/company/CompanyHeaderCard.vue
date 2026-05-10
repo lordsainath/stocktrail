@@ -1,5 +1,5 @@
 <script setup>
-import BaseButton from '../base/BaseButton.vue';
+
 import CompanyStatsGrid from './CompanyStatsGrid.vue';
 
 defineProps({
@@ -18,18 +18,16 @@ const goBack = () => {
     class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/90 shadow-xl backdrop-blur-sm overflow-hidden"
   >
     <div class="p-5">
-
       <!-- Back Button -->
       <button
-        @click="goBack"
         class="mb-5 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-200 dark:hover:bg-slate-700 hover:scale-[1.02]"
+        @click="goBack"
       >
         <i class="fa-solid fa-arrow-left text-xs"></i>
         Back
       </button>
 
       <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5">
-        
         <!-- Left -->
         <div class="flex gap-4">
           <div
@@ -40,9 +38,7 @@ const goBack = () => {
 
           <div class="space-y-2">
             <div>
-              <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                Company Details
-              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Company Details</p>
 
               <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                 {{ profile?.name }}
@@ -78,9 +74,7 @@ const goBack = () => {
         <!-- Right -->
         <div class="sm:text-right">
           <div class="mt-3">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white">
-              ${{ quote?.c }}
-            </h2>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white">${{ quote?.c }}</h2>
 
             <p
               :class="quote?.dp >= 0 ? 'text-emerald-500' : 'text-red-500'"
@@ -92,11 +86,7 @@ const goBack = () => {
         </div>
       </div>
 
-      <CompanyStatsGrid
-        :quote="quote"
-        :profile="profile"
-        :format-market-cap="formatMarketCap"
-      />
+      <CompanyStatsGrid :quote="quote" :profile="profile" :format-market-cap="formatMarketCap" />
     </div>
   </section>
 </template>

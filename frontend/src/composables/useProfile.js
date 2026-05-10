@@ -88,35 +88,35 @@ export function useProfile() {
     }
   };
 
- const updateProfile = async (formData) => {
-  const photoUrl = formData.photoUrl.trim();
+  const updateProfile = async (formData) => {
+    const photoUrl = formData.photoUrl.trim();
 
-  if (!photoUrl) {
-    toast.error('Profile image URL is required');
-    return;
-  }
-
-  try {
-    profileForm.loading = true;
-
-    const response = await profileStore.updateProfilePhoto(photoUrl);
-
-    if (response?.data) {
-      userStore.updateUser(response.data);
-    } else {
-      userStore.updateUser({ photoUrl });
+    if (!photoUrl) {
+      toast.error('Profile image URL is required');
+      return;
     }
 
-    resetProfileForm();
-    closeProfileModal();
+    try {
+      profileForm.loading = true;
 
-    toast.success(response?.message || 'Profile updated successfully');
-  } catch (error) {
-    toast.error(getErrorMessage(error));
-  } finally {
-    profileForm.loading = false;
-  }
-};
+      const response = await profileStore.updateProfilePhoto(photoUrl);
+
+      if (response?.data) {
+        userStore.updateUser(response.data);
+      } else {
+        userStore.updateUser({ photoUrl });
+      }
+
+      resetProfileForm();
+      closeProfileModal();
+
+      toast.success(response?.message || 'Profile updated successfully');
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    } finally {
+      profileForm.loading = false;
+    }
+  };
 
   const updatePassword = async () => {
     if (passwordForm.password.length < 8) {
