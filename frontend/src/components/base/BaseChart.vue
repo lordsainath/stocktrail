@@ -27,6 +27,11 @@ const props = defineProps({
     default: '#22c55e',
   },
 
+  sparkline: {
+    type: Boolean,
+    default: false,
+  },
+
   price: {
     type: Number,
     default: 0,
@@ -67,6 +72,8 @@ const chartOptions = computed(() => ({
   },
 
   grid: {
+    show: !props.sparkline,
+
     borderColor: '#334155',
 
     strokeDashArray: 4,
@@ -79,6 +86,8 @@ const chartOptions = computed(() => ({
   },
 
   tooltip: {
+    enabled: !props.sparkline,
+
     theme: 'dark',
 
     x: {
@@ -93,22 +102,26 @@ const chartOptions = computed(() => ({
   xaxis: {
     categories: props.categories,
 
-    axisBorder: {
-      show: false,
-    },
-
-    axisTicks: {
-      show: false,
-    },
-
     labels: {
+      show: !props.sparkline,
+
       style: {
         colors: '#94a3b8',
       },
     },
+
+    axisBorder: {
+      show: !props.sparkline,
+    },
+
+    axisTicks: {
+      show: !props.sparkline,
+    },
   },
 
   yaxis: {
+    show: !props.sparkline,
+
     opposite: true,
 
     labels: {

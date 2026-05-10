@@ -11,6 +11,8 @@ import router from '@/router';
 export const useMarketStore = defineStore('market', () => {
   const marketNews = ref([]);
 
+  const dashboardCompanies = ref([]);
+
   const quote = ref(null);
   const profile = ref(null);
   const companyNews = ref([]);
@@ -20,6 +22,49 @@ export const useMarketStore = defineStore('market', () => {
   const candleData = ref(null);
 
   const loading = ref(false);
+  const dashboardLoading = ref(false);
+
+  const dashboardUniverse = [
+    {
+      symbol: 'AAPL',
+      name: 'Apple Inc.',
+      accent: 'emerald',
+    },
+    {
+      symbol: 'MSFT',
+      name: 'Microsoft Corp.',
+      accent: 'sky',
+    },
+    {
+      symbol: 'GOOGL',
+      name: 'Alphabet Inc.',
+      accent: 'rose',
+    },
+    {
+      symbol: 'AMZN',
+      name: 'Amazon.com Inc.',
+      accent: 'emerald',
+    },
+    {
+      symbol: 'TSLA',
+      name: 'Tesla Inc.',
+      accent: 'rose',
+    },
+    {
+      symbol: 'NVDA',
+      name: 'NVIDIA Corp.',
+      accent: 'violet',
+    },
+    {
+      symbol: 'META',
+      name: 'Meta Platforms Inc.',
+      accent: 'cyan',
+    },{
+      symbol: 'NFLX',
+      name: 'Netflix Inc.',
+      accent: 'orange',
+    }
+  ];
 
   const selectedCompany = computed(() => ({
     quote: quote.value,
@@ -72,6 +117,40 @@ export const useMarketStore = defineStore('market', () => {
     return value;
   };
 
+  const requestQuote = async (symbol) => {
+    const response = await finnhubApi.get('/quote', {
+      params: { symbol },
+    });
+
+    return response.data || null;
+  };
+
+  const buildDashboardChart = (quoteData) => {
+    if (!quoteData) {
+      return {
+        series: [],
+        categories: [],
+      };
+    }
+
+    const mockData = generateMockCandleData(quoteData, 16);
+
+    return {
+      series: [
+        {
+          name: 'Price',
+          data: mockData.c,
+        },
+      ],
+      categories: mockData.t.map((timestamp) => {
+        return new Date(timestamp).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+      }),
+    };
+  };
+
   const fetchMarketNews = async (category = 'general') => {
     try {
       const response = await finnhubApi.get('/news', {
@@ -92,11 +171,7 @@ export const useMarketStore = defineStore('market', () => {
 
   const fetchQuote = async (symbol) => {
     try {
-      const response = await finnhubApi.get('/quote', {
-        params: { symbol },
-      });
-
-      quote.value = response.data || null;
+      quote.value = await requestQuote(symbol);
 
       return quote.value;
     } catch (error) {
@@ -105,6 +180,41 @@ export const useMarketStore = defineStore('market', () => {
       quote.value = null;
 
       return null;
+    }
+  };
+
+  const fetchDashboardCompanies = async () => {
+    dashboardLoading.value = true;
+
+    try {
+      const companies = await Promise.all(
+        dashboardUniverse.map(async (company) => {
+          const quoteData = await requestQuote(company.symbol);
+          const chart = buildDashboardChart(quoteData);
+
+          return {
+            ...company,
+            quote: quoteData,
+            price: quoteData?.c ?? null,
+            change: quoteData?.d ?? null,
+            changePercent: quoteData?.dp ?? null,
+            chartSeries: chart.series,
+            chartCategories: chart.categories,
+          };
+        })
+      );
+
+      dashboardCompanies.value = companies.filter((company) => company.quote);
+
+      return dashboardCompanies.value;
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to load dashboard companies'));
+
+      dashboardCompanies.value = [];
+
+      return [];
+    } finally {
+      dashboardLoading.value = false;
     }
   };
 
@@ -328,6 +438,8 @@ export const useMarketStore = defineStore('market', () => {
   return {
     marketNews,
 
+    dashboardCompanies,
+
     quote,
     profile,
     companyNews,
@@ -341,6 +453,7 @@ export const useMarketStore = defineStore('market', () => {
     chartCategories,
 
     loading,
+    dashboardLoading,
 
     formatMarketCap,
 
@@ -349,6 +462,7 @@ export const useMarketStore = defineStore('market', () => {
     fetchProfile,
     fetchCompanyNews,
     fetchCompanyDetails,
+    fetchDashboardCompanies,
     getHistoricalData,
     searchSymbols,
   };
