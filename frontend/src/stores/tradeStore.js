@@ -2,6 +2,7 @@ import { computed, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { toast } from 'vue-sonner';
 
+import useMarketStore from '@stores/marketStore';
 import useUserStore from '@stores/userStore';
 import useWalletStore from '@stores/walletStore';
 
@@ -23,6 +24,7 @@ const createDefaultState = () => ({
 });
 
 export const useTradeStore = defineStore('trade', () => {
+  const marketStore = useMarketStore();
   const userStore = useUserStore();
   const walletStore = useWalletStore();
 
@@ -33,6 +35,7 @@ export const useTradeStore = defineStore('trade', () => {
   const cashBalance = ref(0);
   const holdings = ref([]);
   const orders = ref([]);
+  const livePrices = ref({});
 
   const storageKey = computed(() => {
     const user = userStore.user || {};
@@ -59,6 +62,32 @@ export const useTradeStore = defineStore('trade', () => {
   );
 
   const totalEquity = computed(() => roundMoney(availableCash.value + portfolioValue.value));
+
+  const holdingsWithPnL = computed(() =>
+    holdings.value.map((item) => {
+      const currentPrice = roundMoney(
+        livePrices.value[item.symbol] ?? item.lastPrice ?? item.avgPrice ?? 0
+      );
+      const quantity = Number(item.quantity || 0);
+      const costBasis = roundMoney(Number(item.avgPrice || 0) * quantity);
+      const currentValue = roundMoney(currentPrice * quantity);
+      const unrealizedPnL = roundMoney(currentValue - costBasis);
+      const unrealizedPnLPercent = costBasis > 0 ? roundMoney((unrealizedPnL / costBasis) * 100) : 0;
+
+      return {
+        ...item,
+        currentPrice,
+        marketValue: currentValue,
+        unrealizedPnL,
+        unrealizedPnLPercent,
+        isProfit: unrealizedPnL >= 0,
+      };
+    })
+  );
+
+  const totalUnrealizedPnL = computed(() =>
+    roundMoney(holdingsWithPnL.value.reduce((sum, item) => sum + Number(item.unrealizedPnL || 0), 0))
+  );
 
   const getHolding = (symbol) =>
     holdings.value.find((item) => item.symbol === symbol) || null;
@@ -136,9 +165,37 @@ export const useTradeStore = defineStore('trade', () => {
     cashBalance.value = 0;
     holdings.value = [];
     orders.value = [];
+    livePrices.value = {};
     initialized.value = false;
     seededFromWallet.value = false;
     localStorage.removeItem(storageKey.value);
+  };
+
+  const refreshHoldingPrices = async () => {
+    if (!holdings.value.length) {
+      livePrices.value = {};
+      return {};
+    }
+
+    try {
+      const quoteEntries = await Promise.all(
+        holdings.value.map(async (item) => {
+          const quoteData = await marketStore.getQuoteData(item.symbol);
+
+          return [item.symbol, Number(quoteData?.c || item.lastPrice || item.avgPrice || 0)];
+        })
+      );
+
+      livePrices.value = Object.fromEntries(quoteEntries);
+
+      return livePrices.value;
+    } catch (error) {
+      toast.error('Failed to refresh holding prices');
+
+      livePrices.value = {};
+
+      return {};
+    }
   };
 
   const appendOrder = ({ side, symbol, name, quantity, price, total }) => {
@@ -307,16 +364,19 @@ export const useTradeStore = defineStore('trade', () => {
 
     cashBalance: availableCash,
     holdings,
+    holdingsWithPnL,
     orders,
 
     totalInvestment,
     portfolioValue,
     totalEquity,
+    totalUnrealizedPnL,
 
     getHolding,
     getAvailableQuantity,
     init,
     resetState,
+    refreshHoldingPrices,
     placeBuy,
     placeSell,
   };

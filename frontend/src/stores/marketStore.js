@@ -126,6 +126,16 @@ export const useMarketStore = defineStore('market', () => {
     return response.data || null;
   };
 
+  const getQuoteData = async (symbol) => {
+    try {
+      return await requestQuote(symbol);
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to fetch quote'));
+
+      return null;
+    }
+  };
+
   const buildDashboardChart = (quoteData) => {
     if (!quoteData) {
       return {
@@ -438,6 +448,7 @@ export const useMarketStore = defineStore('market', () => {
 
     fetchMarketNews,
     fetchQuote,
+    getQuoteData,
     fetchProfile,
     fetchCompanyNews,
     fetchCompanyDetails,
