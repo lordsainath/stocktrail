@@ -106,7 +106,11 @@ watch(symbol, () => {
           </div>
 
           <!-- TRADING PANEL -->
-          <BuySellPanel />
+          <BuySellPanel
+            :symbol="symbol"
+            :company-name="marketStore.profile?.name"
+            :current-price="marketStore.quote?.c || 0"
+          />
         </section>
 
         <!-- NEWS -->

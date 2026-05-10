@@ -1,13 +1,60 @@
 import { defineStore } from 'pinia';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { apiClient } from '@stores/httpClients';
 
+import useUserStore from '@stores/userStore';
+
+const STORAGE_PREFIX = 'stocktrail-wallet-balance';
+
+const normalizeKey = (value) =>
+  String(value || 'guest')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-');
+
 export const useWalletStore = defineStore('wallet', () => {
+  const userStore = useUserStore();
+
   const loading = ref(false);
 
   const walletBalance = ref(0);
+  const hasStoredBalance = ref(false);
   const linkedAccounts = ref([]);
   const recentTransfers = ref([]);
+
+  const storageKey = computed(() => {
+    const user = userStore.user || {};
+    const userKey = user.id || user._id || user.email || user.phone || 'guest';
+
+    return `${STORAGE_PREFIX}:${normalizeKey(userKey)}`;
+  });
+
+  const persistWalletBalance = () => {
+    localStorage.setItem(storageKey.value, String(Number(walletBalance.value || 0)));
+  };
+
+  const hydrateWalletBalance = () => {
+    const raw = localStorage.getItem(storageKey.value);
+
+    if (raw === null) {
+      hasStoredBalance.value = false;
+      return;
+    }
+
+    const parsed = Number(raw);
+    walletBalance.value = Number.isFinite(parsed) ? parsed : 0;
+    hasStoredBalance.value = true;
+  };
+
+  const setWalletBalance = (value) => {
+    walletBalance.value = Number.isFinite(Number(value)) ? Number(value) : 0;
+    hasStoredBalance.value = true;
+    persistWalletBalance();
+  };
+
+  const adjustWalletBalance = (delta) => {
+    setWalletBalance(Number(walletBalance.value || 0) + Number(delta || 0));
+  };
 
   const addBankForm = reactive({
     bankName: '',
@@ -51,7 +98,13 @@ export const useWalletStore = defineStore('wallet', () => {
     try {
       const response = await apiClient.get('/wallet/summary');
 
-      walletBalance.value = response?.data?.data?.balance || 0;
+      const remoteBalance = response?.data?.data?.balance || 0;
+
+      if (!hasStoredBalance.value) {
+        walletBalance.value = remoteBalance;
+        persistWalletBalance();
+      }
+
       linkedAccounts.value = response?.data?.data?.bankAccounts || [];
       recentTransfers.value = response?.data?.data?.transactions || [];
 
@@ -60,6 +113,14 @@ export const useWalletStore = defineStore('wallet', () => {
       loading.value = false;
     }
   };
+
+  watch(
+    storageKey,
+    () => {
+      hydrateWalletBalance();
+    },
+    { immediate: true }
+  );
 
   const addBankAccount = async () => {
     if (
@@ -126,6 +187,7 @@ export const useWalletStore = defineStore('wallet', () => {
     loading,
 
     walletBalance,
+    hasStoredBalance,
     linkedAccounts,
     recentTransfers,
 
@@ -137,6 +199,9 @@ export const useWalletStore = defineStore('wallet', () => {
 
     resetAddBankForm,
     resetAddMoneyForm,
+
+    setWalletBalance,
+    adjustWalletBalance,
 
     fetchWalletSummary,
     addBankAccount,
