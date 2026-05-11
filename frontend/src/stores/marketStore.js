@@ -229,24 +229,25 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
-  const fetchProfile = async (symbol) => {
-    try {
-      const response = await finnhubApi.get('/stock/profile2', {
-        params: { symbol },
-      });
+const fetchProfile = async (symbol) => {
+  try {
+    const response = await finnhubApi.get('/stock/profile2', {
+      params: { symbol },
+    });
 
-      profile.value = response.data || null;
+    profile.value = response.data || null;
 
-      return profile.value;
-    } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to fetch company profile'));
-      return router.push('/');
+    return profile.value;
+  } catch (error) {
+    toast.error(getErrorMessage(error, 'Failed to fetch company profile'));
 
-      profile.value = null;
+    profile.value = null;
 
-      return null;
-    }
-  };
+    router.push('/');
+
+    return null;
+  }
+};
 
   const fetchCompanyNews = async (symbol, from, to) => {
     try {
@@ -271,67 +272,41 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
-  const getHistoricalData = async (symbol, resolution, from, to) => {
-    try {
-      /*
-      // =========================
-      // REAL FINNHUB API
-      // =========================
-  
-      const response = await finnhubApi.get(
-        '/stock/candle',
-        {
-          params: {
-            symbol,
-            resolution,
-            from,
-            to,
-          },
-        }
-      );
-  
-      if (response.data.s !== 'ok') {
-        throw new Error(
-          'Failed to fetch historical data'
-        );
-      }
-  
-      chartData.value = response.data;
-  
-      return response.data;
-      */
+const getHistoricalData = async (
+  symbol,
+  resolution,
+  from,
+  to
+) => {
+  void symbol;
+  void resolution;
+  void from;
+  void to;
 
-      // =========================
-      // MOCK CANDLE DATA
-      // =========================
-
-      if (!quote.value) {
-        throw new Error('Quote data not found');
-      }
-
-      const mockData = generateMockCandleData(quote.value);
-
-      // Save chart data
-      chartData.value = mockData;
-
-      // Save full candle data
-      candleData.value = mockData;
-
-      console.log('Using mock candle data');
-
-      return mockData;
-    } catch (e) {
-      console.log(e);
-
-      toast.error('Failed to load historical data');
-
-      chartData.value = null;
-
-      candleData.value = null;
-
-      return null;
+  try {
+    if (!quote.value) {
+      throw new Error('Quote data not found');
     }
-  };
+
+    const mockData = generateMockCandleData(quote.value);
+
+    chartData.value = mockData;
+    candleData.value = mockData;
+
+    console.log('Using mock candle data');
+
+    return mockData;
+  } catch (e) {
+    console.log(e);
+
+    toast.error('Failed to load historical data');
+
+    chartData.value = null;
+    candleData.value = null;
+
+    return null;
+  }
+};
 
   const searchSymbols = async (query) => {
     try {

@@ -78,7 +78,7 @@ const navigate = (path) => {
         class="group flex items-center gap-3 px-3 py-2.5 cursor-pointer rounded-xl transition-all duration-200 border"
         :class="[
           route.path === item.path
-            ? 'bg-linear-to-r from-cyan-500/15 to-indigo-500/15 text-cyan-700 dark:text-cyan-300 border-cyan-200/70 dark:border-cyan-900/40 shadow-sm'
+            ? 'bg-primary/10 dark:bg-primary/15 text-primary dark:text-primary border-primary/30 dark:border-primary/30 shadow-sm'
             : 'text-slate-600 dark:text-slate-300 border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/70',
           uiStore.isSidebarOpen ? '' : 'justify-center',
         ]"

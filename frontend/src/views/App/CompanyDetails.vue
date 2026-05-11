@@ -40,10 +40,8 @@ watch(symbol, () => {
 </script>
 
 <template>
-  <div
-    class="min-h-screen p-4 from-slate-100 via-slate-50 to-slate-200 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950"
-  >
-    <div class="max-w-7xl mx-auto">
+  <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
+    <div class="mx-auto max-w-6xl">
       <CompanyLoadingSkeleton v-if="marketStore.loading" />
 
       <template v-else>

@@ -4,3 +4,12 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+/* Global heading utilities */
+.heading {
+  @apply text-slate-900 dark:text-slate-100;
+}
+
+.heading-sm {
+  @apply text-xs font-semibold tracking-[0.22em] text-slate-500 dark:text-slate-400;
+}

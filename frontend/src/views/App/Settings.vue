@@ -13,14 +13,12 @@ const setTheme = (value) => {
 </script>
 
 <template>
-  <div
-    class="min-h-[calc(100vh-65px)] p-5 sm:p-7 bg-[radial-gradient(circle_at_top_left,#dbeafe_0%,#f8fafc_45%,#f1f5f9_100%)] dark:bg-[radial-gradient(circle_at_top_left,#1f2937_0%,#0f172a_45%,#020617_100%)]"
-  >
+  <div class="min-h-[calc(100vh-65px)] bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
     <div class="max-w-6xl mx-auto">
       <section
         class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8"
       >
-        <p class="text-xs tracking-[0.22em] font-semibold text-cyan-700 dark:text-cyan-300">
+        <p class="heading-sm">
           SETTINGS
         </p>
         <h1 class="mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">

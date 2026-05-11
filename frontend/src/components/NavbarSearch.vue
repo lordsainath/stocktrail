@@ -3,7 +3,7 @@ import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useMarketStore } from '@stores/marketStore';
-import BaseButton from './base/BaseButton.vue';
+
 
 const router = useRouter();
 

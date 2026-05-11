@@ -23,7 +23,7 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
-    <div class="mx-auto max-w-7xl space-y-5">
+    <div class="mx-auto max-w-6xl space-y-5">
       <PortfolioSummary
         :cash-balance="walletStore.walletBalance || tradeStore.cashBalance"
         :portfolio-value="tradeStore.portfolioValue"

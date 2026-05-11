@@ -41,16 +41,14 @@ onMounted(walletStore.fetchWalletSummary);
 </script>
 
 <template>
-  <div
-    class="min-h-full p-5 sm:p-7 bg-[linear-gradient(120deg,#dbeafe_0%,#f8fafc_40%,#e2e8f0_100%)] dark:bg-[linear-gradient(130deg,#0f172a_0%,#111827_55%,#020617_100%)]"
-  >
+  <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
     <div class="max-w-6xl mx-auto space-y-5">
       <!-- Header -->
 
       <section
         class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-xl p-6 sm:p-8"
       >
-        <p class="text-xs tracking-[0.22em] font-semibold text-cyan-700 dark:text-cyan-300">
+        <p class="heading-sm">
           BANKING HUB
         </p>
 

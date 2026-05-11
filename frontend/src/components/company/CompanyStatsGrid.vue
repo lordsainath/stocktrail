@@ -2,9 +2,20 @@
 import CompanyStatCard from './CompanyStatCard.vue';
 
 defineProps({
-  quote: Object,
-  profile: Object,
-  formatMarketCap: Function,
+  quote: {
+    type: Object,
+    default: () => ({}),
+  },
+
+  profile: {
+    type: Object,
+    default: () => ({}),
+  },
+
+  formatMarketCap: {
+    type: Function,
+    default: (value) => value,
+  },
 });
 </script>
 

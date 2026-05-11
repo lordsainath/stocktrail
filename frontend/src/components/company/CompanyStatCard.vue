@@ -1,6 +1,9 @@
 <script setup>
 defineProps({
-  label: String,
+  label: {
+    type: String,
+    default: '',
+  },
 
   value: {
     type: [String, Number],

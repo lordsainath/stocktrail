@@ -6,28 +6,55 @@ defineOptions({
 });
 
 const props = defineProps({
-  modelValue: [String, Number],
+  modelValue: {
+    type: [String, Number],
+    default: '',
+  },
 
-  label: String,
+  label: {
+    type: String,
+    default: '',
+  },
 
   type: {
     type: String,
     default: 'text',
   },
 
-  placeholder: String,
+  placeholder: {
+    type: String,
+    default: '',
+  },
 
-  error: String,
+  error: {
+    type: String,
+    default: '',
+  },
 
-  message: String,
+  message: {
+    type: String,
+    default: '',
+  },
 
-  messageClass: String,
+  messageClass: {
+    type: String,
+    default: '',
+  },
 
-  inputClass: String,
+  inputClass: {
+    type: String,
+    default: '',
+  },
 
-  required: Boolean,
+  required: {
+    type: Boolean,
+    default: false,
+  },
 
-  disabled: Boolean,
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 import { ref as vueRef, nextTick } from 'vue';

@@ -183,14 +183,12 @@ const router = createRouter({
 router.beforeEach((to) => {
   const userStore = useUserStore();
 
- 
   if (to.path.startsWith('/auth')) {
     if (userStore.isAuthenticated) {
       return '/dashboard';
     }
   }
 
- 
   if (to.meta.requiresAuth && !userStore.isAuthenticated) {
     return '/auth/login';
   }
