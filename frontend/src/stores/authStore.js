@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { apiClient } from '@stores/httpClients';
+import { apiClient } from '@api/httpClients';
 
 export const useAuthStore = defineStore('auth', () => {
   const loading = ref(false);

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
-import { apiClient } from '@stores/httpClients';
+import { apiClient } from '@api/httpClients';
 import { getErrorMessage } from '@composables/useErrorMessage';
 import {
   hasRequiredAddress,

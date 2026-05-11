@@ -3,7 +3,7 @@ import { computed, reactive, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 import useUserStore from '@stores/userStore';
-import { apiClient } from '@stores/httpClients';
+import { apiClient } from '@api/httpClients';
 
 export const useProfileStore = defineStore('profile', () => {
   const userStore = useUserStore();

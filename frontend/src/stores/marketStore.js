@@ -7,7 +7,7 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { toast } from 'vue-sonner';
 
-import { finnhubApi } from '@stores/httpClients';
+import { finnhubApi } from '@api/httpClients';
 
 import { getErrorMessage } from '@composables/useErrorMessage';
 import { generateMockCandleData } from '@/composables/generateMockCandleData';

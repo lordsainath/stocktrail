@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, reactive, ref, watch } from 'vue';
-import { apiClient } from '@stores/httpClients';
+import { apiClient } from '@api/httpClients';
 
 import useUserStore from '@stores/userStore';
 
