@@ -187,9 +187,14 @@ export const registerService = async (data) => {
             otp,
             otpExpiry: new Date(Date.now() + 10 * 60 * 1000),
         });
-``
         console.log(`[AUTH-SERVICE] User created, sending OTP to ${email}`);
-        await sendEmail(email, "OTP Verification", `<h2>Your OTP is <strong>${otp}</strong></h2><p>This OTP will expire in 10 minutes.</p>`);
+        void sendEmail(
+            email,
+            "OTP Verification",
+            `<h2>Your OTP is <strong>${otp}</strong></h2><p>This OTP will expire in 10 minutes.</p>`
+        ).catch((error) => {
+            console.error(`[AUTH-SERVICE] OTP email delivery failed for ${email}:`, error.message);
+        });
 
         return user;
     } catch (error) {

@@ -232,8 +232,8 @@ export const useRegisterStore = defineStore('register', () => {
     }
   };
 
-  const verifyOtpCode = async () => {
-    const otp = normalizeDigitCode(formData.otp);
+  const verifyOtpCode = async (otpValue = formData.otp) => {
+    const otp = normalizeDigitCode(otpValue);
     formData.otp = otp;
 
     if (!otp) {
@@ -248,8 +248,8 @@ export const useRegisterStore = defineStore('register', () => {
     return response.data;
   };
 
-  const setPinCode = async () => {
-    const pin = normalizeDigitCode(formData.pin);
+  const setPinCode = async (pinValue = formData.pin) => {
+    const pin = normalizeDigitCode(pinValue);
     formData.pin = pin;
 
     if (!isValidPin(pin)) {

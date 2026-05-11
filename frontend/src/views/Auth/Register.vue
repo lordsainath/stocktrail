@@ -13,16 +13,14 @@ import RegisterFooter from '@components/auth/register/RegisterFooter.vue';
 
 <template>
   <div
-    class="min-h-[calc(100vh-65px)] bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-6 transition-colors duration-300"
-  >
+    class="min-h-[calc(100vh-65px)] bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-6 transition-colors duration-300">
     <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- LEFT INFO CARD -->
       <RegisterInfoCard />
 
       <!-- RIGHT CARD -->
       <div
-        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 border border-slate-200 dark:border-slate-700 transition-all"
-      >
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 border border-slate-200 dark:border-slate-700 transition-all">
         <!-- HEADER -->
         <RegisterHeader />
 
