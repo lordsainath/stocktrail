@@ -48,13 +48,9 @@ watch(
 
 <template>
   <BaseModal :show="show" @close="emit('close')">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
-      Change PIN
-    </h3>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change PIN</h3>
 
-    <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">
-      Enter new PIN
-    </p>
+    <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Enter new PIN</p>
 
     <div class="mt-2 flex justify-center">
       <VOtpInput
@@ -72,9 +68,7 @@ watch(
       />
     </div>
 
-    <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">
-      Confirm new PIN
-    </p>
+    <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Confirm new PIN</p>
 
     <div class="mt-2 flex justify-center">
       <VOtpInput
@@ -93,11 +87,7 @@ watch(
     </div>
 
     <div class="mt-4 flex justify-end gap-2">
-      <BaseButton
-        variant="secondary"
-        :full-width="false"
-        @click="emit('close')"
-      >
+      <BaseButton variant="secondary" :full-width="false" @click="emit('close')">
         Cancel
       </BaseButton>
 

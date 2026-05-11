@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 
 import { useMarketStore } from '@stores/marketStore';
 
-
 const router = useRouter();
 
 const marketStore = useMarketStore();

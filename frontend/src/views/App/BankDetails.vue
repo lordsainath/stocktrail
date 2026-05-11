@@ -48,9 +48,7 @@ onMounted(walletStore.fetchWalletSummary);
       <section
         class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-xl p-6 sm:p-8"
       >
-        <p class="heading-sm">
-          BANKING HUB
-        </p>
+        <p class="heading-sm">BANKING HUB</p>
 
         <h1 class="mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">
           Bank Account Details

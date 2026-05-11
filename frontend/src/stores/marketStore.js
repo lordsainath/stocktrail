@@ -229,25 +229,25 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
-const fetchProfile = async (symbol) => {
-  try {
-    const response = await finnhubApi.get('/stock/profile2', {
-      params: { symbol },
-    });
+  const fetchProfile = async (symbol) => {
+    try {
+      const response = await finnhubApi.get('/stock/profile2', {
+        params: { symbol },
+      });
 
-    profile.value = response.data || null;
+      profile.value = response.data || null;
 
-    return profile.value;
-  } catch (error) {
-    toast.error(getErrorMessage(error, 'Failed to fetch company profile'));
+      return profile.value;
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to fetch company profile'));
 
-    profile.value = null;
+      profile.value = null;
 
-    router.push('/');
+      router.push('/');
 
-    return null;
-  }
-};
+      return null;
+    }
+  };
 
   const fetchCompanyNews = async (symbol, from, to) => {
     try {
@@ -272,41 +272,36 @@ const fetchProfile = async (symbol) => {
     }
   };
 
-const getHistoricalData = async (
-  symbol,
-  resolution,
-  from,
-  to
-) => {
-  void symbol;
-  void resolution;
-  void from;
-  void to;
+  const getHistoricalData = async (symbol, resolution, from, to) => {
+    void symbol;
+    void resolution;
+    void from;
+    void to;
 
-  try {
-    if (!quote.value) {
-      throw new Error('Quote data not found');
+    try {
+      if (!quote.value) {
+        throw new Error('Quote data not found');
+      }
+
+      const mockData = generateMockCandleData(quote.value);
+
+      chartData.value = mockData;
+      candleData.value = mockData;
+
+      console.log('Using mock candle data');
+
+      return mockData;
+    } catch (e) {
+      console.log(e);
+
+      toast.error('Failed to load historical data');
+
+      chartData.value = null;
+      candleData.value = null;
+
+      return null;
     }
-
-    const mockData = generateMockCandleData(quote.value);
-
-    chartData.value = mockData;
-    candleData.value = mockData;
-
-    console.log('Using mock candle data');
-
-    return mockData;
-  } catch (e) {
-    console.log(e);
-
-    toast.error('Failed to load historical data');
-
-    chartData.value = null;
-    candleData.value = null;
-
-    return null;
-  }
-};
+  };
 
   const searchSymbols = async (query) => {
     try {

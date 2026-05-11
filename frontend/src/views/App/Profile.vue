@@ -56,9 +56,7 @@ onMounted(fetchProfile);
               </div>
             </div>
             <div>
-              <p class="heading-sm">
-                ACCOUNT PROFILE
-              </p>
+              <p class="heading-sm">ACCOUNT PROFILE</p>
               <h1 class="text-3xl font-black text-slate-900 dark:text-slate-100 mt-1">
                 {{ user?.name || 'NiftyNest User' }}
               </h1>

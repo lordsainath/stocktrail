@@ -18,9 +18,7 @@ const setTheme = (value) => {
       <section
         class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8"
       >
-        <p class="heading-sm">
-          SETTINGS
-        </p>
+        <p class="heading-sm">SETTINGS</p>
         <h1 class="mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">
           Theme Preferences
         </h1>

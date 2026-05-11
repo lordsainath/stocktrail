@@ -82,7 +82,6 @@ const navigate = (path) => {
             : 'text-slate-600 dark:text-slate-300 border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/70',
           uiStore.isSidebarOpen ? '' : 'justify-center',
         ]"
-
         @click="navigate(item.path)"
       >
         <div

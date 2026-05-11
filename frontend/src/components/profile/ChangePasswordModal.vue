@@ -48,16 +48,10 @@ watch(
 
 <template>
   <BaseModal :show="show" @close="emit('close')">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
-      Change Password
-    </h3>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change Password</h3>
 
     <div class="mt-4">
-      <BaseInput
-        v-model="localForm.password"
-        type="password"
-        placeholder="New password"
-      />
+      <BaseInput v-model="localForm.password" type="password" placeholder="New password" />
     </div>
 
     <div class="mt-3">
@@ -69,11 +63,7 @@ watch(
     </div>
 
     <div class="mt-4 flex justify-end gap-2">
-      <BaseButton
-        variant="secondary"
-        :full-width="false"
-        @click="emit('close')"
-      >
+      <BaseButton variant="secondary" :full-width="false" @click="emit('close')">
         Cancel
       </BaseButton>
 
