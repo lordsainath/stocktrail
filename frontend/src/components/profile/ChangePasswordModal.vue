@@ -21,7 +21,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['close', 'save', 'update:form']);
+const emit = defineEmits(['close', 'save']);
 
 const localForm = reactive({
   password: '',
@@ -37,13 +37,6 @@ watch(
   { immediate: true, deep: true }
 );
 
-watch(
-  localForm,
-  (value) => {
-    emit('update:form', { ...value });
-  },
-  { deep: true }
-);
 </script>
 
 <template>
@@ -71,7 +64,7 @@ watch(
         :disabled="localForm.loading"
         variant="primary"
         :full-width="false"
-        @click="emit('save')"
+        @click="emit('save', { ...localForm })"
       >
         {{ localForm.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
