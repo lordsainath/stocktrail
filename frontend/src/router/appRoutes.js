@@ -1,3 +1,5 @@
+// App Route configurations for authenticated users
+
 export const appRoutes = [
   {
     path: '/',

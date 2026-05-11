@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { apiClient } from '@stores/httpClients';
-import useUserStore from '@stores/userStore';
 
 export const useAuthStore = defineStore('auth', () => {
   const loading = ref(false);
@@ -18,7 +17,7 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true;
     try {
       const response = await apiClient.post('/auth/login', { email, password });
-      const temp = response?.data?.tempToken || response?.tempToken || '';
+      const temp = response?.data?.data?.tempToken || response?.data?.tempToken || response?.tempToken || '';
       if (temp) {
         persistTemp(temp);
         step.value = 'pin';
@@ -40,12 +39,9 @@ export const useAuthStore = defineStore('auth', () => {
         pin,
       });
 
-      const sessionPayload = response?.data?.data || response?.data || response || null;
+      const sessionPayload = response?.data?.data || response?.data || response?.data?.token || null;
 
       if (sessionPayload) {
-        // delegate session persistence to userStore
-        const userStore = useUserStore();
-        userStore.setSession(sessionPayload);
         persistTemp('');
         step.value = 'credentials';
         return { success: true, session: sessionPayload };

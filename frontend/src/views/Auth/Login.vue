@@ -1,51 +1,107 @@
 <script setup>
-import { useLogin } from '@composables/useLogin';
+import { computed, nextTick, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useForm } from 'vee-validate';
+import { toast } from 'vue-sonner';
+
+import useAuthStore from '@stores/authStore';
+import useUserStore from '@stores/userStore';
 import BaseButton from '@components/base/BaseButton.vue';
 import BaseInput from '@components/base/BaseInput.vue';
-import { ref, nextTick } from 'vue';
 import BaseOtpInput from '@/components/base/BaseOtpInput.vue';
 import BaseLoader from '@/components/base/BaseLoader.vue';
+import { getErrorMessage } from '@composables/useErrorMessage';
+import { loginCredentialsSchema, loginPinSchema } from '@composables/useValidationSchemas';
 
-const {
-  email,
-  password,
-  pin,
-  loading,
-  step,
-  errors,
-  handleCredentials,
-  handlePin,
-  backToCredentials,
-} = useLogin();
+const router = useRouter();
+const authStore = useAuthStore();
+const userStore = useUserStore();
+
+const step = computed(() => authStore.step);
+const loading = computed(() => authStore.loading);
+
+const validationSchema = computed(() =>
+  step.value === 'credentials' ? loginCredentialsSchema : loginPinSchema,
+);
+
+const { errors, defineField, validate, setFieldValue, setFieldError } = useForm({
+  validationSchema,
+  initialValues: {
+    email: '',
+    password: '',
+    pin: '',
+  },
+});
+
+const [email] = defineField('email');
+const [password] = defineField('password');
+const [pin] = defineField('pin');
 
 const emailRef = ref(null);
 const passwordRef = ref(null);
 const pinRef = ref(null);
 
+const focusFirstError = async (errorKey) => {
+  const refMap = {
+    email: emailRef,
+    password: passwordRef,
+    pin: pinRef,
+  };
+
+  await nextTick();
+  const target = refMap[errorKey];
+  if (target?.value?.focus) target.value.focus();
+};
+
 async function onCredentialsSubmit() {
-  const res = await handleCredentials();
-  if (res && res.success === false && res.firstError) {
-    const refMap = {
-      email: emailRef,
-      password: passwordRef,
-    };
-    await nextTick();
-    const target = refMap[res.firstError];
-    if (target?.value?.focus) target.value.focus();
+  const { valid, errors: validationErrors } = await validate();
+
+  if (!valid) {
+    const firstKey = Object.keys(validationErrors || {})[0];
+    await focusFirstError(firstKey);
+    return;
   }
+
+  const res = await authStore.startLogin({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (!res?.success) {
+    toast.error(getErrorMessage(res?.error, 'Login failed'));
+    return;
+  }
+
+  toast.success('Password verified. Enter your PIN to continue.');
 }
 
 async function onPinSubmit() {
-  const res = await handlePin();
-  if (res && res.success === false && res.firstError) {
-    const refMap = {
-      pin: pinRef,
-    };
-    await nextTick();
-    const target = refMap[res.firstError];
-    if (target?.value?.focus) target.value.focus();
+  const { valid, errors: validationErrors } = await validate();
+
+  if (!valid) {
+    const firstKey = Object.keys(validationErrors || {})[0];
+    await focusFirstError(firstKey);
+    return;
   }
+
+  const res = await authStore.verifyPin(pin.value);
+
+  if (!res?.success) {
+    setFieldValue('pin', '');
+    setFieldError('pin', getErrorMessage(res?.error, 'PIN verification failed'));
+    toast.error(getErrorMessage(res?.error, 'PIN verification failed'));
+    return;
+  }
+
+  userStore.setSession(res.session);
+  toast.success('Login successful');
+  router.push('/');
 }
+
+const backToCredentials = () => {
+  authStore.backToCredentials();
+  setFieldValue('pin', '');
+};
 </script>
 
 <template>

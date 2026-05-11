@@ -1,3 +1,5 @@
+// Authentication-related route configurations for Vue Router
+
 export const authRoutes = [
   {
     path: '/auth',
