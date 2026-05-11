@@ -3,10 +3,10 @@
 // ===================================
 
 import { createRouter, createWebHistory } from 'vue-router';
+import useUserStore from '@stores/userStore';
 
 // ============================================
 // ROUTER CONFIGURATION
-// Define application routes with lazy loading
 // ============================================
 
 const routes = [
@@ -25,6 +25,7 @@ const routes = [
         path: 'login',
         name: 'Login',
         component: () => import('@views/Auth/Login.vue'),
+        meta: { title: 'Login' },
       },
 
       {
@@ -180,31 +181,31 @@ const router = createRouter({
 // ===================================
 
 router.beforeEach((to) => {
-  const token = localStorage.getItem('token');
+  const userStore = useUserStore();
 
-  // AUTH ROUTES
+ 
   if (to.path.startsWith('/auth')) {
-    if (token) {
+    if (userStore.isAuthenticated) {
       return '/dashboard';
     }
   }
 
-  // PROTECTED ROUTES
-  else {
-    if (!token) {
-      return '/auth/login';
-    }
+ 
+  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+    return '/auth/login';
   }
+
+  return true;
 });
 
 // ============================================
 // NAVIGATION GUARD
 // Update document title based on route meta
 // ============================================
+
 router.afterEach((to) => {
-  const title = to.meta.title || 'StockTrail | Investment Portfolio Tracker';
-  const projectName = 'StockTrail ';
-  document.title = `${title} | ${projectName}`;
+  const title = to.meta.title || 'StockTrail';
+  document.title = `${title} | StockTrail`;
 });
 
 export default router;
