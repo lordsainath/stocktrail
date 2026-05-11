@@ -48,14 +48,18 @@ export const useTradeStore = defineStore('trade', () => {
 
   const totalInvestment = computed(() =>
     roundMoney(
-      holdings.value.reduce((sum, item) => sum + Number(item.avgPrice || 0) * Number(item.quantity || 0), 0)
+      holdings.value.reduce(
+        (sum, item) => sum + Number(item.avgPrice || 0) * Number(item.quantity || 0),
+        0
+      )
     )
   );
 
   const portfolioValue = computed(() =>
     roundMoney(
       holdings.value.reduce(
-        (sum, item) => sum + Number(item.lastPrice || item.avgPrice || 0) * Number(item.quantity || 0),
+        (sum, item) =>
+          sum + Number(item.lastPrice || item.avgPrice || 0) * Number(item.quantity || 0),
         0
       )
     )
@@ -72,7 +76,8 @@ export const useTradeStore = defineStore('trade', () => {
       const costBasis = roundMoney(Number(item.avgPrice || 0) * quantity);
       const currentValue = roundMoney(currentPrice * quantity);
       const unrealizedPnL = roundMoney(currentValue - costBasis);
-      const unrealizedPnLPercent = costBasis > 0 ? roundMoney((unrealizedPnL / costBasis) * 100) : 0;
+      const unrealizedPnLPercent =
+        costBasis > 0 ? roundMoney((unrealizedPnL / costBasis) * 100) : 0;
 
       return {
         ...item,
@@ -86,11 +91,12 @@ export const useTradeStore = defineStore('trade', () => {
   );
 
   const totalUnrealizedPnL = computed(() =>
-    roundMoney(holdingsWithPnL.value.reduce((sum, item) => sum + Number(item.unrealizedPnL || 0), 0))
+    roundMoney(
+      holdingsWithPnL.value.reduce((sum, item) => sum + Number(item.unrealizedPnL || 0), 0)
+    )
   );
 
-  const getHolding = (symbol) =>
-    holdings.value.find((item) => item.symbol === symbol) || null;
+  const getHolding = (symbol) => holdings.value.find((item) => item.symbol === symbol) || null;
 
   const getAvailableQuantity = (symbol) => Number(getHolding(symbol)?.quantity || 0);
 

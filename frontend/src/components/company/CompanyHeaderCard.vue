@@ -1,5 +1,4 @@
 <script setup>
-
 import CompanyStatsGrid from './CompanyStatsGrid.vue';
 
 defineProps({

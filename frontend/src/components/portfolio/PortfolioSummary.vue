@@ -34,7 +34,9 @@ const formatSignedMoney = (value) => {
 </script>
 
 <template>
-  <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+  <section
+    class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900"
+  >
     <div class="flex items-start justify-between gap-4">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Portfolio</p>
@@ -46,32 +48,50 @@ const formatSignedMoney = (value) => {
 
       <div class="rounded-xl border border-slate-200 px-4 py-3 text-right dark:border-slate-700">
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Equity</p>
-        <p class="text-xl font-bold text-slate-900 dark:text-white">{{ formatMoney(totalEquity) }}</p>
+        <p class="text-xl font-bold text-slate-900 dark:text-white">
+          {{ formatMoney(totalEquity) }}
+        </p>
       </div>
     </div>
 
     <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+      <div
+        class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+      >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Cash</p>
-        <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{{ formatMoney(cashBalance) }}</p>
+        <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
+          {{ formatMoney(cashBalance) }}
+        </p>
       </div>
 
-      <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+      <div
+        class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+      >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Market value</p>
-        <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{{ formatMoney(portfolioValue) }}</p>
+        <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
+          {{ formatMoney(portfolioValue) }}
+        </p>
       </div>
 
-      <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+      <div
+        class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+      >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Invested</p>
-        <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{{ formatMoney(totalInvestment) }}</p>
+        <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
+          {{ formatMoney(totalInvestment) }}
+        </p>
       </div>
 
-      <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+      <div
+        class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+      >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Positions</p>
         <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{{ holdingCount }}</p>
       </div>
 
-      <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+      <div
+        class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+      >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Unrealized P/L</p>
         <p
           class="mt-2 text-lg font-semibold"

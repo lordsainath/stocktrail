@@ -1,5 +1,5 @@
 <script setup>
-import {  MoonIcon, Sun } from '@lucide/vue';
+import { MoonIcon, Sun } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
 import { useThemeStore } from '../../stores/themeStore';
 import { computed } from 'vue';

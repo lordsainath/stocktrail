@@ -14,8 +14,7 @@ const navigateToCompany = (symbol) => {
   router.push({ name: 'CompanyDetails', params: { symbol } });
 };
 
-const formatMoney = (value) =>
-  `$${Number(value || 0).toFixed(2)}`;
+const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
 
 const formatSignedMoney = (value) => {
   const amount = Number(value || 0);
@@ -33,13 +32,9 @@ const formatSignedMoney = (value) => {
       class="flex items-center justify-between border-b border-slate-200 pb-4 dark:border-slate-700"
     >
       <div>
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white">
-          Holdings
-        </h2>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Holdings</h2>
 
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Your current stock positions
-        </p>
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Your current stock positions</p>
       </div>
 
       <div
@@ -57,8 +52,8 @@ const formatSignedMoney = (value) => {
       No holdings yet.
     </div>
 
-    <!-- Holdings -->
-    <div v-else class="mt-4 space-y-3">
+    <!-- Holdings List -->
+    <div v-else class="mt-4 max-h-[500px] space-y-3 overflow-y-auto pr-1">
       <article
         v-for="holding in holdings"
         :key="holding.symbol"
@@ -72,9 +67,7 @@ const formatSignedMoney = (value) => {
               {{ holding.symbol }}
             </h3>
 
-            <p
-              class="mt-1 text-xs uppercase tracking-wide text-slate-400"
-            >
+            <p class="mt-1 text-xs uppercase tracking-wide text-slate-400">
               {{ holding.name }}
             </p>
           </div>
@@ -82,22 +75,14 @@ const formatSignedMoney = (value) => {
           <div class="text-right">
             <p
               class="text-sm font-semibold"
-              :class="
-                holding.isProfit
-                  ? 'text-emerald-500'
-                  : 'text-rose-500'
-              "
+              :class="holding.isProfit ? 'text-emerald-500' : 'text-rose-500'"
             >
               {{ formatSignedMoney(holding.unrealizedPnL) }}
             </p>
 
             <p
               class="mt-1 text-xs"
-              :class="
-                holding.isProfit
-                  ? 'text-emerald-500'
-                  : 'text-rose-500'
-              "
+              :class="holding.isProfit ? 'text-emerald-500' : 'text-rose-500'"
             >
               {{ holding.unrealizedPnLPercent >= 0 ? '+' : '' }}
               {{ holding.unrealizedPnLPercent.toFixed(2) }}%

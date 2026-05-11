@@ -33,7 +33,9 @@ const submitting = ref(false);
 
 const currentPrice = computed(() => Number(props.currentPrice || 0));
 const quantityValue = computed(() => Number(quantity.value || 0));
-const estimatedValue = computed(() => Number((quantityValue.value * currentPrice.value).toFixed(2)));
+const estimatedValue = computed(() =>
+  Number((quantityValue.value * currentPrice.value).toFixed(2))
+);
 const currentHolding = computed(() => tradeStore.getHolding(props.symbol));
 const availableQuantity = computed(() => Number(currentHolding.value?.quantity || 0));
 const cashBalance = computed(() => walletStore.walletBalance || tradeStore.cashBalance.valueOf());
@@ -89,9 +91,7 @@ const handlePlaceOrder = async () => {
     };
 
     const result =
-      side.value === 'buy'
-        ? tradeStore.placeBuy(payload)
-        : tradeStore.placeSell(payload);
+      side.value === 'buy' ? tradeStore.placeBuy(payload) : tradeStore.placeSell(payload);
 
     toast.success(
       `${side.value === 'buy' ? 'Bought' : 'Sold'} ${qty} ${props.symbol} shares successfully`
@@ -126,7 +126,9 @@ watch(
 </script>
 
 <template>
-  <aside class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+  <aside
+    class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900"
+  >
     <div class="flex items-start justify-between gap-3">
       <div>
         <h2 class="text-lg font-bold text-slate-900 dark:text-white">
@@ -150,7 +152,11 @@ watch(
       <button
         type="button"
         class="rounded-xl cursor-pointer px-3 py-2 text-sm font-semibold transition"
-        :class="side === 'buy' ? 'bg-emerald-500 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300'"
+        :class="
+          side === 'buy'
+            ? 'bg-emerald-500 text-white shadow-sm'
+            : 'text-slate-600 dark:text-slate-300'
+        "
         @click="switchSide('buy')"
       >
         Buy
@@ -159,7 +165,11 @@ watch(
       <button
         type="button"
         class="rounded-xl cursor-pointer px-3 py-2 text-sm font-semibold transition"
-        :class="side === 'sell' ? 'bg-rose-500 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300'"
+        :class="
+          side === 'sell'
+            ? 'bg-rose-500 text-white shadow-sm'
+            : 'text-slate-600 dark:text-slate-300'
+        "
         @click="switchSide('sell')"
       >
         Sell
@@ -175,10 +185,16 @@ watch(
         label="Quantity"
         placeholder="Enter quantity"
         input-class="mt-1"
-        :message="side === 'sell' ? `Available: ${availableQuantity}` : `Wallet balance: ${formatMoney(cashBalance)}`"
+        :message="
+          side === 'sell'
+            ? `Available: ${availableQuantity}`
+            : `Wallet balance: ${formatMoney(cashBalance)}`
+        "
       />
 
-      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+      <div
+        class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
+      >
         <div class="flex items-center justify-between gap-3">
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             Estimated order value

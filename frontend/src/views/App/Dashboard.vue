@@ -2,8 +2,9 @@
 import { useDashboard } from '@composables/useDashboard';
 import MarketIntelligence from '@components/dashboard/MarketIntelligence.vue';
 import DashboardCompanyGrid from '@/components/dashboard/DashboardCompanyGrid.vue';
+import DashboardLoadingSkeleton from '@components/dashboard/DashboardLoadingSkeleton.vue';
 
-const { companies, news } = useDashboard();
+const { companies, news, dashboardLoading } = useDashboard();
 </script>
 
 <template>
@@ -18,9 +19,13 @@ const { companies, news } = useDashboard();
         <p class="mt-2 text-xl font-bold text-slate-900 dark:text-white">Technology heavyweights</p>
       </div>
 
-      <DashboardCompanyGrid :companies="companies" />
+      <DashboardLoadingSkeleton v-if="dashboardLoading" />
 
-      <MarketIntelligence :news="news" />
+      <template v-else>
+        <DashboardCompanyGrid :companies="companies" />
+
+        <MarketIntelligence :news="news" />
+      </template>
     </div>
   </div>
 </template>
