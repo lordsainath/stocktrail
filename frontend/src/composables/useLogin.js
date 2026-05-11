@@ -2,17 +2,15 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import { useForm } from 'vee-validate';
-import useUserStore from '@stores/userStore';
 import useAuthStore from '@stores/authStore';
 import { getErrorMessage } from '@composables/useErrorMessage';
 import { loginCredentialsSchema, loginPinSchema } from '@composables/useValidationSchemas';
 
 export function useLogin() {
   const router = useRouter();
-  const userStore = useUserStore();
   const authStore = useAuthStore();
 
-  const step = ref('credentials');
+  const step = computed(() => authStore.step);
 
   const validationSchema = computed(() => {
     if (step.value === 'credentials') {
@@ -35,8 +33,8 @@ export function useLogin() {
   const [password] = defineField('password');
   const [pin] = defineField('pin');
 
-  const loading = ref(false);
-  const tempToken = ref(userStore.tempToken || '');
+  const loading = computed(() => authStore.loading);
+  const tempToken = computed(() => authStore.tempToken);
 
   const handleCredentials = async () => {
     step.value = 'credentials';
@@ -49,15 +47,15 @@ export function useLogin() {
 
     loading.value = true;
     try {
-      const response = await authStore.login({
+      const res = await authStore.startLogin({
         email: email.value,
         password: password.value,
       });
-      const temp =
-        response?.data?.tempToken || response?.tempToken || response?.data?.data?.tempToken || '';
-      tempToken.value = temp;
-      userStore.setTempToken(tempToken.value);
-      step.value = 'pin';
+
+      if (!res || !res.success) {
+        throw res?.error || new Error('Login failed');
+      }
+
       toast.success('Password verified. Enter your PIN to continue.');
     } catch (error) {
       toast.error(getErrorMessage(error, 'Login failed'));
@@ -83,13 +81,11 @@ export function useLogin() {
 
     loading.value = true;
     try {
-      const response = await authStore.verifyLoginPin({
-        tempToken: tempToken.value,
-        pin: pin.value,
-      });
-      const sessionPayload = response?.data?.data || response?.data || response || null;
-      userStore.setSession(sessionPayload);
-      userStore.setTempToken('');
+      const res = await authStore.verifyPin(pin.value);
+      if (!res || !res.success) {
+        throw res?.error || new Error('PIN verification failed');
+      }
+
       toast.success('Login successful');
       router.push('/');
     } catch (error) {
@@ -105,7 +101,7 @@ export function useLogin() {
 
   const backToCredentials = () => {
     step.value = 'credentials';
-    userStore.setTempToken('');
+    authStore.backToCredentials();
   };
 
   return {

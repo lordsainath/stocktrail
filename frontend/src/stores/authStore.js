@@ -1,39 +1,83 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { apiClient } from '@stores/httpClients';
+import useUserStore from '@stores/userStore';
 
 export const useAuthStore = defineStore('auth', () => {
   const loading = ref(false);
+  const step = ref('credentials');
+  const tempToken = ref(sessionStorage.getItem('tempToken') || '');
 
-  const login = async ({ email, password }) => {
+  const persistTemp = (value) => {
+    tempToken.value = value || '';
+    if (value) sessionStorage.setItem('tempToken', value);
+    else sessionStorage.removeItem('tempToken');
+  };
+
+  const startLogin = async ({ email, password }) => {
     loading.value = true;
-
     try {
       const response = await apiClient.post('/auth/login', { email, password });
-      return response.data;
+      const temp = response?.data?.tempToken || response?.tempToken || '';
+      if (temp) {
+        persistTemp(temp);
+        step.value = 'pin';
+        return { success: true };
+      }
+      return { success: false, error: 'No temp token' };
+    } catch (err) {
+      return { success: false, error: err };
     } finally {
       loading.value = false;
     }
   };
 
-  const verifyLoginPin = async ({ tempToken, pin }) => {
+  const verifyPin = async (pin) => {
     loading.value = true;
-
     try {
       const response = await apiClient.post('/auth/verify-pin', {
-        tempToken,
+        tempToken: tempToken.value,
         pin,
       });
-      return response.data;
+
+      const sessionPayload = response?.data?.data || response?.data || response || null;
+
+      if (sessionPayload) {
+        // delegate session persistence to userStore
+        const userStore = useUserStore();
+        userStore.setSession(sessionPayload);
+        persistTemp('');
+        step.value = 'credentials';
+        return { success: true, session: sessionPayload };
+      }
+
+      return { success: false, error: 'Invalid session payload' };
+    } catch (err) {
+      return { success: false, error: err };
     } finally {
       loading.value = false;
     }
+  };
+
+  const backToCredentials = () => {
+    persistTemp('');
+    step.value = 'credentials';
+  };
+
+  const clearAuth = () => {
+    persistTemp('');
+    step.value = 'credentials';
+    loading.value = false;
   };
 
   return {
     loading,
-    login,
-    verifyLoginPin,
+    step,
+    tempToken,
+    startLogin,
+    verifyPin,
+    backToCredentials,
+    clearAuth,
   };
 });
 
