@@ -38,20 +38,14 @@ onMounted(fetchProfile);
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
     <div class="max-w-6xl mx-auto space-y-5">
       <section
-        class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8"
-      >
+        class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
           <div class="flex items-center gap-4">
             <div class="relative">
-              <img
-                :src="user?.photoUrl"
-                alt="Profile avatar"
-                class="w-20 h-20 rounded-2xl object-cover ring-4 ring-white dark:ring-slate-700 shadow-lg"
-              />
-              <div
-                v-if="loadingProfile"
-                class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-cyan-500 text-white text-[10px] flex items-center justify-center"
-              >
+              <img :src="user?.photoUrl" alt="Profile avatar"
+                class="w-20 h-20 rounded-2xl object-cover ring-4 ring-white dark:ring-slate-700 shadow-lg" />
+              <div v-if="loadingProfile"
+                class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-cyan-500 text-white text-[10px] flex items-center justify-center">
                 ...
               </div>
             </div>
@@ -66,12 +60,7 @@ onMounted(fetchProfile);
             </div>
           </div>
 
-          <BaseButton
-            variant="primary"
-            :full-width="false"
-            class="self-start lg:self-auto"
-            @click="openProfileModal"
-          >
+          <BaseButton variant="primary" :full-width="false" class="self-start lg:self-auto" @click="openProfileModal">
             Edit Profile
           </BaseButton>
         </div>
@@ -79,8 +68,7 @@ onMounted(fetchProfile);
 
       <section class="grid lg:grid-cols-3 gap-5">
         <article
-          class="lg:col-span-2 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6"
-        >
+          class="lg:col-span-2 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6">
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Account Details</h2>
           <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Your verified profile and KYC details in a clean summary format.
@@ -97,11 +85,8 @@ onMounted(fetchProfile);
 
                 <ProfileInfoItem label="Email" :value="user?.email" />
 
-                <ProfileInfoItem
-                  label="KYC Status"
-                  :value="user?.kycStatus"
-                  value-class="text-sm font-semibold text-emerald-600 dark:text-emerald-400"
-                />
+                <ProfileInfoItem label="KYC Status" :value="user?.kycStatus"
+                  value-class="text-sm font-semibold text-emerald-600 dark:text-emerald-400" />
               </dl>
             </ProfileInfoCard>
 
@@ -126,19 +111,15 @@ onMounted(fetchProfile);
         </article>
 
         <article
-          class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6"
-        >
+          class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6">
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Security Controls</h2>
           <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Manage your login protection from here.
           </p>
 
           <div class="mt-5 space-y-3">
-            <BaseButton
-              variant="secondary"
-              class="!justify-start !p-3 !items-start flex-col"
-              @click="openPasswordModal"
-            >
+            <BaseButton variant="secondary" class="!justify-start !p-3 !items-start flex-col"
+              @click="openPasswordModal">
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">
                 Change Password
               </p>
@@ -148,11 +129,7 @@ onMounted(fetchProfile);
               </p>
             </BaseButton>
 
-            <BaseButton
-              variant="secondary"
-              class="!justify-start !p-3 !items-start flex-col"
-              @click="openPinModal"
-            >
+            <BaseButton variant="secondary" class="!justify-start !p-3 !items-start flex-col" @click="openPinModal">
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Change PIN</p>
 
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -162,14 +139,10 @@ onMounted(fetchProfile);
 
             <div class="rounded-xl border border-dashed border-slate-300 dark:border-slate-700 p-3">
               <p class="text-xs text-slate-500 dark:text-slate-400">PIN Status</p>
-              <p
-                class="text-sm font-semibold mt-1"
-                :class="
-                  user?.isPinSet
-                    ? 'text-emerald-600 dark:text-emerald-400'
-                    : 'text-amber-600 dark:text-amber-400'
-                "
-              >
+              <p class="text-sm font-semibold mt-1" :class="user?.isPinSet
+                  ? 'text-emerald-600 dark:text-emerald-400'
+                  : 'text-amber-600 dark:text-amber-400'
+                ">
                 {{ user?.isPinSet ? 'PIN is configured' : 'PIN is not set yet' }}
               </p>
             </div>
@@ -177,26 +150,12 @@ onMounted(fetchProfile);
         </article>
       </section>
 
-      <EditProfileModal
-        :show="showProfileModal"
-        :form="profileForm"
-        @close="closeProfileModal"
-        @save="updateProfile"
-      />
+      <EditProfileModal :show="showProfileModal" :form="profileForm" @close="closeProfileModal" @save="updateProfile" />
 
-      <ChangePasswordModal
-        :show="showPasswordModal"
-        :form="passwordForm"
-        @close="closePasswordModal"
-        @save="updatePassword"
-      />
+      <ChangePasswordModal :show="showPasswordModal" :form="passwordForm" @close="closePasswordModal"
+        @save="updatePassword" />
 
-      <ChangePinModal
-        :show="showPinModal"
-        :form="pinForm"
-        @close="closePinModal"
-        @save="updatePin"
-      />
+      <ChangePinModal :show="showPinModal" :form="pinForm" @close="closePinModal" @save="updatePin" />
     </div>
   </div>
 </template>

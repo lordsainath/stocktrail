@@ -1,6 +1,15 @@
+<!--  ===================================
+      Script Started
+      =================================== -->
+
+
 <script setup>
+
+// Imports
 import { computed } from 'vue';
 
+
+// Definig Props
 const props = defineProps({
   type: {
     type: String,
@@ -38,6 +47,7 @@ const props = defineProps({
   },
 });
 
+// Computed Properties for Chart Options
 const chartOptions = computed(() => ({
   chart: {
     toolbar: {
@@ -167,10 +177,25 @@ const chartOptions = computed(() => ({
     },
   ],
 }));
+
+
 </script>
+
+
+
+<!--  ===================================
+      Script Ended
+      =================================== -->
+
+<!--  ===================================
+      Template Started
+      =================================== -->
+
 
 <template>
   <div class="w-full">
+    <!-- Importing ApexCharts -->
     <apexchart :type="type" :height="height" :options="chartOptions" :series="series" />
+
   </div>
 </template>

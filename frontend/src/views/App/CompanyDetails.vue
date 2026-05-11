@@ -1,27 +1,33 @@
+<!--  ===================================
+      Script Started
+      =================================== -->
+
+
 <script setup>
+
+// imports
 import { computed, onMounted, watch } from 'vue';
-
 import { useRoute } from 'vue-router';
-
 import { useMarketStore } from '@stores/marketStore';
-
 import CompanyHeaderCard from '@components/company/CompanyHeaderCard.vue';
 import CompanyNewsCard from '@components/company/CompanyNewsCard.vue';
 import CompanyLoadingSkeleton from '@components/company/CompanyLoadingSkeleton.vue';
-
 import BaseChart from '@components/base/BaseChart.vue';
-
 import BuySellPanel from '@/components/BuySellPanel.vue';
+
 
 const route = useRoute();
 
 const marketStore = useMarketStore();
 
+
+// Computed Properties
 const symbol = computed(() => route.params.symbol);
 
-// =========================
+
+
 // LOAD COMPANY DATA
-// =========================
+
 const loadCompany = async () => {
   if (!symbol.value) return;
 
@@ -33,11 +39,21 @@ onMounted(() => {
   loadCompany();
 });
 
-// Route param change
+// watcher for symbol change and refetch company data
 watch(symbol, () => {
   loadCompany();
 });
 </script>
+
+
+
+<!--  ===================================
+      Script Ended
+      =================================== -->
+
+<!--  ===================================
+      Template Started
+      =================================== -->
 
 <template>
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
@@ -51,7 +67,7 @@ watch(symbol, () => {
 
         <!-- MARKET SECTION -->
         <section class="mt-5 grid grid-cols-1 xl:grid-cols-4 gap-5">
-          <!-- CHART -->
+
           <div
             class="xl:col-span-3 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/90 shadow-xl backdrop-blur-sm p-5">
             <!-- TOP -->

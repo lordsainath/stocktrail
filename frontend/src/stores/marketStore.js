@@ -1,3 +1,8 @@
+// ============================================
+// IMPORTS
+// ============================================
+
+
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { toast } from 'vue-sonner';
@@ -9,64 +14,55 @@ import { generateMockCandleData } from '@/composables/generateMockCandleData';
 import router from '@/router';
 
 export const useMarketStore = defineStore('market', () => {
+
+  // State Initialization
   const marketNews = ref([]);
-
   const dashboardCompanies = ref([]);
-
   const quote = ref(null);
   const profile = ref(null);
   const companyNews = ref([]);
-
   const chartData = ref(null);
-
   const candleData = ref(null);
-
   const loading = ref(false);
   const dashboardLoading = ref(false);
 
+  // Constant list of popular stocks for dashboard
   const dashboardUniverse = [
     {
       symbol: 'AAPL',
       name: 'Apple Inc.',
-      accent: 'emerald',
     },
     {
       symbol: 'MSFT',
       name: 'Microsoft Corp.',
-      accent: 'sky',
     },
     {
       symbol: 'GOOGL',
       name: 'Alphabet Inc.',
-      accent: 'rose',
     },
     {
       symbol: 'AMZN',
       name: 'Amazon.com Inc.',
-      accent: 'emerald',
     },
     {
       symbol: 'TSLA',
       name: 'Tesla Inc.',
-      accent: 'rose',
     },
     {
       symbol: 'NVDA',
       name: 'NVIDIA Corp.',
-      accent: 'violet',
     },
     {
       symbol: 'META',
       name: 'Meta Platforms Inc.',
-      accent: 'cyan',
     },
     {
       symbol: 'NFLX',
       name: 'Netflix Inc.',
-      accent: 'orange',
     },
   ];
 
+  // Computed property to combine quote, profile, and news for the selected company
   const selectedCompany = computed(() => ({
     quote: quote.value,
     profile: profile.value,
@@ -272,6 +268,8 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
+
+
   const getHistoricalData = async (symbol, resolution, from, to) => {
     void symbol;
     void resolution;
@@ -294,7 +292,7 @@ export const useMarketStore = defineStore('market', () => {
     } catch (e) {
       console.log(e);
 
-      toast.error('Failed to load historical data');
+      toast.error('Failed to load historical data from page');
 
       chartData.value = null;
       candleData.value = null;
@@ -303,6 +301,8 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
+
+  // Search for symbols based on user query
   const searchSymbols = async (query) => {
     try {
       if (!query?.trim()) {
@@ -318,52 +318,14 @@ export const useMarketStore = defineStore('market', () => {
       return response.data.result || [];
     } catch (error) {
       console.log(error);
+      toast.error(getErrorMessage(error, 'Failed to search symbols'));
 
-      // FALLBACK MOCK DATA
-      const fallbackStocks = [
-        {
-          symbol: 'AAPL',
-          displaySymbol: 'AAPL',
-          description: 'Apple Inc.',
-          type: 'Equity',
-        },
-
-        {
-          symbol: 'MSFT',
-          displaySymbol: 'MSFT',
-          description: 'Microsoft Corp.',
-          type: 'Equity',
-        },
-
-        {
-          symbol: 'GOOGL',
-          displaySymbol: 'GOOGL',
-          description: 'Alphabet Inc.',
-          type: 'Equity',
-        },
-
-        {
-          symbol: 'TSLA',
-          displaySymbol: 'TSLA',
-          description: 'Tesla Inc.',
-          type: 'Equity',
-        },
-
-        {
-          symbol: 'NVDA',
-          displaySymbol: 'NVDA',
-          description: 'NVIDIA Corp.',
-          type: 'Equity',
-        },
-      ];
-
-      return fallbackStocks.filter(
-        (stock) =>
-          stock.symbol.toLowerCase().includes(query.toLowerCase()) ||
-          stock.description.toLowerCase().includes(query.toLowerCase())
-      );
+      return [];
     }
   };
+
+
+  // Fetch all company details (quote, profile, news) for a given symbol
 
   const fetchCompanyDetails = async (symbol) => {
     loading.value = true;
@@ -373,8 +335,6 @@ export const useMarketStore = defineStore('market', () => {
 
       const from = to - 30 * 24 * 60 * 60;
 
-      // Fetch quote first
-      // because mock candle generation depends on it
       await fetchQuote(symbol);
 
       await Promise.all([
