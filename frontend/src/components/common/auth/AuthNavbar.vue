@@ -21,7 +21,7 @@ const route = useRoute();
           S
         </div>
 
-        <h1 class="font-semibold tracking-wide">StockTrail</h1>
+        <h1 class="font-semibold tracking-wide text-black dark:text-white">StockTrail</h1>
       </div>
 
       <!-- RIGHT -->

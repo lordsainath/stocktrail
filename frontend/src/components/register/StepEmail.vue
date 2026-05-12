@@ -70,7 +70,7 @@ const checkValid = handleSubmit(
       v-model="email"
       label="Email Address"
       type="email"
-      placeholder="you@example.com"
+      placeholder="Enter email address"
       :error="errors.email"
       required
       @keydown.enter="checkValid"

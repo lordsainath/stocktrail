@@ -7,6 +7,9 @@ import DashboardLoadingSkeleton from '@components/dashboard/DashboardLoadingSkel
 const { companies, news, dashboardLoading } = useDashboard();
 </script>
 
+<!-- Script Ended -->
+<!-- Template Started -->
+
 <template>
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
     <div class="mx-auto max-w-6xl space-y-5">
@@ -37,4 +40,9 @@ const { companies, news, dashboardLoading } = useDashboard();
   </div>
 </template>
 
-<style scoped></style>
+<!-- Template Ended -->
+<!-- Style Started  -->
+<style scoped>
+
+</style>
+<!-- Style Ended  -->

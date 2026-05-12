@@ -1,3 +1,5 @@
+<!-- Script Started -->
+
 <script setup>
 import { computed } from 'vue';
 import { useThemeStore } from '../../stores/themeStore';
@@ -11,6 +13,11 @@ const setTheme = (value) => {
   }
 };
 </script>
+
+
+<!-- Script Ended -->
+<!-- Template Started -->
+
 
 <template>
   <div class="min-h-[calc(100vh-65px)] bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
@@ -82,5 +89,9 @@ const setTheme = (value) => {
     </div>
   </div>
 </template>
+<!-- Template Ended -->
+<!-- Style Started  -->
+<style scoped>
 
-<style scoped></style>
+</style>
+<!-- Style Ended  -->

@@ -81,8 +81,8 @@ const inputClasses = computed(() => [
   'placeholder-slate-400 dark:placeholder-slate-500',
 
   props.error
-    ? 'border-red-500 focus:ring-2 focus:ring-red-400'
-    : 'border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-primary focus:border-transparent',
+    ? 'border-red-500 focus:ring-1 focus:ring-red-400'
+    : 'border-slate-200 dark:border-slate-600 focus:ring-1 focus:ring-primary focus:border-transparent',
 
   props.disabled && 'opacity-50 cursor-not-allowed',
 
@@ -98,17 +98,8 @@ const inputClasses = computed(() => [
       <span v-if="required" class="text-red-500 ml-1"> * </span>
     </label>
 
-    <input
-      ref="inputRef"
-      :value="modelValue"
-      :type="type"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :required="required"
-      :class="inputClasses"
-      v-bind="$attrs"
-      @input="handleInput"
-    />
+    <input ref="inputRef" :value="modelValue" :type="type" :placeholder="placeholder" :disabled="disabled"
+      :required="required" :class="inputClasses" v-bind="$attrs" @input="handleInput" />
 
     <p v-if="error" class="mt-1 text-sm text-red-500">
       {{ error }}

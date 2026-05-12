@@ -1,5 +1,7 @@
+<!-- Script Started -->
+
 <script setup>
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { toast } from 'vue-sonner';
@@ -31,6 +33,15 @@ const { errors, defineField, validate, setFieldValue, setFieldError } = useForm(
     password: '',
     pin: '',
   },
+  validateOnChange: false,
+  validateOnBlur: false,
+});
+
+// Clear errors when step changes
+watch(() => step.value, () => {
+  Object.keys(errors.value).forEach(field => {
+    setFieldError(field, '');
+  });
 });
 
 const [email] = defineField('email');
@@ -104,6 +115,9 @@ const backToCredentials = () => {
 };
 </script>
 
+<!-- Script Ended -->
+<!-- Template Started -->
+
 <template>
   <div
     class="min-h-[calc(100vh-65px)] bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-6 transition-colors duration-300">
@@ -119,7 +133,7 @@ const backToCredentials = () => {
             Market-ready workspace for focused investors.
           </h2>
           <p class="mt-4 text-slate-600 dark:text-slate-300 leading-relaxed">
-            Continue with secure sign in, then verify PIN to unlock your dashboard, watchlists, and
+            Continue with secure sign in, then verify PIN to unlock your dashboard and
             portfolio controls.
           </p>
         </div>
@@ -141,10 +155,7 @@ const backToCredentials = () => {
         class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 border border-slate-200 dark:border-slate-700">
         <div class="flex flex-col items-center mb-8">
           <div class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center mb-4 shadow-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14" />
-            </svg>
+            <i class="fa-solid fa-lock text-white"></i>
           </div>
           <h3 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
             {{ step === 'credentials' ? 'Welcome Back' : 'Verify PIN' }}
@@ -159,10 +170,10 @@ const backToCredentials = () => {
         </div>
 
         <form v-if="step === 'credentials'" class="space-y-5" @submit.prevent="onCredentialsSubmit">
-          <BaseInput ref="emailRef" v-model="email" label="Email Address" type="email" placeholder="you@example.com"
+          <BaseInput ref="emailRef" v-model="email" label="Email Address" type="email" placeholder="Enter email address"
             :error="errors.email" required />
 
-          <BaseInput ref="passwordRef" v-model="password" label="Password" type="password" placeholder="••••••••"
+          <BaseInput ref="passwordRef" v-model="password" label="Password" type="password" placeholder="Enter password"
             :error="errors.password" required />
 
           <BaseButton type="submit" :disabled="loading" class="mt-6">
@@ -201,4 +212,9 @@ const backToCredentials = () => {
   </div>
 </template>
 
+<!-- Template Ended -->
+<!-- Style Started  -->
+
 <style scoped></style>
+
+<!-- Style Ended  -->

@@ -64,11 +64,25 @@ export function useRegisterStepper() {
   });
 
   // ===================================
+  // PROGRESS VALUE
+  // ===================================
+
+  const progressValue = computed(() => {
+    /*
+      First step => 0%
+      Last step => below 100%
+      Completion screen can later use 100%
+    */
+
+    return (currentIndex.value / REGISTER_STEPS.length) * 100;
+  });
+
+  // ===================================
   // PROGRESS WIDTH
   // ===================================
 
   const progressWidth = computed(() => {
-    return (currentIndex.value / (REGISTER_STEPS.length - 1)) * 100 + '%';
+    return `${progressValue.value}%`;
   });
 
   // ===================================
@@ -76,7 +90,7 @@ export function useRegisterStepper() {
   // ===================================
 
   const progressPercentage = computed(() => {
-    return Math.round((currentIndex.value / (REGISTER_STEPS.length - 1)) * 100);
+    return Math.round(progressValue.value);
   });
 
   // ===================================
@@ -84,7 +98,9 @@ export function useRegisterStepper() {
   // ===================================
 
   const currentStepName = computed(() => {
-    return route.name ? route.name.toString().replace('Register', '') : 'Email';
+    return route.name
+      ? route.name.toString().replace('Register', '')
+      : 'Email';
   });
 
   // ===================================

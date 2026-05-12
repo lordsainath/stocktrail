@@ -18,11 +18,7 @@ const appNavItems = [
     path: '/portfolio',
     icon: 'fa-solid fa-briefcase',
   },
-  {
-    name: 'Watchlist',
-    path: '/watchlist',
-    icon: 'fa-solid fa-star',
-  },
+  
   {
     name: 'Profile',
     path: '/profile',

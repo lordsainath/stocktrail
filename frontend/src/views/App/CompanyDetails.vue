@@ -132,3 +132,10 @@ watch(symbol, () => {
     </div>
   </div>
 </template>
+<!-- Template Ended -->
+
+<!-- Style Started  -->
+<style scoped>
+
+</style>
+<!-- Style Ended  -->

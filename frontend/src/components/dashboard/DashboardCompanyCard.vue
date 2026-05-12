@@ -107,7 +107,7 @@ const openCompany = () => {
       class="mt-4 inline-flex items-center justify-center rounded-xl border cursor-pointer border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
       @click="openCompany"
     >
-      Details →
+      See Details →
     </button>
   </article>
 </template>

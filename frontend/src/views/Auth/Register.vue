@@ -1,3 +1,5 @@
+<!-- Script Started -->
+
 <script setup>
 // imports
 import RegisterInfoCard from '@components/auth/register/RegisterInfoCard.vue';
@@ -10,6 +12,10 @@ import RegisterStepper from '@components/auth/register/RegisterStepper.vue';
 
 import RegisterFooter from '@components/auth/register/RegisterFooter.vue';
 </script>
+
+<!-- Script Ended -->
+
+<!-- Template Started -->
 
 <template>
   <div
@@ -43,3 +49,11 @@ import RegisterFooter from '@components/auth/register/RegisterFooter.vue';
     </div>
   </div>
 </template>
+
+
+<!-- Template Ended -->
+<!-- Style Started  -->
+
+<style scoped></style>
+
+<!-- Style Ended  -->

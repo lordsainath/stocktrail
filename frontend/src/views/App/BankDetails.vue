@@ -1,3 +1,5 @@
+<!-- Script Started -->
+
 <script setup>
 import { onMounted, ref } from 'vue';
 import VOtpInput from 'vue3-otp-input';
@@ -39,6 +41,11 @@ const handleEsc = () => {
 
 onMounted(walletStore.fetchWalletSummary);
 </script>
+
+
+<!-- Script Ended -->
+<!-- Template Started -->
+
 
 <template>
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
@@ -146,8 +153,8 @@ onMounted(walletStore.fetchWalletSummary);
                 </div>
 
                 <span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="account.status === 'VERIFIED'
-                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300'
-                    : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300'
+                  ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300'
+                  : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300'
                   ">
                   {{ account.status }}
                 </span>
@@ -188,8 +195,8 @@ onMounted(walletStore.fetchWalletSummary);
 
               <div class="mt-2 flex items-center justify-between">
                 <p class="text-sm font-bold" :class="item.type === 'CREDIT'
-                    ? 'text-emerald-600 dark:text-emerald-400'
-                    : 'text-rose-600 dark:text-rose-400'
+                  ? 'text-emerald-600 dark:text-emerald-400'
+                  : 'text-rose-600 dark:text-rose-400'
                   ">
                   {{ item.type === 'CREDIT' ? '+' : '-' }}
                   {{ formatCurrency(item.amount) }}
@@ -304,3 +311,10 @@ onMounted(walletStore.fetchWalletSummary);
     </div>
   </div>
 </template>
+
+<!-- Template Ended -->
+
+
+<!-- Style Started  -->
+<style scoped></style>
+<!-- Style Ended  -->

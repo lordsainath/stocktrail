@@ -1,3 +1,5 @@
+<!-- Script Started -->
+
 <script setup>
 import { onMounted } from 'vue';
 
@@ -14,6 +16,10 @@ const profileStore = useProfileStore();
 
 onMounted(profileStore.fetchCurrentProfile);
 </script>
+
+
+<!-- Script Ended -->
+<!-- Template Started -->
 
 <template>
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
@@ -45,10 +51,7 @@ onMounted(profileStore.fetchCurrentProfile);
             </div>
           </div>
 
-          <BaseButton
-            variant="primary"
-            :full-width="false"
-            class="self-start lg:self-auto"
+          <BaseButton variant="primary" :full-width="false" class="self-start lg:self-auto"
             @click="profileStore.openProfileModal">
 
             Edit Profile
@@ -74,21 +77,13 @@ onMounted(profileStore.fetchCurrentProfile);
             <ProfileInfoCard title="IDENTITY">
               <dl class="mt-3 grid sm:grid-cols-2 gap-y-3 gap-x-4">
 
-                <ProfileInfoItem
-                  label="Full Name"
-                  :value="profileStore.user?.name" />
+                <ProfileInfoItem label="Full Name" :value="profileStore.user?.name" />
 
-                <ProfileInfoItem
-                  label="Username"
-                  :value="profileStore.user?.username" />
+                <ProfileInfoItem label="Username" :value="profileStore.user?.username" />
 
-                <ProfileInfoItem
-                  label="Email"
-                  :value="profileStore.user?.email" />
+                <ProfileInfoItem label="Email" :value="profileStore.user?.email" />
 
-                <ProfileInfoItem
-                  label="KYC Status"
-                  :value="profileStore.user?.kycStatus"
+                <ProfileInfoItem label="KYC Status" :value="profileStore.user?.kycStatus"
                   value-class="text-sm font-semibold text-emerald-600 dark:text-emerald-400" />
 
               </dl>
@@ -97,13 +92,9 @@ onMounted(profileStore.fetchCurrentProfile);
             <ProfileInfoCard title="KYC DOCUMENTS">
               <dl class="mt-3 grid sm:grid-cols-2 gap-y-3 gap-x-4">
 
-                <ProfileInfoItem
-                  label="PAN Number"
-                  :value="profileStore.user?.panNumber" />
+                <ProfileInfoItem label="PAN Number" :value="profileStore.user?.panNumber" />
 
-                <ProfileInfoItem
-                  label="Aadhaar Number"
-                  :value="profileStore.user?.aadhaarNumber" />
+                <ProfileInfoItem label="Aadhaar Number" :value="profileStore.user?.aadhaarNumber" />
 
               </dl>
             </ProfileInfoCard>
@@ -131,9 +122,7 @@ onMounted(profileStore.fetchCurrentProfile);
 
           <div class="mt-5 space-y-3">
 
-            <BaseButton
-              variant="secondary"
-              class="!justify-start !p-3 !items-start flex-col"
+            <BaseButton variant="secondary" class="!justify-start !p-3 !items-start flex-col"
               @click="profileStore.openPasswordModal">
 
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">
@@ -146,9 +135,7 @@ onMounted(profileStore.fetchCurrentProfile);
 
             </BaseButton>
 
-            <BaseButton
-              variant="secondary"
-              class="!justify-start !p-3 !items-start flex-col"
+            <BaseButton variant="secondary" class="!justify-start !p-3 !items-start flex-col"
               @click="profileStore.openPinModal">
 
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">
@@ -167,11 +154,9 @@ onMounted(profileStore.fetchCurrentProfile);
                 PIN Status
               </p>
 
-              <p
-                class="text-sm font-semibold mt-1"
-                :class="profileStore.user?.isPinSet
-                  ? 'text-emerald-600 dark:text-emerald-400'
-                  : 'text-amber-600 dark:text-amber-400'
+              <p class="text-sm font-semibold mt-1" :class="profileStore.user?.isPinSet
+                ? 'text-emerald-600 dark:text-emerald-400'
+                : 'text-amber-600 dark:text-amber-400'
                 ">
 
                 {{
@@ -186,25 +171,23 @@ onMounted(profileStore.fetchCurrentProfile);
         </article>
       </section>
 
-      <EditProfileModal
-        :show="profileStore.showProfileModal"
-        :form="profileStore.profileForm"
-        @close="profileStore.closeProfileModal"
-        @save="profileStore.updateProfile" />
+      <EditProfileModal :show="profileStore.showProfileModal" :form="profileStore.profileForm"
+        @close="profileStore.closeProfileModal" @save="profileStore.updateProfile" />
 
-      <ChangePasswordModal
-        :show="profileStore.showPasswordModal"
-        :form="profileStore.passwordForm"
-        @close="profileStore.closePasswordModal"
-        @save="profileStore.updatePassword" />
+      <ChangePasswordModal :show="profileStore.showPasswordModal" :form="profileStore.passwordForm"
+        @close="profileStore.closePasswordModal" @save="profileStore.updatePassword" />
 
-      <ChangePinModal
-        :show="profileStore.showPinModal"
-        :form="profileStore.pinForm"
-        @close="profileStore.closePinModal"
+      <ChangePinModal :show="profileStore.showPinModal" :form="profileStore.pinForm" @close="profileStore.closePinModal"
         @save="profileStore.updatePin" />
     </div>
   </div>
 </template>
 
-<style scoped></style>
+
+<!-- Template Ended -->
+
+<!-- Style Started  -->
+<style scoped>
+
+</style>
+<!-- Style Ended  -->

@@ -1,3 +1,5 @@
+// Imports
+
 import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
 import { apiClient } from '@api/httpClients';

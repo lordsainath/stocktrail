@@ -72,43 +72,30 @@ const handleContinue = handleSubmit(
   <div class="space-y-4">
     <div class="flex items-center flex-col gap-5">
       <div id="otp-inputs">
-        <label
-          class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block"
-        >
+        <label class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block">
           Enter OTP
         </label>
 
-        <BaseOtpInput
-          v-model="otp"
-          :num-inputs="6"
-          input-type="number"
-          :should-auto-focus="true"
-          :is-input-num="true"
-        />
+        <BaseOtpInput v-model="otp" :num-inputs="6" input-type="number" :should-auto-focus="true" :is-input-num="true"
+          @keyup.enter="handleContinue" />
 
-        <p
-          v-if="errors.otp"
-          class="mt-2 text-sm text-red-500"
-        >
+        <p v-if="errors.otp" class="mt-2 text-sm text-red-500">
           {{ errors.otp }}
         </p>
       </div>
     </div>
 
     <div class="mt-6 flex gap-4">
-      <BaseButton
-        variant="secondary"
-        @click="handleBack"
-      >
+      <BaseButton variant="secondary" @click="handleBack">
         Back
       </BaseButton>
 
-      <BaseButton
-        variant="primary"
-        :disabled="loading"
-        @click="handleContinue"
-      >
-        Continue
+      <BaseButton variant="primary" :disabled="loading" @click="handleContinue">
+        <span v-if="!loading">Continue</span>
+        <span v-else class="flex items-center justify-center gap-2">
+          <BaseLoader size="sm" />
+          Submitting...
+        </span>
       </BaseButton>
     </div>
   </div>

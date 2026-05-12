@@ -37,12 +37,7 @@ export const appRoutes = [
         meta: { title: 'Settings', requiresAuth: true },
       },
 
-      {
-        path: 'watchlist',
-        name: 'WatchList',
-        component: () => import('@views/App/WatchList.vue'),
-        meta: { title: 'WatchList', requiresAuth: true },
-      },
+   
 
       {
         path: 'bank-details',

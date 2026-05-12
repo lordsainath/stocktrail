@@ -25,14 +25,10 @@ const formatDate = (unix) => {
 </script>
 
 <template>
-  <div
-    class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 shadow-sm"
-  >
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 shadow-sm">
     <div class="flex items-center justify-between mb-3">
       <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Market Intelligence</h4>
-      <button type="button" class="text-xs text-cyan-600 hover:underline" @click.prevent>
-        SEE ALL NEWS
-      </button>
+
     </div>
 
     <div class="space-y-3">
@@ -41,24 +37,15 @@ const formatDate = (unix) => {
       </div>
 
       <div v-for="(item, idx) in visibleNews" :key="item.id || idx" class="flex gap-3">
-        <img
-          v-if="item.image"
-          :src="item.image"
-          alt="thumb"
-          class="w-12 h-12 rounded-md object-cover"
-        />
+        <img v-if="item.image" :src="item.image" alt="thumb" class="w-12 h-12 rounded-md object-cover" />
         <div class="flex-1">
           <div class="flex items-start justify-between">
             <div class="text-xs text-slate-500">{{ item.source }}</div>
             <div class="text-xs text-slate-400">{{ formatDate(item.datetime) }}</div>
           </div>
-          <a
-            :href="item.url"
-            target="_blank"
-            rel="noreferrer"
-            class="block text-sm font-medium text-slate-800 dark:text-slate-100 hover:underline"
-            >{{ item.headline || item.title }}</a
-          >
+          <a :href="item.url" target="_blank" rel="noreferrer"
+            class="block text-sm font-medium text-slate-800 dark:text-slate-100 hover:underline">{{ item.headline ||
+            item.title }}</a>
           <p v-if="item.summary" class="text-xs text-slate-500 mt-1 line-clamp-2">
             {{ item.summary }}
           </p>

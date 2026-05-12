@@ -84,6 +84,16 @@ const handleFinish = handleSubmit(
   }
 );
 
+const handlePinEnter = async () => {
+  await nextTick();
+
+  document.querySelector('#confirm-pin-inputs input')?.focus();
+};
+
+const handleConfirmPinEnter = () => {
+  handleFinish();
+};
+
 onUnmounted(() => {
   setFieldValue('pin', '');
   setFieldValue('confirmPin', '');
@@ -98,8 +108,8 @@ onUnmounted(() => {
     <div class="flex items-center flex-col gap-4">
       <div id="pin-inputs" class="w-full">
         <label class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block">Set a 4-digit PIN</label>
-        <BaseOtpInput v-model="pin" :num-inputs="4" input-type="number" :should-auto-focus="true"
-          :is-input-num="true" />
+        <BaseOtpInput v-model="pin" :num-inputs="4" input-type="number" :should-auto-focus="true" :is-input-num="true"
+          @keyup.enter="handlePinEnter" />
         <p v-if="errors.pin" class="mt-2 text-sm text-red-500">
           {{ errors.pin }}
         </p>
@@ -108,7 +118,7 @@ onUnmounted(() => {
       <div id="confirm-pin-inputs" class="w-full">
         <label class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block">Confirm PIN</label>
         <BaseOtpInput v-model="confirmPin" :num-inputs="4" input-type="number" :should-auto-focus="false"
-          :is-input-num="true" />
+          :is-input-num="true" @keyup.enter="handleConfirmPinEnter" />
         <p v-if="errors.confirmPin" class="mt-2 text-sm text-red-500">
           {{ errors.confirmPin }}
         </p>
@@ -116,7 +126,13 @@ onUnmounted(() => {
     </div>
     <div class="mt-6 flex gap-4">
       <BaseButton variant="secondary" @click="handleBack"> Back </BaseButton>
-      <BaseButton variant="primary" :disabled="loading" @click="handleFinish"> Finish </BaseButton>
+      <BaseButton variant="primary" :disabled="loading" @click="handleFinish">
+        <span v-if="!loading">Register</span>
+        <span v-else class="flex items-center justify-center gap-2">
+          <BaseLoader size="sm" />
+          Registering...
+        </span>
+      </BaseButton>
     </div>
   </div>
 </template>

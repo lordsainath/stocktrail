@@ -21,6 +21,10 @@ onMounted(async () => {
 });
 </script>
 
+
+<!-- Script Ended -->
+<!-- Template Started -->
+
 <template>
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
     <div class="mx-auto max-w-6xl space-y-5">
@@ -40,5 +44,9 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+<!-- Template Ended -->
+<!-- Style Started  -->
+<style scoped>
 
-<style scoped></style>
+</style>
+<!-- Style Ended  -->
