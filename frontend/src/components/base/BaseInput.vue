@@ -98,8 +98,17 @@ const inputClasses = computed(() => [
       <span v-if="required" class="text-red-500 ml-1"> * </span>
     </label>
 
-    <input ref="inputRef" :value="modelValue" :type="type" :placeholder="placeholder" :disabled="disabled"
-      :required="required" :class="inputClasses" v-bind="$attrs" @input="handleInput" />
+    <input
+      ref="inputRef"
+      :value="modelValue"
+      :type="type"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :required="required"
+      :class="inputClasses"
+      v-bind="$attrs"
+      @input="handleInput"
+    />
 
     <p v-if="error" class="mt-1 text-sm text-red-500">
       {{ error }}

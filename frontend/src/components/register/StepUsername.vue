@@ -46,16 +46,16 @@ const handleContinue = handleSubmit(
 
 <template>
   <div class="space-y-4">
-   <BaseInput
-  ref="usernameRef"
-  v-model="username"
-  label="Username"
-  type="text"
-  placeholder="Enter your username"
-  :error="errors.username"
-  required
-  @keyup.enter="handleContinue"
-/>
+    <BaseInput
+      ref="usernameRef"
+      v-model="username"
+      label="Username"
+      type="text"
+      placeholder="Enter your username"
+      :error="errors.username"
+      required
+      @keyup.enter="handleContinue"
+    />
     <div class="mt-6 flex gap-4">
       <BaseButton variant="secondary" @click="handleBack"> Back </BaseButton>
       <BaseButton variant="primary" @click="handleContinue"> Continue </BaseButton>

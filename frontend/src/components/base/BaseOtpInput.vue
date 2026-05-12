@@ -64,10 +64,7 @@ const inputClasses = computed(() => [
 
 <template>
   <div class="flex flex-col items-center gap-3">
-    <label
-      v-if="label"
-      class="text-sm font-medium text-slate-700 dark:text-slate-200"
-    >
+    <label v-if="label" class="text-sm font-medium text-slate-700 dark:text-slate-200">
       {{ label }}
     </label>
 
@@ -84,10 +81,7 @@ const inputClasses = computed(() => [
       />
     </div>
 
-    <p
-      v-if="error"
-      class="text-sm text-red-500"
-    >
+    <p v-if="error" class="text-sm text-red-500">
       {{ error }}
     </p>
   </div>

@@ -98,9 +98,7 @@ export function useRegisterStepper() {
   // ===================================
 
   const currentStepName = computed(() => {
-    return route.name
-      ? route.name.toString().replace('Register', '')
-      : 'Email';
+    return route.name ? route.name.toString().replace('Register', '') : 'Email';
   });
 
   // ===================================

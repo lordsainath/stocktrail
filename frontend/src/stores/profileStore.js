@@ -52,13 +52,7 @@ export const useProfileStore = defineStore('profile', () => {
 
     if (!address) return 'No address available';
 
-    return [
-      address.street,
-      address.city,
-      address.state,
-      address.country,
-      address.zipCode,
-    ]
+    return [address.street, address.city, address.state, address.country, address.zipCode]
       .filter(Boolean)
       .join(', ');
   });
@@ -126,10 +120,7 @@ export const useProfileStore = defineStore('profile', () => {
 
       return response.data;
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-        'Failed to fetch profile'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to fetch profile');
     } finally {
       loadingProfile.value = false;
     }
@@ -151,12 +142,9 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       profileForm.loading = true;
 
-      const response = await apiClient.put(
-        '/auth/update-photo',
-        {
-          photoUrl,
-        }
-      );
+      const response = await apiClient.put('/auth/update-photo', {
+        photoUrl,
+      });
 
       if (response?.data?.data) {
         userStore.updateUser(response.data.data);
@@ -164,18 +152,12 @@ export const useProfileStore = defineStore('profile', () => {
         userStore.updateUser({ photoUrl });
       }
 
-      toast.success(
-        response?.data?.message ||
-        'Profile updated successfully'
-      );
+      toast.success(response?.data?.message || 'Profile updated successfully');
 
       resetProfileForm();
       closeProfileModal();
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-        'Failed to update profile'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to update profile');
     } finally {
       profileForm.loading = false;
     }
@@ -191,16 +173,11 @@ export const useProfileStore = defineStore('profile', () => {
     const confirmPassword = form.confirmPassword || '';
 
     if (password.length < 8) {
-      toast.error(
-        'Password must be at least 8 characters'
-      );
+      toast.error('Password must be at least 8 characters');
       return;
     }
 
-    if (
-      password !==
-      confirmPassword
-    ) {
+    if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
@@ -208,25 +185,16 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       passwordForm.loading = true;
 
-      const response = await apiClient.put(
-        '/auth/update-password',
-        {
-          password,
-        }
-      );
+      const response = await apiClient.put('/auth/update-password', {
+        password,
+      });
 
-      toast.success(
-        response?.data?.message ||
-        'Password updated successfully'
-      );
+      toast.success(response?.data?.message || 'Password updated successfully');
 
       resetPasswordForm();
       closePasswordModal();
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-        'Failed to update password'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to update password');
     } finally {
       passwordForm.loading = false;
     }
@@ -254,29 +222,20 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       pinForm.loading = true;
 
-      const response = await apiClient.put(
-        '/auth/update-pin',
-        {
-          pin,
-        }
-      );
+      const response = await apiClient.put('/auth/update-pin', {
+        pin,
+      });
 
       userStore.updateUser({
         isPinSet: true,
       });
 
-      toast.success(
-        response?.data?.message ||
-        'PIN updated successfully'
-      );
+      toast.success(response?.data?.message || 'PIN updated successfully');
 
       resetPinForm();
       closePinModal();
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-        'Failed to update PIN'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to update PIN');
     } finally {
       pinForm.loading = false;
     }

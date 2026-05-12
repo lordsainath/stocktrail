@@ -2,12 +2,9 @@
       Script Started
       =================================== -->
 
-
 <script setup>
-
 // Imports
 import { computed } from 'vue';
-
 
 // Definig Props
 const props = defineProps({
@@ -177,11 +174,7 @@ const chartOptions = computed(() => ({
     },
   ],
 }));
-
-
 </script>
-
-
 
 <!--  ===================================
       Script Ended
@@ -191,11 +184,9 @@ const chartOptions = computed(() => ({
       Template Started
       =================================== -->
 
-
 <template>
   <div class="w-full">
     <!-- Importing ApexCharts -->
     <apexchart :type="type" :height="height" :options="chartOptions" :series="series" />
-
   </div>
 </template>

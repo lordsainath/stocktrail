@@ -12,7 +12,8 @@ import BaseLoader from '../base/BaseLoader.vue';
 
 const router = useRouter();
 const registerStore = useRegisterStore();
-const { panStatus, panMessage, aadhaarStatus, aadhaarMessage, loading } = storeToRefs(registerStore);
+const { panStatus, panMessage, aadhaarStatus, aadhaarMessage, loading } =
+  storeToRefs(registerStore);
 const { schedulePanVerification, scheduleAadhaarVerification, submitRegistration } = registerStore;
 const formData = registerStore.formData;
 const panRef = ref(null);
@@ -66,47 +67,47 @@ const handleContinue = handleSubmit(
 
 <template>
   <div class="space-y-4">
-   <BaseInput
-  ref="panRef"
-  v-model.trim="panNumber"
-  required
-  label="PAN Number"
-  type="text"
-  maxlength="10"
-  placeholder="ABCDE1234F"
-  input-class="uppercase"
-  :error="errors.panNumber"
-  :message="panMessage"
-  :message-class="
-    panStatus === 'valid'
-      ? 'text-emerald-600'
-      : panStatus === 'checking'
-        ? 'text-sky-600'
-        : 'text-slate-500'
-  "
-  @keyup.enter="aadhaarRef?.focus?.()"
-/>
+    <BaseInput
+      ref="panRef"
+      v-model.trim="panNumber"
+      required
+      label="PAN Number"
+      type="text"
+      maxlength="10"
+      placeholder="ABCDE1234F"
+      input-class="uppercase"
+      :error="errors.panNumber"
+      :message="panMessage"
+      :message-class="
+        panStatus === 'valid'
+          ? 'text-emerald-600'
+          : panStatus === 'checking'
+            ? 'text-sky-600'
+            : 'text-slate-500'
+      "
+      @keyup.enter="aadhaarRef?.focus?.()"
+    />
 
-<BaseInput
-  ref="aadhaarRef"
-  v-model.trim="aadhaarNumber"
-  required
-  label="Aadhaar Number"
-  type="text"
-  inputmode="numeric"
-  maxlength="12"
-  placeholder="123412341234"
-  :error="errors.aadhaarNumber"
-  :message="aadhaarMessage"
-  :message-class="
-    aadhaarStatus === 'valid'
-      ? 'text-emerald-600'
-      : aadhaarStatus === 'checking'
-        ? 'text-sky-600'
-        : 'text-slate-500'
-  "
-  @keyup.enter="handleContinue"
-/>
+    <BaseInput
+      ref="aadhaarRef"
+      v-model.trim="aadhaarNumber"
+      required
+      label="Aadhaar Number"
+      type="text"
+      inputmode="numeric"
+      maxlength="12"
+      placeholder="123412341234"
+      :error="errors.aadhaarNumber"
+      :message="aadhaarMessage"
+      :message-class="
+        aadhaarStatus === 'valid'
+          ? 'text-emerald-600'
+          : aadhaarStatus === 'checking'
+            ? 'text-sky-600'
+            : 'text-slate-500'
+      "
+      @keyup.enter="handleContinue"
+    />
 
     <div class="mt-6 flex gap-4">
       <BaseButton variant="secondary" @click="handleBack"> Back </BaseButton>
@@ -116,7 +117,6 @@ const handleContinue = handleSubmit(
           <BaseLoader size="sm" />
           Submitting...
         </span>
-
       </BaseButton>
     </div>
   </div>

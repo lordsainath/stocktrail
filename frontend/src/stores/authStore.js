@@ -17,7 +17,8 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true;
     try {
       const response = await apiClient.post('/auth/login', { email, password });
-      const temp = response?.data?.data?.tempToken || response?.data?.tempToken || response?.tempToken || '';
+      const temp =
+        response?.data?.data?.tempToken || response?.data?.tempToken || response?.tempToken || '';
       if (temp) {
         persistTemp(temp);
         step.value = 'pin';
@@ -39,7 +40,8 @@ export const useAuthStore = defineStore('auth', () => {
         pin,
       });
 
-      const sessionPayload = response?.data?.data || response?.data || response?.data?.token || null;
+      const sessionPayload =
+        response?.data?.data || response?.data || response?.data?.token || null;
 
       if (sessionPayload) {
         persistTemp('');

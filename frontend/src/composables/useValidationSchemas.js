@@ -114,10 +114,10 @@ export const registerAddressSchema = yup.object({
     .max(200, 'Address line cannot exceed 200 characters'),
 
   pincode: yup
-  .string()
-  .trim()
-  .matches(/^\d*$/, 'Pincode can only contain numbers')
-  .matches(/^$|^\d{6}$/, 'Pincode must be exactly 6 digits'),
+    .string()
+    .trim()
+    .matches(/^\d*$/, 'Pincode can only contain numbers')
+    .matches(/^$|^\d{6}$/, 'Pincode must be exactly 6 digits'),
 });
 
 export const registerUsernameSchema = yup.object({

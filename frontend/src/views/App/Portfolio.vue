@@ -21,7 +21,6 @@ onMounted(async () => {
 });
 </script>
 
-
 <!-- Script Ended -->
 <!-- Template Started -->
 
@@ -46,7 +45,5 @@ onMounted(async () => {
 </template>
 <!-- Template Ended -->
 <!-- Style Started  -->
-<style scoped>
-
-</style>
+<style scoped></style>
 <!-- Style Ended  -->

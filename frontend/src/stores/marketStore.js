@@ -2,7 +2,6 @@
 // IMPORTS
 // ============================================
 
-
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { toast } from 'vue-sonner';
@@ -14,7 +13,6 @@ import { generateMockCandleData } from '@/composables/generateMockCandleData';
 import router from '@/router';
 
 export const useMarketStore = defineStore('market', () => {
-
   // State Initialization
   const marketNews = ref([]);
   const dashboardCompanies = ref([]);
@@ -268,8 +266,6 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
-
-
   const getHistoricalData = async (symbol, resolution, from, to) => {
     void symbol;
     void resolution;
@@ -301,7 +297,6 @@ export const useMarketStore = defineStore('market', () => {
     }
   };
 
-
   // Search for symbols based on user query
   const searchSymbols = async (query) => {
     try {
@@ -323,7 +318,6 @@ export const useMarketStore = defineStore('market', () => {
       return [];
     }
   };
-
 
   // Fetch all company details (quote, profile, news) for a given symbol
 

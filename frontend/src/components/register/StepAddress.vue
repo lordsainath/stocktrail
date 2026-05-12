@@ -111,49 +111,42 @@ const handleContinue = handleSubmit(
         Address Line <span class="text-red-500">*</span>
       </label>
 
-<textarea
-  ref="line1Ref"
-  v-model="line1"
-  rows="4"
-  placeholder="Enter address line"
-  :class="[
-    'w-full mt-2 border-2 rounded-xl px-4 py-3 outline-none transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none',
+      <textarea
+        ref="line1Ref"
+        v-model="line1"
+        rows="4"
+        placeholder="Enter address line"
+        :class="[
+          'w-full mt-2 border-2 rounded-xl px-4 py-3 outline-none transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none',
 
-    errors.line1
-      ? 'border-red-500 focus:ring-1 focus:ring-red-400'
-      : 'border-slate-200 dark:border-slate-600 focus:ring-1 focus:ring-primary focus:border-transparent'
-  ]"
-  @keyup.enter.prevent="pincodeRef?.focus()"
-/>
-      <p
-        v-if="errors.line1"
-        class="mt-1 text-sm text-red-500"
-      >
+          errors.line1
+            ? 'border-red-500 focus:ring-1 focus:ring-red-400'
+            : 'border-slate-200 dark:border-slate-600 focus:ring-1 focus:ring-primary focus:border-transparent',
+        ]"
+        @keyup.enter.prevent="pincodeRef?.focus()"
+      />
+      <p v-if="errors.line1" class="mt-1 text-sm text-red-500">
         {{ errors.line1 }}
       </p>
     </div>
 
     <BaseInput
-  ref="pincodeRef"
-  v-model="pincode"
-  label="Pincode"
-  type="text"
-  inputmode="numeric"
-  placeholder="Enter pincode (optional)"
-  maxlength="6"
-  :error="errors.pincode"
-  @input="pincode = pincode.replace(/\D/g, '')"
-  @keyup.enter="handleContinue"
-/>
+      ref="pincodeRef"
+      v-model="pincode"
+      label="Pincode"
+      type="text"
+      inputmode="numeric"
+      placeholder="Enter pincode (optional)"
+      maxlength="6"
+      :error="errors.pincode"
+      @input="pincode = pincode.replace(/\D/g, '')"
+      @keyup.enter="handleContinue"
+    />
 
     <div class="mt-6 flex gap-4">
-      <BaseButton variant="secondary" @click="handleBack">
-        Back
-      </BaseButton>
+      <BaseButton variant="secondary" @click="handleBack"> Back </BaseButton>
 
-      <BaseButton variant="primary" @click="handleContinue">
-        Continue
-      </BaseButton>
+      <BaseButton variant="primary" @click="handleContinue"> Continue </BaseButton>
     </div>
   </div>
 </template>

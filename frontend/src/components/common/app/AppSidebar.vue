@@ -18,7 +18,7 @@ const appNavItems = [
     path: '/portfolio',
     icon: 'fa-solid fa-briefcase',
   },
-  
+
   {
     name: 'Profile',
     path: '/profile',

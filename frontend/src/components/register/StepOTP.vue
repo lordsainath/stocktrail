@@ -50,10 +50,7 @@ const handleContinue = handleSubmit(
 
       router.push({ name: 'RegisterPIN' });
     } catch (error) {
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        'OTP verification failed';
+      const message = error?.response?.data?.message || error?.message || 'OTP verification failed';
 
       toast.error(message);
     } finally {
@@ -76,8 +73,14 @@ const handleContinue = handleSubmit(
           Enter OTP
         </label>
 
-        <BaseOtpInput v-model="otp" :num-inputs="6" input-type="number" :should-auto-focus="true" :is-input-num="true"
-          @keyup.enter="handleContinue" />
+        <BaseOtpInput
+          v-model="otp"
+          :num-inputs="6"
+          input-type="number"
+          :should-auto-focus="true"
+          :is-input-num="true"
+          @keyup.enter="handleContinue"
+        />
 
         <p v-if="errors.otp" class="mt-2 text-sm text-red-500">
           {{ errors.otp }}
@@ -86,9 +89,7 @@ const handleContinue = handleSubmit(
     </div>
 
     <div class="mt-6 flex gap-4">
-      <BaseButton variant="secondary" @click="handleBack">
-        Back
-      </BaseButton>
+      <BaseButton variant="secondary" @click="handleBack"> Back </BaseButton>
 
       <BaseButton variant="primary" :disabled="loading" @click="handleContinue">
         <span v-if="!loading">Continue</span>

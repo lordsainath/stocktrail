@@ -16,9 +16,9 @@ import AuthNavbar from '@/components/common/auth/AuthNavbar.vue';
       =================================== -->
 
 <template>
-      <AuthNavbar />
+  <AuthNavbar />
 
-      <router-view></router-view>
+  <router-view></router-view>
 </template>
 
 <!--  ===================================

@@ -54,16 +54,11 @@ const handleFinish = handleSubmit(
       formData.confirmPin = values.confirmPin || '';
       await setPinCode(values.pin);
 
-      toast.success(
-        'PIN set successfully. Please login to continue.'
-      );
+      toast.success('PIN set successfully. Please login to continue.');
 
       router.push('/auth/login');
     } catch (error) {
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        'Failed to set PIN';
+      const message = error?.response?.data?.message || error?.message || 'Failed to set PIN';
 
       toast.error(message);
     } finally {
@@ -107,18 +102,34 @@ onUnmounted(() => {
   <div class="space-y-4">
     <div class="flex items-center flex-col gap-4">
       <div id="pin-inputs" class="w-full">
-        <label class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block">Set a 4-digit PIN</label>
-        <BaseOtpInput v-model="pin" :num-inputs="4" input-type="number" :should-auto-focus="true" :is-input-num="true"
-          @keyup.enter="handlePinEnter" />
+        <label class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block"
+          >Set a 4-digit PIN</label
+        >
+        <BaseOtpInput
+          v-model="pin"
+          :num-inputs="4"
+          input-type="number"
+          :should-auto-focus="true"
+          :is-input-num="true"
+          @keyup.enter="handlePinEnter"
+        />
         <p v-if="errors.pin" class="mt-2 text-sm text-red-500">
           {{ errors.pin }}
         </p>
       </div>
 
       <div id="confirm-pin-inputs" class="w-full">
-        <label class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block">Confirm PIN</label>
-        <BaseOtpInput v-model="confirmPin" :num-inputs="4" input-type="number" :should-auto-focus="false"
-          :is-input-num="true" @keyup.enter="handleConfirmPinEnter" />
+        <label class="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 block"
+          >Confirm PIN</label
+        >
+        <BaseOtpInput
+          v-model="confirmPin"
+          :num-inputs="4"
+          input-type="number"
+          :should-auto-focus="false"
+          :is-input-num="true"
+          @keyup.enter="handleConfirmPinEnter"
+        />
         <p v-if="errors.confirmPin" class="mt-2 text-sm text-red-500">
           {{ errors.confirmPin }}
         </p>

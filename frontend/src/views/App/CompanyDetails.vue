@@ -2,9 +2,7 @@
       Script Started
       =================================== -->
 
-
 <script setup>
-
 // imports
 import { computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
@@ -15,16 +13,12 @@ import CompanyLoadingSkeleton from '@components/company/CompanyLoadingSkeleton.v
 import BaseChart from '@components/base/BaseChart.vue';
 import BuySellPanel from '@/components/BuySellPanel.vue';
 
-
 const route = useRoute();
 
 const marketStore = useMarketStore();
 
-
 // Computed Properties
 const symbol = computed(() => route.params.symbol);
-
-
 
 // LOAD COMPANY DATA
 
@@ -45,8 +39,6 @@ watch(symbol, () => {
 });
 </script>
 
-
-
 <!--  ===================================
       Script Ended
       =================================== -->
@@ -62,22 +54,27 @@ watch(symbol, () => {
 
       <template v-else>
         <!-- HEADER -->
-        <CompanyHeaderCard :quote="marketStore.quote" :profile="marketStore.profile"
-          :format-market-cap="marketStore.formatMarketCap" />
+        <CompanyHeaderCard
+          :quote="marketStore.quote"
+          :profile="marketStore.profile"
+          :format-market-cap="marketStore.formatMarketCap"
+        />
 
         <!-- MARKET SECTION -->
         <section class="mt-5 grid grid-cols-1 xl:grid-cols-4 gap-5">
-
           <div
-            class="xl:col-span-3 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/90 shadow-xl backdrop-blur-sm p-5">
+            class="xl:col-span-3 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/90 shadow-xl backdrop-blur-sm p-5"
+          >
             <!-- TOP -->
             <div class="flex items-center justify-between mb-5">
               <div>
                 <div class="flex items-center gap-3">
                   <h2 class="text-lg font-bold text-slate-900 dark:text-white">Price Chart</h2>
 
-                  <span class="text-sm font-semibold"
-                    :class="marketStore.quote?.d >= 0 ? 'text-emerald-500' : 'text-rose-500'">
+                  <span
+                    class="text-sm font-semibold"
+                    :class="marketStore.quote?.d >= 0 ? 'text-emerald-500' : 'text-rose-500'"
+                  >
                     {{ marketStore.quote?.d >= 0 ? '+' : ''
                     }}{{ marketStore.quote?.dp?.toFixed(2) }}%
                   </span>
@@ -88,8 +85,10 @@ watch(symbol, () => {
                     ${{ marketStore.quote?.c?.toFixed(2) }}
                   </h3>
 
-                  <span class="pb-1 text-sm font-medium"
-                    :class="marketStore.quote?.d >= 0 ? 'text-emerald-500' : 'text-rose-500'">
+                  <span
+                    class="pb-1 text-sm font-medium"
+                    :class="marketStore.quote?.d >= 0 ? 'text-emerald-500' : 'text-rose-500'"
+                  >
                     {{ marketStore.quote?.d >= 0 ? '+' : '' }}{{ marketStore.quote?.d?.toFixed(2) }}
                   </span>
                 </div>
@@ -101,19 +100,28 @@ watch(symbol, () => {
             </div>
 
             <!-- CHART -->
-            <BaseChart type="area" :series="marketStore.chartSeries" :categories="marketStore.chartCategories"
-              :height="400" :price="marketStore.quote?.c"
-              :color="marketStore.quote?.c >= marketStore.quote?.pc ? '#22c55e' : '#ef4444'" />
+            <BaseChart
+              type="area"
+              :series="marketStore.chartSeries"
+              :categories="marketStore.chartCategories"
+              :height="400"
+              :price="marketStore.quote?.c"
+              :color="marketStore.quote?.c >= marketStore.quote?.pc ? '#22c55e' : '#ef4444'"
+            />
           </div>
 
           <!-- TRADING PANEL -->
-          <BuySellPanel :symbol="symbol" :company-name="marketStore.profile?.name"
-            :current-price="marketStore.quote?.c || 0" />
+          <BuySellPanel
+            :symbol="symbol"
+            :company-name="marketStore.profile?.name"
+            :current-price="marketStore.quote?.c || 0"
+          />
         </section>
 
         <!-- NEWS -->
         <section
-          class="mt-5 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/90 shadow-xl backdrop-blur-sm overflow-hidden">
+          class="mt-5 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/90 shadow-xl backdrop-blur-sm overflow-hidden"
+        >
           <div class="flex items-center justify-between px-5 pt-5">
             <div>
               <h2 class="text-lg font-bold text-slate-900 dark:text-white">Latest News</h2>
@@ -124,7 +132,11 @@ watch(symbol, () => {
 
           <div class="p-5 pt-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <CompanyNewsCard v-for="item in marketStore.companyNews.slice(0, 4)" :key="item.id" :item="item" />
+              <CompanyNewsCard
+                v-for="item in marketStore.companyNews.slice(0, 4)"
+                :key="item.id"
+                :item="item"
+              />
             </div>
           </div>
         </section>
@@ -135,7 +147,5 @@ watch(symbol, () => {
 <!-- Template Ended -->
 
 <!-- Style Started  -->
-<style scoped>
-
-</style>
+<style scoped></style>
 <!-- Style Ended  -->

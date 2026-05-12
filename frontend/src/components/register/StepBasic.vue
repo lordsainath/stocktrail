@@ -57,37 +57,37 @@ const handleContinue = handleSubmit(
 
 <template>
   <div class="space-y-4">
- <BaseInput
-  ref="nameRef"
-  v-model="name"
-  label="Full Name"
-  placeholder="Enter full name"
-  :error="errors.name"
-  required
-  @keyup.enter="passwordRef?.focus?.()"
-/>
+    <BaseInput
+      ref="nameRef"
+      v-model="name"
+      label="Full Name"
+      placeholder="Enter full name"
+      :error="errors.name"
+      required
+      @keyup.enter="passwordRef?.focus?.()"
+    />
 
-<BaseInput
-  ref="passwordRef"
-  v-model="password"
-  label="Password"
-  type="password"
-  placeholder="Enter password"
-  :error="errors.password"
-  required
-  @keyup.enter="confirmRef?.focus?.()"
-/>
+    <BaseInput
+      ref="passwordRef"
+      v-model="password"
+      label="Password"
+      type="password"
+      placeholder="Enter password"
+      :error="errors.password"
+      required
+      @keyup.enter="confirmRef?.focus?.()"
+    />
 
-<BaseInput
-  ref="confirmRef"
-  v-model="confirmPassword"
-  label="Confirm Password"
-  type="password"
-  placeholder="Enter confirm password"
-  :error="errors.confirmPassword"
-  required
-  @keyup.enter="handleContinue"
-/>
+    <BaseInput
+      ref="confirmRef"
+      v-model="confirmPassword"
+      label="Confirm Password"
+      type="password"
+      placeholder="Enter confirm password"
+      :error="errors.confirmPassword"
+      required
+      @keyup.enter="handleContinue"
+    />
     <div class="mt-6 flex gap-4">
       <BaseButton variant="secondary" @click="handleBack"> Back </BaseButton>
 

@@ -37,8 +37,6 @@ export const appRoutes = [
         meta: { title: 'Settings', requiresAuth: true },
       },
 
-   
-
       {
         path: 'bank-details',
         name: 'BankDetails',

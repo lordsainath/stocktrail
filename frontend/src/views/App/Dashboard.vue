@@ -42,7 +42,5 @@ const { companies, news, dashboardLoading } = useDashboard();
 
 <!-- Template Ended -->
 <!-- Style Started  -->
-<style scoped>
-
-</style>
+<style scoped></style>
 <!-- Style Ended  -->
