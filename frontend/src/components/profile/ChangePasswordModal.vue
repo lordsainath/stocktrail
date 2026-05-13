@@ -57,34 +57,19 @@ const onSubmit = handleSubmit(
     <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change Password</h3>
 
     <div class="mt-4">
-      <BaseInput
-        ref="passwordRef"
-        v-model="password"
-        type="password"
-        placeholder="New password"
-        :error="errors.password"
-      />
+      <BaseInput ref="passwordRef" v-model="password" type="password" placeholder="New password"
+        :error="errors.password" />
     </div>
 
     <div class="mt-3">
-      <BaseInput
-        ref="confirmPasswordRef"
-        v-model="confirmPassword"
-        type="password"
-        placeholder="Confirm password"
-        :error="errors.confirmPassword"
-      />
+      <BaseInput ref="confirmPasswordRef" v-model="confirmPassword" type="password" placeholder="Confirm password"
+        :error="errors.confirmPassword" />
     </div>
 
     <div class="mt-4 flex justify-end gap-2">
       <BaseButton variant="secondary" :full-width="false" @click="closeModal"> Cancel </BaseButton>
 
-      <BaseButton
-        :disabled="profileStore.passwordForm.loading"
-        variant="primary"
-        :full-width="false"
-        @click="onSubmit"
-      >
+      <BaseButton :disabled="profileStore.passwordForm.loading" variant="primary" :full-width="false" @click="onSubmit">
         {{ profileStore.passwordForm.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
     </div>
