@@ -8,7 +8,7 @@ const { currentStepName, progressPercentage } = useRegisterStepper();
 
 <template>
   <div
-    class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 flex flex-col justify-between border border-slate-200 dark:border-slate-700 transition-all"
+    class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 hidden md:flex flex-col justify-between border border-slate-200 dark:border-slate-700 transition-all"
   >
     <div>
       <div class="text-sm text-primary font-semibold tracking-widest uppercase">Account Setup</div>

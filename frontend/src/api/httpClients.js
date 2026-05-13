@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_apiBaseUrl,
   timeout: 10000,
 });
 
@@ -17,7 +17,7 @@ apiClient.interceptors.request.use((config) => {
 });
 
 const finnhubApi = axios.create({
-  baseURL: 'https://finnhub.io/api/v1',
+  baseURL: import.meta.env.VITE_stockBaseUrl,
   timeout: 10000,
 });
 

@@ -62,7 +62,7 @@ onMounted(profileStore.fetchCurrentProfile);
             class="self-start lg:self-auto"
             @click="profileStore.openProfileModal"
           >
-            Edit Profile
+            Edit Profile Image
           </BaseButton>
         </div>
       </section>
@@ -122,7 +122,7 @@ onMounted(profileStore.fetchCurrentProfile);
           <div class="mt-5 space-y-3">
             <BaseButton
               variant="secondary"
-              class="!justify-start !p-3 !items-start flex-col"
+              class="justify-start p-3 items-start flex-col"
               @click="profileStore.openPasswordModal"
             >
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">
@@ -136,7 +136,7 @@ onMounted(profileStore.fetchCurrentProfile);
 
             <BaseButton
               variant="secondary"
-              class="!justify-start !p-3 !items-start flex-col"
+              class="justify-start p-3 items-start flex-col"
               @click="profileStore.openPinModal"
             >
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Change PIN</p>

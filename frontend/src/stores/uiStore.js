@@ -16,8 +16,13 @@ const useUiStore = defineStore('ui', () => {
     localStorage.setItem('isSidebarOpen', isSidebarOpen.value);
   };
 
+  const closeSidebar = () => {
+    isSidebarOpen.value = false;
+    localStorage.setItem('isSidebarOpen', isSidebarOpen.value);
+  };
+
   // returning state and actions
-  return { isSidebarOpen, toggleSidebar };
+  return { isSidebarOpen, toggleSidebar, closeSidebar };
 });
 
 export default useUiStore;

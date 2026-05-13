@@ -128,7 +128,7 @@ const backToCredentials = () => {
     <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Left info card -->
       <div
-        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 flex flex-col justify-between border border-slate-200 dark:border-slate-700"
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 hidden md:flex flex-col justify-between border border-slate-200 dark:border-slate-700"
       >
         <div>
           <div class="text-sm text-primary font-semibold tracking-widest uppercase">

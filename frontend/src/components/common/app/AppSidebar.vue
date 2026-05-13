@@ -37,7 +37,9 @@ const appNavItems = [
 ];
 
 const navigate = (path) => {
-  // uiStore.closeMobileMenu();
+  if (window.innerWidth < 1024) {
+    uiStore.closeSidebar();
+  }
   router.push(path);
 };
 </script>
@@ -91,6 +93,56 @@ const navigate = (path) => {
       </div>
     </nav>
   </aside>
+
+  <!-- MOBILE DRAWER -->
+  <transition name="fade">
+    <div
+      v-if="uiStore.isSidebarOpen"
+      class="fixed inset-0 z-50 bg-black/40 lg:hidden"
+      @click="uiStore.closeSidebar"
+    >
+      <aside
+        class="h-full w-72 max-w-[85vw] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 px-3 py-3"
+        @click.stop
+      >
+        <div class="flex items-center justify-between p-2 mb-2">
+          <span class="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+            Menu
+          </span>
+
+          <button
+            class="cursor-pointer outline-none w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            @click="uiStore.closeSidebar"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <nav class="flex-1 mt-2 space-y-2">
+          <div
+            v-for="item in appNavItems"
+            :key="`mobile-${item.name}`"
+            class="group flex items-center gap-3 px-3 py-2.5 cursor-pointer rounded-xl transition-all duration-200 border"
+            :class="[
+              route.path === item.path
+                ? 'bg-primary/10 dark:bg-primary/15 text-primary dark:text-primary border-primary/30 dark:border-primary/30 shadow-sm'
+                : 'text-slate-600 dark:text-slate-300 border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/70',
+            ]"
+            @click="navigate(item.path)"
+          >
+            <div
+              class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"
+            >
+              <i :class="item.icon"></i>
+            </div>
+            <span class="text-sm font-semibold">
+              {{ item.name }}
+            </span>
+          </div>
+        </nav>
+      </aside>
+    </div>
+  </transition>
 </template>
 
 <style scoped></style>
