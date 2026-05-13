@@ -1,4 +1,5 @@
 <script setup>
+import { formatCurrency } from '../../composables/useWalletHelpers';
 import { useRouter } from 'vue-router';
 
 defineProps({
@@ -14,12 +15,10 @@ const navigateToCompany = (symbol) => {
   router.push({ name: 'CompanyDetails', params: { symbol } });
 };
 
-const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
-
 const formatSignedMoney = (value) => {
   const amount = Number(value || 0);
 
-  return `${amount >= 0 ? '+' : '-'}$${Math.abs(amount).toFixed(2)}`;
+  return `${amount >= 0 ? '+' : '-'}${formatCurrency(Math.abs(amount))}`;
 };
 </script>
 
@@ -53,7 +52,7 @@ const formatSignedMoney = (value) => {
     </div>
 
     <!-- Holdings List -->
-    <div v-else class="mt-4 max-h-[500px] space-y-3 overflow-y-auto pr-1">
+    <div v-else class="mt-4 max-h-125 space-y-3 overflow-y-auto pr-1">
       <article
         v-for="holding in holdings"
         :key="holding.symbol"
@@ -106,7 +105,7 @@ const formatSignedMoney = (value) => {
             <p class="text-xs text-slate-400">Avg Price</p>
 
             <p class="mt-1 text-sm font-semibold text-slate-900 dark:text-white">
-              {{ formatMoney(holding.avgPrice) }}
+              {{ formatCurrency(holding.avgPrice) }}
             </p>
           </div>
 
@@ -114,7 +113,7 @@ const formatSignedMoney = (value) => {
             <p class="text-xs text-slate-400">Value</p>
 
             <p class="mt-1 text-sm font-semibold text-slate-900 dark:text-white">
-              {{ formatMoney(holding.marketValue) }}
+              {{ formatCurrency(holding.marketValue) }}
             </p>
           </div>
         </div>

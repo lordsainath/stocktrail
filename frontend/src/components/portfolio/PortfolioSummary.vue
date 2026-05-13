@@ -1,4 +1,6 @@
 <script setup>
+import { formatCurrency } from '../../composables/useWalletHelpers';
+
 defineProps({
   cashBalance: {
     type: Number,
@@ -26,10 +28,10 @@ defineProps({
   },
 });
 
-const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
 const formatSignedMoney = (value) => {
   const amount = Number(value || 0);
-  return `${amount >= 0 ? '+' : '-'}$${Math.abs(amount).toFixed(2)}`;
+
+  return `${amount >= 0 ? '+' : '-'}${formatCurrency(Math.abs(amount))}`;
 };
 </script>
 
@@ -49,7 +51,7 @@ const formatSignedMoney = (value) => {
       <div class="rounded-xl border border-slate-200 px-4 py-3 text-right dark:border-slate-700">
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Equity</p>
         <p class="text-xl font-bold text-slate-900 dark:text-white">
-          {{ formatMoney(totalEquity) }}
+          {{ formatCurrency(totalEquity) }}
         </p>
       </div>
     </div>
@@ -60,7 +62,7 @@ const formatSignedMoney = (value) => {
       >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Cash</p>
         <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
-          {{ formatMoney(cashBalance) }}
+          {{ formatCurrency(cashBalance) }}
         </p>
       </div>
 
@@ -69,7 +71,7 @@ const formatSignedMoney = (value) => {
       >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Market value</p>
         <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
-          {{ formatMoney(portfolioValue) }}
+          {{ formatCurrency(portfolioValue) }}
         </p>
       </div>
 
@@ -78,7 +80,7 @@ const formatSignedMoney = (value) => {
       >
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Invested</p>
         <p class="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
-          {{ formatMoney(totalInvestment) }}
+          {{ formatCurrency(totalInvestment) }}
         </p>
       </div>
 

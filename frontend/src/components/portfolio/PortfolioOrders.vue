@@ -1,12 +1,12 @@
 <script setup>
+import { formatCurrency } from '../../composables/useWalletHelpers';
+
 defineProps({
   orders: {
     type: Array,
     default: () => [],
   },
 });
-
-const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
 
 const formatDate = (value) => {
   try {
@@ -36,7 +36,7 @@ const formatDate = (value) => {
     </div>
 
     <!-- Orders List -->
-    <div v-else class="mt-4 max-h-[420px] space-y-3 overflow-y-auto pr-1">
+    <div v-else class="mt-4 max-h-105 space-y-3 overflow-y-auto pr-1">
       <article
         v-for="order in orders"
         :key="order.id"
@@ -73,11 +73,11 @@ const formatDate = (value) => {
         <!-- Right -->
         <div class="text-right">
           <p class="text-sm font-semibold text-slate-900 dark:text-white">
-            {{ order.quantity }} x {{ formatMoney(order.price) }}
+            {{ order.quantity }} x {{ formatCurrency(order.price) }}
           </p>
 
           <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            {{ formatMoney(order.total) }}
+            {{ formatCurrency(order.total) }}
           </p>
         </div>
       </article>
