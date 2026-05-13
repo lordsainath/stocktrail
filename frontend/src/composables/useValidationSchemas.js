@@ -52,7 +52,7 @@ export const registerBasicSchema = yup.object({
     .min(3, 'Full name should be at least 3 characters long')
     .max(100, 'Full name cannot exceed 100 characters')
     .matches(/^[a-zA-Z\s]+$/, {
-      message: 'Full name can only contain letters and spaces',
+      message: 'Full name can only contain characters and spaces',
       excludeEmptyString: true,
     }),
 
@@ -77,7 +77,7 @@ export const registerAddressSchema = yup.object({
     .min(2, 'Country must be at least 2 characters')
     .max(100, 'Country cannot exceed 100 characters')
     .matches(/^[a-zA-Z\s]+$/, {
-      message: 'Country can only contain letters and spaces',
+      message: 'Country can only contain characters and spaces',
       excludeEmptyString: true,
     }),
 
@@ -89,7 +89,7 @@ export const registerAddressSchema = yup.object({
     .min(2, 'State must be at least 2 characters')
     .max(100, 'State cannot exceed 100 characters')
     .matches(/^[a-zA-Z\s]+$/, {
-      message: 'State can only contain letters and spaces',
+      message: 'State can only contain characters and spaces',
       excludeEmptyString: true,
     }),
 
@@ -101,7 +101,7 @@ export const registerAddressSchema = yup.object({
     .min(2, 'City must be at least 2 characters')
     .max(100, 'City cannot exceed 100 characters')
     .matches(/^[a-zA-Z\s]+$/, {
-      message: 'City can only contain letters and spaces',
+      message: 'City can only contain characters and spaces',
       excludeEmptyString: true,
     }),
 
@@ -180,7 +180,6 @@ export const registerPinSchema = yup.object({
     .required('Confirm PIN is required')
     .oneOf([yup.ref('pin')], 'PINs must match'),
 });
-
 
 // ============================================
 // WALLET SCHEMAS

@@ -18,7 +18,6 @@ const props = defineProps({
       photoUrl: '',
       loading: false,
     }),
-
   },
 });
 
@@ -49,19 +48,30 @@ const { updateProfile } = useProfileStore();
     </p>
 
     <div class="mt-4">
-      <BaseInput v-model="photoUrl" type="url" placeholder="https://example.com/profile.jpg"
-        :error="defineProfileError.photoUrl" />
-
+      <BaseInput
+        v-model="photoUrl"
+        type="url"
+        placeholder="https://example.com/profile.jpg"
+        :error="defineProfileError.photoUrl"
+      />
     </div>
 
     <div class="mt-4 flex justify-end gap-2">
-      <BaseButton variant="secondary" :full-width="false" :disabled="profileStore.profileForm.loading"
-        @click="profileStore.closeProfileModal">
+      <BaseButton
+        variant="secondary"
+        :full-width="false"
+        :disabled="profileStore.profileForm.loading"
+        @click="profileStore.closeProfileModal"
+      >
         Cancel
       </BaseButton>
 
-      <BaseButton variant="primary" :full-width="false" :disabled="profileStore.profileForm.loading"
-        @click="profileStore.updateProfile">
+      <BaseButton
+        variant="primary"
+        :full-width="false"
+        :disabled="profileStore.profileForm.loading"
+        @click="profileStore.updateProfile"
+      >
         {{ profileStore.profileForm.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
     </div>

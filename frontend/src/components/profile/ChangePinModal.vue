@@ -3,7 +3,6 @@ import { computed, nextTick, ref } from 'vue';
 
 import VOtpInput from 'vue3-otp-input';
 
-
 import { useProfileStore } from '@stores/profileStore';
 
 import BaseModal from '@components/base/BaseModal.vue';
@@ -17,11 +16,9 @@ const show = defineModel('show');
 const pinOtpRef = ref(null);
 const confirmOtpRef = ref(null);
 
-
 const { pin, confirmPin, definePinError } = storeToRefs(profileStore);
 
 const closeModal = () => {
-
   show.value = false;
 };
 
@@ -42,8 +39,6 @@ const confirmPinInputClasses = computed(() => {
     ? `${base} border border-red-500 focus:ring-red-400`
     : `${base} border border-slate-300 dark:border-slate-600 focus:ring-primary`;
 });
-
-
 </script>
 
 <template>
@@ -55,8 +50,14 @@ const confirmPinInputClasses = computed(() => {
         New PIN
       </label>
 
-      <VOtpInput :ref="pinOtpRef" v-model:value="pin" :num-inputs="4" input-type="number" separator=""
-        :input-classes="pinInputClasses" />
+      <VOtpInput
+        :ref="pinOtpRef"
+        v-model:value="pin"
+        :num-inputs="4"
+        input-type="number"
+        separator=""
+        :input-classes="pinInputClasses"
+      />
 
       <p v-if="definePinError.pin" class="mt-2 text-sm text-red-500">
         {{ definePinError.pin }}
@@ -68,8 +69,14 @@ const confirmPinInputClasses = computed(() => {
         Confirm PIN
       </label>
 
-      <VOtpInput :ref="confirmOtpRef" v-model:value="confirmPin" :num-inputs="4" input-type="number" separator=""
-        :input-classes="confirmPinInputClasses" />
+      <VOtpInput
+        :ref="confirmOtpRef"
+        v-model:value="confirmPin"
+        :num-inputs="4"
+        input-type="number"
+        separator=""
+        :input-classes="confirmPinInputClasses"
+      />
 
       <p v-if="definePinError.confirmPin" class="mt-2 text-sm text-red-500">
         {{ definePinError.confirmPin }}
@@ -77,13 +84,21 @@ const confirmPinInputClasses = computed(() => {
     </div>
 
     <div class="mt-6 flex justify-end gap-2">
-      <BaseButton variant="secondary" :full-width="false" :disabled="profileStore.pinForm.loading"
-        @click="profileStore.closePinModal">
+      <BaseButton
+        variant="secondary"
+        :full-width="false"
+        :disabled="profileStore.pinForm.loading"
+        @click="profileStore.closePinModal"
+      >
         Cancel
       </BaseButton>
 
-      <BaseButton variant="primary" :full-width="false" :disabled="profileStore.pinForm.loading"
-        @click="profileStore.updatePin">
+      <BaseButton
+        variant="primary"
+        :full-width="false"
+        :disabled="profileStore.pinForm.loading"
+        @click="profileStore.updatePin"
+      >
         {{ profileStore.pinForm.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
     </div>

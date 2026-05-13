@@ -107,13 +107,7 @@ export const useProfileStore = defineStore('profile', () => {
 
     if (!address) return 'No address available';
 
-    return [
-      address.street,
-      address.city,
-      address.state,
-      address.country,
-      address.zipCode,
-    ]
+    return [address.street, address.city, address.state, address.country, address.zipCode]
       .filter(Boolean)
       .join(', ');
   });

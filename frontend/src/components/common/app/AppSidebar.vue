@@ -66,13 +66,13 @@ const navigate = (path) => {
   >
     <!-- TOP -->
     <div class="flex items-center justify-between p-2 mb-2">
-      <span
+      <span title="Menu"
         v-if="uiStore.isSidebarOpen"
         class="text-sm uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400"
         >Menu</span
       >
 
-      <button
+      <button title="Menu"
         class="cursor-pointer outline-none w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
         @click="uiStore.toggleSidebar"
       >
@@ -83,6 +83,7 @@ const navigate = (path) => {
     <!-- Navbar -->
     <nav class="flex-1 mt-2 space-y-2">
       <div
+      :title="item.name"
         v-for="item in appNavItems"
         :key="item.name"
         class="group flex items-center gap-3 px-3 py-2.5 cursor-pointer rounded-xl transition-all duration-200 border"
@@ -94,10 +95,10 @@ const navigate = (path) => {
         ]"
         @click="navigate(item.path)"
       >
-        <div
+        <div 
           class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"
         >
-          <i :class="item.icon"></i>
+          <i  :class="item.icon"></i>
         </div>
         <span v-if="uiStore.isSidebarOpen" class="text-sm font-semibold">
           {{ item.name }}
