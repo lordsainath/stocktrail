@@ -6,6 +6,7 @@ import { toast } from 'vue-sonner';
 
 import useUserStore from '@stores/userStore';
 import { apiClient } from '@api/httpClients';
+import { passwordSchema, pinSchema } from '@composables/useValidationSchemas';
 
 export const useProfileStore = defineStore('profile', () => {
   const userStore = useUserStore();
@@ -33,12 +34,14 @@ export const useProfileStore = defineStore('profile', () => {
     password: '',
     confirmPassword: '',
     loading: false,
+    errors: {},
   });
 
   const pinForm = reactive({
     pin: '',
     confirmPin: '',
     loading: false,
+    errors: {},
   });
 
   // ==================================================
@@ -71,6 +74,9 @@ export const useProfileStore = defineStore('profile', () => {
   };
 
   const openPasswordModal = () => {
+    passwordForm.password = '';
+    passwordForm.confirmPassword = '';
+    passwordForm.errors = {};
     showPasswordModal.value = true;
   };
 
@@ -79,6 +85,9 @@ export const useProfileStore = defineStore('profile', () => {
   };
 
   const openPinModal = () => {
+    pinForm.pin = '';
+    pinForm.confirmPin = '';
+    pinForm.errors = {};
     showPinModal.value = true;
   };
 
@@ -97,11 +106,12 @@ export const useProfileStore = defineStore('profile', () => {
   const resetPasswordForm = () => {
     passwordForm.password = '';
     passwordForm.confirmPassword = '';
+    passwordForm.errors = {};
   };
-
   const resetPinForm = () => {
     pinForm.pin = '';
     pinForm.confirmPin = '';
+    pinForm.errors = {};
   };
 
   // ==================================================
@@ -169,24 +179,36 @@ export const useProfileStore = defineStore('profile', () => {
 
   const updatePassword = async (payload = null) => {
     const form = payload || passwordForm;
-    const password = form.password || '';
-    const confirmPassword = form.confirmPassword || '';
 
-    if (password.length < 8) {
-      toast.error('Password must be at least 8 characters');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
+    // Keep store-backed form in sync for validation errors display
+    passwordForm.password = form.password || '';
+    passwordForm.confirmPassword = form.confirmPassword || '';
+    // Clear previous errors
+    passwordForm.errors = {};
 
     try {
-      passwordForm.loading = true;
+      await passwordSchema.validate(form, {
+        abortEarly: false,
+      });
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        error.inner.forEach((err) => {
+          if (err.path) {
+            passwordForm.errors[err.path] = err.message;
+          }
+        });
 
+        return;
+      }
+
+      return;
+    }
+
+    passwordForm.loading = true;
+
+    try {
       const response = await apiClient.put('/auth/update-password', {
-        password,
+        password: passwordForm.password,
       });
 
       toast.success(response?.data?.message || 'Password updated successfully');
@@ -199,31 +221,43 @@ export const useProfileStore = defineStore('profile', () => {
       passwordForm.loading = false;
     }
   };
-
   // ==================================================
   // UPDATE PIN
   // ==================================================
 
   const updatePin = async (payload = null) => {
     const form = payload || pinForm;
-    const pin = form.pin || '';
-    const confirmPin = form.confirmPin || '';
 
-    if (!/^\d{4}$/.test(pin)) {
-      toast.error('PIN must be exactly 4 digits');
-      return;
-    }
+    // Keep store-backed pin values in sync for validation errors display
+    pinForm.pin = form.pin || '';
+    pinForm.confirmPin = form.confirmPin || '';
 
-    if (pin !== confirmPin) {
-      toast.error('PINs do not match');
-      return;
-    }
+    // Clear previous errors reactively
+    Object.keys(pinForm.errors).forEach((k) => delete pinForm.errors[k]);
 
     try {
-      pinForm.loading = true;
+      await pinSchema.validate(form, {
+        abortEarly: false,
+      });
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        // Populate errors reactively
+        error.inner.forEach((err) => {
+          pinForm.errors[err.path] = err.message;
+        });
+        toast.error(error.inner[0]?.message || 'Validation failed');
+        return;
+      }
 
+      toast.error(error?.message || 'Validation failed');
+      return;
+    }
+
+    pinForm.loading = true;
+
+    try {
       const response = await apiClient.put('/auth/update-pin', {
-        pin,
+        pin: pinForm.pin,
       });
 
       userStore.updateUser({

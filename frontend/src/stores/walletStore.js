@@ -3,6 +3,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import { apiClient } from '@api/httpClients';
 
 import useUserStore from '@stores/userStore';
+import { toast } from 'vue-sonner';
 
 const STORAGE_PREFIX = 'stocktrail-wallet-balance';
 
@@ -74,6 +75,8 @@ export const useWalletStore = defineStore('wallet', () => {
     () => linkedAccounts.value.filter((item) => item.status === 'VERIFIED').length
   );
 
+  const hasLinkedBankAccount = computed(() => linkedAccounts.value.length > 0);
+
   const pendingCount = computed(
     () => linkedAccounts.value.filter((item) => item.status === 'PENDING').length
   );
@@ -100,10 +103,9 @@ export const useWalletStore = defineStore('wallet', () => {
 
       const remoteBalance = response?.data?.data?.balance || 0;
 
-      if (!hasStoredBalance.value) {
-        walletBalance.value = remoteBalance;
-        persistWalletBalance();
-      }
+      walletBalance.value = remoteBalance;
+      hasStoredBalance.value = true;
+      persistWalletBalance();
 
       linkedAccounts.value = response?.data?.data?.bankAccounts || [];
       recentTransfers.value = response?.data?.data?.transactions || [];
@@ -123,6 +125,12 @@ export const useWalletStore = defineStore('wallet', () => {
   );
 
   const addBankAccount = async () => {
+    if (hasLinkedBankAccount.value) {
+      toast.error('Only one bank account can be linked.');
+
+      return null;
+    }
+
     if (
       !addBankForm.bankName ||
       !addBankForm.accountHolder ||
@@ -142,12 +150,15 @@ export const useWalletStore = defineStore('wallet', () => {
         ifsc: addBankForm.ifsc,
         accountType: addBankForm.accountType,
       });
+      toast.success('Bank account added successfully!');
 
       resetAddBankForm();
 
       await fetchWalletSummary();
 
       return response.data;
+    }catch(error){
+      toast.error(error?.response?.data?.message || 'Failed to add bank account');
     } finally {
       loading.value = false;
     }
@@ -173,6 +184,10 @@ export const useWalletStore = defineStore('wallet', () => {
         pin: addMoneyForm.pin,
       });
 
+      if (response?.data?.data?.balance !== undefined) {
+        setWalletBalance(response.data.data.balance);
+      }
+
       resetAddMoneyForm();
 
       await fetchWalletSummary();
@@ -190,6 +205,7 @@ export const useWalletStore = defineStore('wallet', () => {
     hasStoredBalance,
     linkedAccounts,
     recentTransfers,
+    hasLinkedBankAccount,
 
     verifiedCount,
     pendingCount,

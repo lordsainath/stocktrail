@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 
 import BaseModal from '@components/base/BaseModal.vue';
 import BaseButton from '@components/base/BaseButton.vue';
@@ -13,28 +13,46 @@ const props = defineProps({
 
   form: {
     type: Object,
-    default: () => ({
-      password: '',
-      confirmPassword: '',
-      loading: false,
-    }),
+    required: true,
   },
 });
 
 const emit = defineEmits(['close', 'save']);
 
-const localForm = reactive({
-  password: '',
-  confirmPassword: '',
-  loading: false,
-});
+const passwordRef = ref(null);
+const confirmPasswordRef = ref(null);
+
+const passwordValue = ref(props.form.password || '');
+const confirmPasswordValue = ref(props.form.confirmPassword || '');
 
 watch(
-  () => props.form,
-  (newForm) => {
-    Object.assign(localForm, newForm);
+  () => props.show,
+  (isOpen) => {
+    if (!isOpen) return;
+    passwordValue.value = props.form.password || '';
+    confirmPasswordValue.value = props.form.confirmPassword || '';
   },
-  { immediate: true, deep: true }
+  { immediate: true }
+);
+
+// Focus first invalid field
+watch(
+  () => props.form.errors,
+  async (errors) => {
+    await nextTick();
+
+    if (errors?.password) {
+      passwordRef.value?.focus();
+      return;
+    }
+
+    if (errors?.confirmPassword) {
+      confirmPasswordRef.value?.focus();
+    }
+  },
+  {
+    deep: true,
+  }
 );
 </script>
 
@@ -42,30 +60,41 @@ watch(
   <BaseModal :show="show" @close="emit('close')">
     <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change Password</h3>
 
+    <!-- PASSWORD -->
     <div class="mt-4">
-      <BaseInput v-model="localForm.password" type="password" placeholder="New password" />
-    </div>
-
-    <div class="mt-3">
       <BaseInput
-        v-model="localForm.confirmPassword"
+        ref="passwordRef"
+        v-model="passwordValue"
         type="password"
-        placeholder="Confirm password"
+        placeholder="New password"
+        :error="props.form.errors?.password"
       />
     </div>
 
+    <!-- CONFIRM PASSWORD -->
+    <div class="mt-3">
+      <BaseInput
+        ref="confirmPasswordRef"
+        v-model="confirmPasswordValue"
+        type="password"
+        placeholder="Confirm password"
+        :error="props.form.errors?.confirmPassword"
+      />
+    </div>
+
+    <!-- ACTIONS -->
     <div class="mt-4 flex justify-end gap-2">
       <BaseButton variant="secondary" :full-width="false" @click="emit('close')">
         Cancel
       </BaseButton>
 
       <BaseButton
-        :disabled="localForm.loading"
+        :disabled="props.form.loading"
         variant="primary"
         :full-width="false"
-        @click="emit('save', { ...localForm })"
+        @click="emit('save', { password: passwordValue, confirmPassword: confirmPasswordValue })"
       >
-        {{ localForm.loading ? 'Saving...' : 'Save' }}
+        {{ props.form.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
     </div>
   </BaseModal>

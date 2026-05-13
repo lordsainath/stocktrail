@@ -166,7 +166,7 @@ export const useMarketStore = defineStore('market', () => {
 
       return marketNews.value;
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to fetch market news'));
+      // toast.error(getErrorMessage(error, 'Failed to fetch market news'));
 
       marketNews.value = [];
 
@@ -180,7 +180,7 @@ export const useMarketStore = defineStore('market', () => {
 
       return quote.value;
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to fetch quote'));
+      // toast.error(getErrorMessage(error, 'Failed to fetch quote'));
 
       quote.value = null;
 
@@ -233,7 +233,7 @@ export const useMarketStore = defineStore('market', () => {
 
       return profile.value;
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to fetch company profile'));
+      // toast.error(getErrorMessage(error, 'Failed to fetch company profile'));
 
       profile.value = null;
 
@@ -288,7 +288,7 @@ export const useMarketStore = defineStore('market', () => {
     } catch (e) {
       console.log(e);
 
-      toast.error('Failed to load historical data from page');
+      // toast.error('Failed to load historical data from page');
 
       chartData.value = null;
       candleData.value = null;
@@ -313,7 +313,7 @@ export const useMarketStore = defineStore('market', () => {
       return response.data.result || [];
     } catch (error) {
       console.log(error);
-      toast.error(getErrorMessage(error, 'Failed to search symbols'));
+      // toast.error(getErrorMessage(error, 'Failed to search symbols'));
 
       return [];
     }

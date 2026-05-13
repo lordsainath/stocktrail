@@ -60,8 +60,13 @@ export const useTradeStore = defineStore('trade', () => {
   const portfolioValue = computed(() =>
     roundMoney(
       holdings.value.reduce(
-        (sum, item) =>
-          sum + Number(item.lastPrice || item.avgPrice || 0) * Number(item.quantity || 0),
+        (sum, item) => {
+          const currentPrice = Number(
+            livePrices.value[item.symbol] ?? item.lastPrice ?? item.avgPrice ?? 0
+          );
+
+          return sum + currentPrice * Number(item.quantity || 0);
+        },
         0
       )
     )
@@ -69,36 +74,47 @@ export const useTradeStore = defineStore('trade', () => {
 
   const totalEquity = computed(() => roundMoney(availableCash.value + portfolioValue.value));
 
+  const syncCashBalanceFromWallet = (value = walletStore.walletBalance) => {
+    const nextBalance = roundMoney(value);
+
+    cashBalance.value = nextBalance;
+    initialized.value = true;
+
+    if (nextBalance > 0) {
+      seededFromWallet.value = true;
+    }
+
+    persistState();
+  };
+
   const holdingsWithPnL = computed(() =>
     holdings.value.map((item) => {
-      const currentPrice = roundMoney(
+      const currentPrice = Number(
         livePrices.value[item.symbol] ?? item.lastPrice ?? item.avgPrice ?? 0
       );
       const quantity = Number(item.quantity || 0);
-      const costBasis = roundMoney(Number(item.avgPrice || 0) * quantity);
-      const currentValue = roundMoney(currentPrice * quantity);
-      const unrealizedPnL = roundMoney(currentValue - costBasis);
+      const costBasis = Number(item.avgPrice || 0) * quantity;
+      const currentValue = currentPrice * quantity;
+      const unrealizedPnL = currentValue - costBasis;
       const unrealizedPnLPercent =
-        costBasis > 0 ? roundMoney((unrealizedPnL / costBasis) * 100) : 0;
+        costBasis > 0 ? (unrealizedPnL / costBasis) * 100 : 0;
 
       return {
         ...item,
-        currentPrice,
-        marketValue: currentValue,
-        unrealizedPnL,
-        unrealizedPnLPercent,
+        currentPrice: roundMoney(currentPrice),
+        marketValue: roundMoney(currentValue),
+        unrealizedPnL: roundMoney(unrealizedPnL),
+        unrealizedPnLPercent: roundMoney(unrealizedPnLPercent),
         isProfit: unrealizedPnL >= 0,
       };
     })
   );
 
-  const totalUnrealizedPnL = computed(() =>
-    roundMoney(
-      holdingsWithPnL.value.reduce((sum, item) => sum + Number(item.unrealizedPnL || 0), 0)
-    )
+  const totalProfitLoss = computed(() =>
+    roundMoney(portfolioValue.value - totalInvestment.value)
   );
 
-  const totalProfitLoss = computed(() => totalUnrealizedPnL.value);
+  const totalUnrealizedPnL = computed(() => totalProfitLoss.value);
 
   const getHolding = (symbol) => holdings.value.find((item) => item.symbol === symbol) || null;
 
@@ -146,23 +162,12 @@ export const useTradeStore = defineStore('trade', () => {
   };
 
   const seedFromWalletIfNeeded = async () => {
-    if (seededFromWallet.value) {
-      return;
-    }
-
-    if (!walletStore.hasStoredBalance && walletStore.walletBalance <= 0) {
-      return;
-    }
-
     if (!walletStore.walletBalance || walletStore.walletBalance <= 0) {
       await walletStore.fetchWalletSummary().catch(() => null);
     }
 
-    if (!cashBalance.value) {
-      cashBalance.value = roundMoney(walletStore.walletBalance);
-      seededFromWallet.value = true;
-      initialized.value = true;
-      persistState();
+    if (walletStore.hasStoredBalance || walletStore.walletBalance > 0 || !seededFromWallet.value) {
+      syncCashBalanceFromWallet(walletStore.walletBalance);
     }
   };
 
@@ -364,7 +369,7 @@ export const useTradeStore = defineStore('trade', () => {
   watch(
     () => walletStore.walletBalance,
     () => {
-      seedFromWalletIfNeeded();
+      syncCashBalanceFromWallet(walletStore.walletBalance);
     }
   );
 
