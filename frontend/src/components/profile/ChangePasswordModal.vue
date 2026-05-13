@@ -1,100 +1,108 @@
 <script setup>
-import { ref, watch, nextTick } from 'vue';
+import { nextTick, ref } from 'vue';
+import { useForm } from 'vee-validate';
+
+import { passwordSchema } from '@composables/useValidationSchemas';
+import { useProfileStore } from '@stores/profileStore';
 
 import BaseModal from '@components/base/BaseModal.vue';
 import BaseButton from '@components/base/BaseButton.vue';
 import BaseInput from '@components/base/BaseInput.vue';
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false,
-  },
+const profileStore = useProfileStore();
 
-  form: {
-    type: Object,
-    required: true,
-  },
-});
-
-const emit = defineEmits(['close', 'save']);
+const show = defineModel('show');
 
 const passwordRef = ref(null);
 const confirmPasswordRef = ref(null);
 
-const passwordValue = ref(props.form.password || '');
-const confirmPasswordValue = ref(props.form.confirmPassword || '');
+const {
+  errors,
+  defineField,
+  handleSubmit,
+  resetForm,
+} = useForm({
+  validationSchema: passwordSchema,
+});
 
-watch(
-  () => props.show,
-  (isOpen) => {
-    if (!isOpen) return;
-    passwordValue.value = props.form.password || '';
-    confirmPasswordValue.value = props.form.confirmPassword || '';
+const [password] = defineField('password');
+const [confirmPassword] = defineField('confirmPassword');
+
+const closeModal = () => {
+  resetForm();
+  show.value = false;
+};
+
+const onSubmit = handleSubmit(
+  async (values) => {
+    const isSuccess = await profileStore.updatePassword(values);
+
+    if (isSuccess) {
+      resetForm();
+    }
   },
-  { immediate: true }
-);
 
-// Focus first invalid field
-watch(
-  () => props.form.errors,
-  async (errors) => {
+  async () => {
     await nextTick();
 
-    if (errors?.password) {
+    if (errors.value.password) {
       passwordRef.value?.focus();
       return;
     }
 
-    if (errors?.confirmPassword) {
+    if (errors.value.confirmPassword) {
       confirmPasswordRef.value?.focus();
     }
-  },
-  {
-    deep: true,
   }
 );
 </script>
 
 <template>
-  <BaseModal :show="show" @close="emit('close')">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change Password</h3>
+  <BaseModal :show="show" @close="closeModal">
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
+      Change Password
+    </h3>
 
-    <!-- PASSWORD -->
     <div class="mt-4">
       <BaseInput
         ref="passwordRef"
-        v-model="passwordValue"
+        v-model="password"
         type="password"
         placeholder="New password"
-        :error="props.form.errors?.password"
+        :error="errors.password"
       />
     </div>
 
-    <!-- CONFIRM PASSWORD -->
     <div class="mt-3">
       <BaseInput
         ref="confirmPasswordRef"
-        v-model="confirmPasswordValue"
+        v-model="confirmPassword"
         type="password"
         placeholder="Confirm password"
-        :error="props.form.errors?.confirmPassword"
+        :error="errors.confirmPassword"
       />
     </div>
 
-    <!-- ACTIONS -->
     <div class="mt-4 flex justify-end gap-2">
-      <BaseButton variant="secondary" :full-width="false" @click="emit('close')">
+      <BaseButton
+        variant="secondary"
+        :full-width="false"
+        @click="closeModal"
+      >
         Cancel
       </BaseButton>
 
       <BaseButton
-        :disabled="props.form.loading"
+        :disabled="profileStore.passwordForm.loading"
         variant="primary"
         :full-width="false"
-        @click="emit('save', { password: passwordValue, confirmPassword: confirmPasswordValue })"
+        @click="onSubmit"
       >
-        {{ props.form.loading ? 'Saving...' : 'Save' }}
+        {{
+          profileStore.passwordForm.loading
+            ? 'Saving...'
+            : 'Save'
+        }}
       </BaseButton>
     </div>
   </BaseModal>

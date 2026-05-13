@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, reactive, ref, watch } from 'vue';
 import { apiClient } from '@api/httpClients';
-
 import useUserStore from '@stores/userStore';
 import { toast } from 'vue-sonner';
 
@@ -31,7 +30,10 @@ export const useWalletStore = defineStore('wallet', () => {
   });
 
   const persistWalletBalance = () => {
-    localStorage.setItem(storageKey.value, String(Number(walletBalance.value || 0)));
+    localStorage.setItem(
+      storageKey.value,
+      String(Number(walletBalance.value || 0))
+    );
   };
 
   const hydrateWalletBalance = () => {
@@ -43,18 +45,24 @@ export const useWalletStore = defineStore('wallet', () => {
     }
 
     const parsed = Number(raw);
+
     walletBalance.value = Number.isFinite(parsed) ? parsed : 0;
     hasStoredBalance.value = true;
   };
 
   const setWalletBalance = (value) => {
-    walletBalance.value = Number.isFinite(Number(value)) ? Number(value) : 0;
+    walletBalance.value = Number.isFinite(Number(value))
+      ? Number(value)
+      : 0;
+
     hasStoredBalance.value = true;
     persistWalletBalance();
   };
 
   const adjustWalletBalance = (delta) => {
-    setWalletBalance(Number(walletBalance.value || 0) + Number(delta || 0));
+    setWalletBalance(
+      Number(walletBalance.value || 0) + Number(delta || 0)
+    );
   };
 
   const addBankForm = reactive({
@@ -71,14 +79,20 @@ export const useWalletStore = defineStore('wallet', () => {
     pin: '',
   });
 
-  const verifiedCount = computed(
-    () => linkedAccounts.value.filter((item) => item.status === 'VERIFIED').length
+  const verifiedCount = computed(() =>
+    linkedAccounts.value.filter(
+      (item) => item.status === 'VERIFIED'
+    ).length
   );
 
-  const hasLinkedBankAccount = computed(() => linkedAccounts.value.length > 0);
+  const pendingCount = computed(() =>
+    linkedAccounts.value.filter(
+      (item) => item.status === 'PENDING'
+    ).length
+  );
 
-  const pendingCount = computed(
-    () => linkedAccounts.value.filter((item) => item.status === 'PENDING').length
+  const hasLinkedBankAccount = computed(
+    () => linkedAccounts.value.length > 0
   );
 
   const resetAddBankForm = () => {
@@ -101,16 +115,25 @@ export const useWalletStore = defineStore('wallet', () => {
     try {
       const response = await apiClient.get('/wallet/summary');
 
-      const remoteBalance = response?.data?.data?.balance || 0;
+      const remoteBalance =
+        response?.data?.data?.balance || 0;
 
       walletBalance.value = remoteBalance;
       hasStoredBalance.value = true;
       persistWalletBalance();
 
-      linkedAccounts.value = response?.data?.data?.bankAccounts || [];
-      recentTransfers.value = response?.data?.data?.transactions || [];
+      linkedAccounts.value =
+        response?.data?.data?.bankAccounts || [];
+
+      recentTransfers.value =
+        response?.data?.data?.transactions || [];
 
       return response.data;
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          'Failed to fetch wallet summary'
+      );
     } finally {
       loading.value = false;
     }
@@ -124,32 +147,23 @@ export const useWalletStore = defineStore('wallet', () => {
     { immediate: true }
   );
 
-  const addBankAccount = async () => {
+  const addBankAccount = async (payload) => {
     if (hasLinkedBankAccount.value) {
       toast.error('Only one bank account can be linked.');
-
       return null;
-    }
-
-    if (
-      !addBankForm.bankName ||
-      !addBankForm.accountHolder ||
-      !addBankForm.accountNumber ||
-      !addBankForm.ifsc
-    ) {
-      throw new Error('Please fill all required bank fields');
     }
 
     loading.value = true;
 
     try {
       const response = await apiClient.post('/wallet/banks', {
-        bankName: addBankForm.bankName,
-        accountHolder: addBankForm.accountHolder,
-        accountNumber: addBankForm.accountNumber,
-        ifsc: addBankForm.ifsc,
-        accountType: addBankForm.accountType,
+        bankName: payload.bankName,
+        accountHolder: payload.accountHolder,
+        accountNumber: payload.accountNumber,
+        ifsc: payload.ifsc,
+        accountType: payload.accountType,
       });
+
       toast.success('Bank account added successfully!');
 
       resetAddBankForm();
@@ -157,32 +171,27 @@ export const useWalletStore = defineStore('wallet', () => {
       await fetchWalletSummary();
 
       return response.data;
-    }catch(error){
-      toast.error(error?.response?.data?.message || 'Failed to add bank account');
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          'Failed to add bank account'
+      );
     } finally {
       loading.value = false;
     }
   };
 
-  const addMoneyToWallet = async () => {
-    const amount = Number(addMoneyForm.amount);
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-      throw new Error('Please enter a valid amount');
-    }
-
-    if (!/^\d{4}$/.test(String(addMoneyForm.pin))) {
-      throw new Error('Please enter a valid 4-digit PIN');
-    }
-
+  const addMoneyToWallet = async (payload) => {
     loading.value = true;
 
     try {
       const response = await apiClient.post('/wallet/add-money', {
-        amount,
-        bankAccountId: addMoneyForm.bankAccountId || null,
-        pin: addMoneyForm.pin,
+        amount: Number(payload.amount),
+        bankAccountId: payload.bankAccountId,
+        pin: payload.pin,
       });
+
+      toast.success('Money added to wallet successfully!');
 
       if (response?.data?.data?.balance !== undefined) {
         setWalletBalance(response.data.data.balance);
@@ -193,6 +202,11 @@ export const useWalletStore = defineStore('wallet', () => {
       await fetchWalletSummary();
 
       return response.data;
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          'Failed to add money'
+      );
     } finally {
       loading.value = false;
     }
@@ -205,10 +219,10 @@ export const useWalletStore = defineStore('wallet', () => {
     hasStoredBalance,
     linkedAccounts,
     recentTransfers,
-    hasLinkedBankAccount,
 
     verifiedCount,
     pendingCount,
+    hasLinkedBankAccount,
 
     addBankForm,
     addMoneyForm,
