@@ -98,6 +98,8 @@ export const useTradeStore = defineStore('trade', () => {
     )
   );
 
+  const totalProfitLoss = computed(() => totalUnrealizedPnL.value);
+
   const getHolding = (symbol) => holdings.value.find((item) => item.symbol === symbol) || null;
 
   const getAvailableQuantity = (symbol) => Number(getHolding(symbol)?.quantity || 0);
@@ -379,6 +381,7 @@ export const useTradeStore = defineStore('trade', () => {
     portfolioValue,
     totalEquity,
     totalUnrealizedPnL,
+    totalProfitLoss,
 
     getHolding,
     getAvailableQuantity,

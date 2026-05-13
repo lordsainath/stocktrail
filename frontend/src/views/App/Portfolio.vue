@@ -32,7 +32,7 @@ onMounted(async () => {
         :portfolio-value="tradeStore.portfolioValue"
         :total-equity="tradeStore.totalEquity"
         :total-investment="tradeStore.totalInvestment"
-        :total-unrealized-pnl="tradeStore.totalUnrealizedPnL"
+        :total-profit-loss="tradeStore.totalProfitLoss"
         :holding-count="holdings.length"
       />
 

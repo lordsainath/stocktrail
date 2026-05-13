@@ -16,7 +16,7 @@ defineProps({
     type: Number,
     default: 0,
   },
-  totalUnrealizedPnL: {
+  totalProfitLoss: {
     type: Number,
     default: 0,
   },
@@ -92,12 +92,12 @@ const formatSignedMoney = (value) => {
       <div
         class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40"
       >
-        <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Unrealized P/L</p>
+        <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Profit / Loss Total</p>
         <p
           class="mt-2 text-lg font-semibold"
-          :class="totalUnrealizedPnL >= 0 ? 'text-emerald-500' : 'text-rose-500'"
+          :class="totalProfitLoss >= 0 ? 'text-emerald-500' : 'text-rose-500'"
         >
-          {{ formatSignedMoney(totalUnrealizedPnL) }}
+          {{ formatSignedMoney(totalProfitLoss) }}
         </p>
       </div>
     </div>
