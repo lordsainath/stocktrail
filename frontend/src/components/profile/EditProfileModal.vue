@@ -4,6 +4,11 @@ import { reactive, watch } from 'vue';
 import BaseModal from '@components/base/BaseModal.vue';
 import BaseButton from '@components/base/BaseButton.vue';
 import BaseInput from '@components/base/BaseInput.vue';
+import { useProfileStore } from '@/stores/profileStore';
+import { storeToRefs } from 'pinia';
+
+const profileStore = useProfileStore();
+const { photoUrl, defineProfileError } = storeToRefs(profileStore);
 
 const props = defineProps({
   show: Boolean,
@@ -13,23 +18,26 @@ const props = defineProps({
       photoUrl: '',
       loading: false,
     }),
+
   },
 });
 
 const emit = defineEmits(['close', 'save']);
 
-const localForm = reactive({
-  photoUrl: '',
-  loading: false,
-});
+const { updateProfile } = useProfileStore();
 
-watch(
-  () => props.form,
-  (newForm) => {
-    Object.assign(localForm, newForm);
-  },
-  { immediate: true, deep: true }
-);
+// const localForm = reactive({
+//   photoUrl: '',
+//   loading: false,
+// });
+
+// watch(
+//   () => props.form,
+//   (newForm) => {
+//     Object.assign(localForm, newForm);
+//   },
+//   { immediate: true, deep: true }
+// );
 </script>
 
 <template>
@@ -41,25 +49,20 @@ watch(
     </p>
 
     <div class="mt-4">
-      <BaseInput
-        v-model="localForm.photoUrl"
-        type="url"
-        placeholder="https://example.com/profile.jpg"
-      />
+      <BaseInput v-model="photoUrl" type="url" placeholder="https://example.com/profile.jpg"
+        :error="defineProfileError.photoUrl" />
+
     </div>
 
     <div class="mt-4 flex justify-end gap-2">
-      <BaseButton variant="secondary" :full-width="false" @click="emit('close')">
+      <BaseButton variant="secondary" :full-width="false" :disabled="profileStore.profileForm.loading"
+        @click="profileStore.closeProfileModal">
         Cancel
       </BaseButton>
 
-      <BaseButton
-        :disabled="localForm.loading"
-        variant="primary"
-        :full-width="false"
-        @click="emit('save', localForm)"
-      >
-        {{ localForm.loading ? 'Saving...' : 'Save' }}
+      <BaseButton variant="primary" :full-width="false" :disabled="profileStore.profileForm.loading"
+        @click="profileStore.updateProfile">
+        {{ profileStore.profileForm.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
     </div>
   </BaseModal>

@@ -181,40 +181,6 @@ export const registerPinSchema = yup.object({
     .oneOf([yup.ref('pin')], 'PINs must match'),
 });
 
-// ============================================
-// PROFILE SCHEMAS
-// ============================================
-export const profilePhotoSchema = yup.object({
-  photoUrl: yup
-    .string()
-    .url('Please enter a valid image URL')
-    .required('Profile image URL is required'),
-});
-
-export const passwordSchema = yup.object({
-  password: yup
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Passwords do not match')
-    .required('Confirm password is required'),
-});
-
-export const pinSchema = yup.object({
-  pin: yup
-    .string()
-    .transform((_, originalValue) => normalizeDigitCode(originalValue))
-    .length(4, 'PIN must be exactly 4 digits')
-    .matches(/^\d+$/, 'PIN must contain only numbers')
-    .required('PIN is required'),
-  confirmPin: yup
-    .string()
-    .transform((_, originalValue) => normalizeDigitCode(originalValue))
-    .oneOf([yup.ref('pin')], 'PINs do not match')
-    .required('Confirm PIN is required'),
-});
 
 // ============================================
 // WALLET SCHEMAS
