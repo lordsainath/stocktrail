@@ -8,6 +8,7 @@ import BaseInput from '@components/base/BaseInput.vue';
 
 import useWalletStore from '@stores/walletStore';
 import useTradeStore from '@stores/tradeStore';
+import { formatCurrency } from '@/composables/useWalletHelpers';
 
 const props = defineProps({
   symbol: {
@@ -136,14 +137,14 @@ watch(
         </h2>
 
         <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-          Current price {{ formatMoney(currentPrice) }}
+          Current price {{ formatCurrency(currentPrice) }}
         </p>
       </div>
 
       <div class="rounded-xl border border-slate-200 px-3 py-2 text-right dark:border-slate-700">
         <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Cash</p>
         <p class="text-sm font-semibold text-slate-900 dark:text-white">
-          {{ formatMoney(cashBalance) }}
+          {{ formatCurrency(cashBalance) }}
         </p>
       </div>
     </div>
@@ -188,7 +189,7 @@ watch(
         :message="
           side === 'sell'
             ? `Available: ${availableQuantity}`
-            : `Wallet balance: ${formatMoney(cashBalance)}`
+            : `Wallet balance: ${formatCurrency(cashBalance)}`
         "
       />
 
@@ -200,7 +201,7 @@ watch(
             Estimated order value
           </p>
           <p class="text-xl font-bold text-slate-900 dark:text-white">
-            {{ formatMoney(estimatedValue) }}
+            {{ formatCurrency(estimatedValue) }}
           </p>
         </div>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { formatCurrency } from '../../composables/useWalletHelpers';
+import { formatCurrency } from '@composables/useWalletHelpers';
 
 defineProps({
   orders: {

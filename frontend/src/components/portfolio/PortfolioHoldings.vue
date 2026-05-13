@@ -1,5 +1,5 @@
 <script setup>
-import { formatCurrency } from '../../composables/useWalletHelpers';
+import { formatCurrency } from '@composables/useWalletHelpers';
 import { useRouter } from 'vue-router';
 
 defineProps({
