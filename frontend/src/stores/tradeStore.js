@@ -59,16 +59,13 @@ export const useTradeStore = defineStore('trade', () => {
 
   const portfolioValue = computed(() =>
     roundMoney(
-      holdings.value.reduce(
-        (sum, item) => {
-          const currentPrice = Number(
-            livePrices.value[item.symbol] ?? item.lastPrice ?? item.avgPrice ?? 0
-          );
+      holdings.value.reduce((sum, item) => {
+        const currentPrice = Number(
+          livePrices.value[item.symbol] ?? item.lastPrice ?? item.avgPrice ?? 0
+        );
 
-          return sum + currentPrice * Number(item.quantity || 0);
-        },
-        0
-      )
+        return sum + currentPrice * Number(item.quantity || 0);
+      }, 0)
     )
   );
 
@@ -96,8 +93,7 @@ export const useTradeStore = defineStore('trade', () => {
       const costBasis = Number(item.avgPrice || 0) * quantity;
       const currentValue = currentPrice * quantity;
       const unrealizedPnL = currentValue - costBasis;
-      const unrealizedPnLPercent =
-        costBasis > 0 ? (unrealizedPnL / costBasis) * 100 : 0;
+      const unrealizedPnLPercent = costBasis > 0 ? (unrealizedPnL / costBasis) * 100 : 0;
 
       return {
         ...item,
@@ -110,9 +106,7 @@ export const useTradeStore = defineStore('trade', () => {
     })
   );
 
-  const totalProfitLoss = computed(() =>
-    roundMoney(portfolioValue.value - totalInvestment.value)
-  );
+  const totalProfitLoss = computed(() => roundMoney(portfolioValue.value - totalInvestment.value));
 
   const totalUnrealizedPnL = computed(() => totalProfitLoss.value);
 

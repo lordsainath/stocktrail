@@ -47,7 +47,7 @@ const maxQuantity = computed(() => (side.value === 'sell' ? availableQuantity.va
 const activeSideLabel = computed(() => (side.value === 'buy' ? 'Buy' : 'Sell'));
 const buttonLabel = computed(() => `Confirm ${activeSideLabel.value}`);
 
-const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
+
 
 const clearQuantity = () => {
   quantity.value = '';

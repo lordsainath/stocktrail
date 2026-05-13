@@ -16,12 +16,7 @@ const show = defineModel('show');
 const passwordRef = ref(null);
 const confirmPasswordRef = ref(null);
 
-const {
-  errors,
-  defineField,
-  handleSubmit,
-  resetForm,
-} = useForm({
+const { errors, defineField, handleSubmit, resetForm } = useForm({
   validationSchema: passwordSchema,
 });
 
@@ -59,9 +54,7 @@ const onSubmit = handleSubmit(
 
 <template>
   <BaseModal :show="show" @close="closeModal">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
-      Change Password
-    </h3>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change Password</h3>
 
     <div class="mt-4">
       <BaseInput
@@ -84,13 +77,7 @@ const onSubmit = handleSubmit(
     </div>
 
     <div class="mt-4 flex justify-end gap-2">
-      <BaseButton
-        variant="secondary"
-        :full-width="false"
-        @click="closeModal"
-      >
-        Cancel
-      </BaseButton>
+      <BaseButton variant="secondary" :full-width="false" @click="closeModal"> Cancel </BaseButton>
 
       <BaseButton
         :disabled="profileStore.passwordForm.loading"
@@ -98,11 +85,7 @@ const onSubmit = handleSubmit(
         :full-width="false"
         @click="onSubmit"
       >
-        {{
-          profileStore.passwordForm.loading
-            ? 'Saving...'
-            : 'Save'
-        }}
+        {{ profileStore.passwordForm.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
     </div>
   </BaseModal>

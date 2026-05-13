@@ -30,10 +30,7 @@ export const useWalletStore = defineStore('wallet', () => {
   });
 
   const persistWalletBalance = () => {
-    localStorage.setItem(
-      storageKey.value,
-      String(Number(walletBalance.value || 0))
-    );
+    localStorage.setItem(storageKey.value, String(Number(walletBalance.value || 0)));
   };
 
   const hydrateWalletBalance = () => {
@@ -51,18 +48,14 @@ export const useWalletStore = defineStore('wallet', () => {
   };
 
   const setWalletBalance = (value) => {
-    walletBalance.value = Number.isFinite(Number(value))
-      ? Number(value)
-      : 0;
+    walletBalance.value = Number.isFinite(Number(value)) ? Number(value) : 0;
 
     hasStoredBalance.value = true;
     persistWalletBalance();
   };
 
   const adjustWalletBalance = (delta) => {
-    setWalletBalance(
-      Number(walletBalance.value || 0) + Number(delta || 0)
-    );
+    setWalletBalance(Number(walletBalance.value || 0) + Number(delta || 0));
   };
 
   const addBankForm = reactive({
@@ -79,21 +72,15 @@ export const useWalletStore = defineStore('wallet', () => {
     pin: '',
   });
 
-  const verifiedCount = computed(() =>
-    linkedAccounts.value.filter(
-      (item) => item.status === 'VERIFIED'
-    ).length
+  const verifiedCount = computed(
+    () => linkedAccounts.value.filter((item) => item.status === 'VERIFIED').length
   );
 
-  const pendingCount = computed(() =>
-    linkedAccounts.value.filter(
-      (item) => item.status === 'PENDING'
-    ).length
+  const pendingCount = computed(
+    () => linkedAccounts.value.filter((item) => item.status === 'PENDING').length
   );
 
-  const hasLinkedBankAccount = computed(
-    () => linkedAccounts.value.length > 0
-  );
+  const hasLinkedBankAccount = computed(() => linkedAccounts.value.length > 0);
 
   const resetAddBankForm = () => {
     addBankForm.bankName = '';
@@ -115,25 +102,19 @@ export const useWalletStore = defineStore('wallet', () => {
     try {
       const response = await apiClient.get('/wallet/summary');
 
-      const remoteBalance =
-        response?.data?.data?.balance || 0;
+      const remoteBalance = response?.data?.data?.balance || 0;
 
       walletBalance.value = remoteBalance;
       hasStoredBalance.value = true;
       persistWalletBalance();
 
-      linkedAccounts.value =
-        response?.data?.data?.bankAccounts || [];
+      linkedAccounts.value = response?.data?.data?.bankAccounts || [];
 
-      recentTransfers.value =
-        response?.data?.data?.transactions || [];
+      recentTransfers.value = response?.data?.data?.transactions || [];
 
       return response.data;
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          'Failed to fetch wallet summary'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to fetch wallet summary');
     } finally {
       loading.value = false;
     }
@@ -172,10 +153,7 @@ export const useWalletStore = defineStore('wallet', () => {
 
       return response.data;
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          'Failed to add bank account'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to add bank account');
     } finally {
       loading.value = false;
     }
@@ -203,10 +181,7 @@ export const useWalletStore = defineStore('wallet', () => {
 
       return response.data;
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          'Failed to add money'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to add money');
     } finally {
       loading.value = false;
     }

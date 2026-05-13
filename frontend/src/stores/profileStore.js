@@ -34,13 +34,7 @@ export const useProfileStore = defineStore('profile', () => {
 
     if (!address) return 'No address available';
 
-    return [
-      address.street,
-      address.city,
-      address.state,
-      address.country,
-      address.zipCode,
-    ]
+    return [address.street, address.city, address.state, address.country, address.zipCode]
       .filter(Boolean)
       .join(', ');
   });
@@ -86,9 +80,7 @@ export const useProfileStore = defineStore('profile', () => {
 
       return response.data;
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message || 'Failed to fetch profile'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to fetch profile');
     } finally {
       loadingProfile.value = false;
     }
@@ -116,26 +108,19 @@ export const useProfileStore = defineStore('profile', () => {
         userStore.updateUser({ photoUrl });
       }
 
-      toast.success(
-        response?.data?.message || 'Profile updated successfully'
-      );
+      toast.success(response?.data?.message || 'Profile updated successfully');
 
       resetProfileForm();
       closeProfileModal();
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message || 'Failed to update profile'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to update profile');
     } finally {
       profileForm.loading = false;
     }
   };
 
   const updatePassword = async (payload) => {
-    const password =
-      typeof payload === 'string'
-        ? payload
-        : (payload?.password || '');
+    const password = typeof payload === 'string' ? payload : payload?.password || '';
 
     if (!password.trim()) {
       toast.error('Password is required');
@@ -149,16 +134,12 @@ export const useProfileStore = defineStore('profile', () => {
         password,
       });
 
-      toast.success(
-        response?.data?.message || 'Password updated successfully'
-      );
+      toast.success(response?.data?.message || 'Password updated successfully');
 
       closePasswordModal();
       return true;
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message || 'Failed to update password'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to update password');
       return false;
     } finally {
       passwordForm.loading = false;
@@ -166,10 +147,7 @@ export const useProfileStore = defineStore('profile', () => {
   };
 
   const updatePin = async (payload) => {
-    const pinRaw =
-      typeof payload === 'string'
-        ? payload
-        : (payload?.pin || '');
+    const pinRaw = typeof payload === 'string' ? payload : payload?.pin || '';
     const pin = String(pinRaw).replace(/\D/g, '');
 
     if (pin.length !== 4) {
@@ -188,16 +166,12 @@ export const useProfileStore = defineStore('profile', () => {
         isPinSet: true,
       });
 
-      toast.success(
-        response?.data?.message || 'PIN updated successfully'
-      );
+      toast.success(response?.data?.message || 'PIN updated successfully');
 
       closePinModal();
       return true;
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message || 'Failed to update PIN'
-      );
+      toast.error(error?.response?.data?.message || 'Failed to update PIN');
       return false;
     } finally {
       pinForm.loading = false;

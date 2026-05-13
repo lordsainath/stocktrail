@@ -16,12 +16,7 @@ const show = defineModel('show');
 const pinOtpRef = ref(null);
 const confirmOtpRef = ref(null);
 
-const {
-  errors,
-  defineField,
-  handleSubmit,
-  resetForm,
-} = useForm({
+const { errors, defineField, handleSubmit, resetForm } = useForm({
   validationSchema: pinSchema,
 });
 
@@ -77,17 +72,21 @@ const onSubmit = handleSubmit(
 
 <template>
   <BaseModal :show="show" @close="closeModal">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
-      Change PIN
-    </h3>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change PIN</h3>
 
     <div class="mt-4">
       <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
         New PIN
       </label>
 
-      <VOtpInput ref="pinOtpRef" v-model:value="pin" :num-inputs="4" input-type="number" separator=""
-        :input-classes="pinInputClasses" />
+      <VOtpInput
+        ref="pinOtpRef"
+        v-model:value="pin"
+        :num-inputs="4"
+        input-type="number"
+        separator=""
+        :input-classes="pinInputClasses"
+      />
 
       <p v-if="errors.pin" class="mt-2 text-sm text-red-500">
         {{ errors.pin }}
@@ -99,8 +98,14 @@ const onSubmit = handleSubmit(
         Confirm PIN
       </label>
 
-      <VOtpInput ref="confirmOtpRef" v-model:value="confirmPin" :num-inputs="4" input-type="number" separator=""
-        :input-classes="confirmPinInputClasses" />
+      <VOtpInput
+        ref="confirmOtpRef"
+        v-model:value="confirmPin"
+        :num-inputs="4"
+        input-type="number"
+        separator=""
+        :input-classes="confirmPinInputClasses"
+      />
 
       <p v-if="errors.confirmPin" class="mt-2 text-sm text-red-500">
         {{ errors.confirmPin }}
@@ -108,16 +113,15 @@ const onSubmit = handleSubmit(
     </div>
 
     <div class="mt-6 flex justify-end gap-2">
-      <BaseButton variant="secondary" :full-width="false" @click="closeModal">
-        Cancel
-      </BaseButton>
+      <BaseButton variant="secondary" :full-width="false" @click="closeModal"> Cancel </BaseButton>
 
-      <BaseButton :disabled="profileStore.pinForm.loading" variant="primary" :full-width="false" @click="onSubmit">
-        {{
-          profileStore.pinForm.loading
-            ? 'Saving...'
-            : 'Save'
-        }}
+      <BaseButton
+        :disabled="profileStore.pinForm.loading"
+        variant="primary"
+        :full-width="false"
+        @click="onSubmit"
+      >
+        {{ profileStore.pinForm.loading ? 'Saving...' : 'Save' }}
       </BaseButton>
     </div>
   </BaseModal>
