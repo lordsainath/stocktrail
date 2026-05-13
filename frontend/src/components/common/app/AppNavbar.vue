@@ -24,9 +24,7 @@ const uiStore = useUiStore();
           S
         </div>
 
-        <h1 class=" font-semibold tracking-wide text-slate-900 dark:text-white">
-          StockTrail
-        </h1>
+        <h1 class="font-semibold tracking-wide text-slate-900 dark:text-white">StockTrail</h1>
       </RouterLink>
 
       <!-- CENTER -->

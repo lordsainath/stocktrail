@@ -7,9 +7,7 @@ const { currentTitle, currentIndex, steps } = useRegisterStepper();
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6 md:mb-8"
-  >
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6 md:mb-8">
     <!-- LEFT CONTENT -->
     <div class="min-w-0">
       <div

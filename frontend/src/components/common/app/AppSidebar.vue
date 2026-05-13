@@ -1,11 +1,23 @@
 <script setup>
 import useUiStore from '@/stores/uiStore';
+import useUserStore from '@/stores/userStore';
 import { useRouter, useRoute } from 'vue-router';
+import { toast } from 'vue-sonner';
 
 const uiStore = useUiStore();
 
 const router = useRouter();
+const userStore = useUserStore();
 const route = useRoute();
+
+// methods
+const handleLogout = () => {
+  userStore.clearSession();
+
+  toast.success('Logged out successfully');
+
+  router.push('/auth/login');
+};
 
 const appNavItems = [
   {
@@ -138,6 +150,18 @@ const navigate = (path) => {
             <span class="text-sm font-semibold">
               {{ item.name }}
             </span>
+          </div>
+          <div
+            @click="handleLogout"
+            class="group flex items-center text-red-500 gap-3 px-3 py-2.5 cursor-pointer rounded-xl transition-all duration-200"
+          >
+            <div
+              class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"
+            >
+              <!-- icon -->
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </div>
+            <span class="text-sm font-semibold"> Logout </span>
           </div>
         </nav>
       </aside>
