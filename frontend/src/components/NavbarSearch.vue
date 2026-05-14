@@ -64,7 +64,10 @@ const goToCompany = (symbol) => {
   <div class="relative w-72">
     <!-- INPUT -->
     <div class="relative">
+      <label for="stock-search" class="sr-only"> Search stocks </label>
+
       <input
+        id="stock-search"
         v-model="query"
         type="text"
         placeholder="Search stocks..."

@@ -267,6 +267,8 @@ onMounted(walletStore.fetchWalletSummary);
       <div
         v-if="showAddBankModal"
         tabindex="0"
+        role="dialog"
+        aria-modal="true"
         class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4"
         @keydown.esc="handleEsc"
       >
