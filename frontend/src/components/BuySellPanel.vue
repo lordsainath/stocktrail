@@ -39,7 +39,7 @@ const estimatedValue = computed(() =>
 );
 const currentHolding = computed(() => tradeStore.getHolding(props.symbol));
 const availableQuantity = computed(() => Number(currentHolding.value?.quantity || 0));
-const cashBalance = computed(() => walletStore.walletBalance ?? tradeStore.cashBalance.valueOf());
+const cashBalance = computed(() => walletStore.walletBalance);
 
 const canSell = computed(() => availableQuantity.value > 0);
 const maxQuantity = computed(() => (side.value === 'sell' ? availableQuantity.value : null));

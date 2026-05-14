@@ -271,8 +271,8 @@ export const useTradeStore = defineStore('trade', () => {
       ];
     }
 
-    cashBalance.value = roundMoney(availableCash.value - total);
-    walletStore.setWalletBalance(cashBalance.value);
+    walletStore.adjustWalletBalance(-total);
+    cashBalance.value = roundMoney(walletStore.walletBalance);
 
     appendOrder({
       side: 'BUY',
@@ -287,7 +287,7 @@ export const useTradeStore = defineStore('trade', () => {
 
     return {
       success: true,
-      cashBalance: availableCash.value,
+      cashBalance: cashBalance.value,
       total,
       holding: getHolding(symbol),
     };
@@ -329,8 +329,8 @@ export const useTradeStore = defineStore('trade', () => {
       holdings.value = holdings.value.filter((item) => item.symbol !== symbol);
     }
 
-    cashBalance.value = roundMoney(availableCash.value + total);
-    walletStore.setWalletBalance(cashBalance.value);
+    walletStore.adjustWalletBalance(total);
+    cashBalance.value = roundMoney(walletStore.walletBalance);
 
     appendOrder({
       side: 'SELL',
@@ -345,7 +345,7 @@ export const useTradeStore = defineStore('trade', () => {
 
     return {
       success: true,
-      cashBalance: availableCash.value,
+      cashBalance: cashBalance.value,
       total,
       holding: getHolding(symbol),
     };

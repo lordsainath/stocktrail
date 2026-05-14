@@ -6,6 +6,8 @@ import { toast } from 'vue-sonner';
 
 const STORAGE_PREFIX = 'stocktrail-wallet-balance';
 
+const roundMoney = (value) => Number(Number(value || 0).toFixed(2));
+
 const normalizeKey = (value) =>
   String(value || 'guest')
     .trim()
@@ -17,7 +19,9 @@ export const useWalletStore = defineStore('wallet', () => {
 
   const loading = ref(false);
 
-  const walletBalance = ref(0);
+  const bankBalance = ref(0);
+  const tradeBalanceAdjustment = ref(0);
+  const walletBalance = computed(() => roundMoney(bankBalance.value + tradeBalanceAdjustment.value));
   const hasStoredBalance = ref(false);
   const linkedAccounts = ref([]);
   const recentTransfers = ref([]);
@@ -30,32 +34,59 @@ export const useWalletStore = defineStore('wallet', () => {
   });
 
   const persistWalletBalance = () => {
-    localStorage.setItem(storageKey.value, String(Number(walletBalance.value || 0)));
+    localStorage.setItem(
+      storageKey.value,
+      JSON.stringify({
+        bankBalance: roundMoney(bankBalance.value),
+        tradeBalanceAdjustment: roundMoney(tradeBalanceAdjustment.value),
+      })
+    );
   };
 
   const hydrateWalletBalance = () => {
     const raw = localStorage.getItem(storageKey.value);
 
     if (raw === null) {
+      bankBalance.value = 0;
+      tradeBalanceAdjustment.value = 0;
       hasStoredBalance.value = false;
       return;
     }
 
-    const parsed = Number(raw);
+    try {
+      const parsed = JSON.parse(raw);
 
-    walletBalance.value = Number.isFinite(parsed) ? parsed : 0;
+      if (parsed && typeof parsed === 'object') {
+        bankBalance.value = roundMoney(parsed.bankBalance || 0);
+        tradeBalanceAdjustment.value = roundMoney(parsed.tradeBalanceAdjustment || 0);
+      } else {
+        bankBalance.value = roundMoney(parsed || 0);
+        tradeBalanceAdjustment.value = 0;
+      }
+    } catch (error) {
+      const parsed = Number(raw);
+
+      bankBalance.value = Number.isFinite(parsed) ? roundMoney(parsed) : 0;
+      tradeBalanceAdjustment.value = 0;
+    }
+
     hasStoredBalance.value = true;
   };
 
   const setWalletBalance = (value) => {
-    walletBalance.value = Number.isFinite(Number(value)) ? Number(value) : 0;
+    bankBalance.value = Number.isFinite(Number(value)) ? roundMoney(value) : 0;
 
     hasStoredBalance.value = true;
     persistWalletBalance();
   };
 
   const adjustWalletBalance = (delta) => {
-    setWalletBalance(Number(walletBalance.value || 0) + Number(delta || 0));
+    tradeBalanceAdjustment.value = roundMoney(
+      Number(tradeBalanceAdjustment.value || 0) + Number(delta || 0)
+    );
+
+    hasStoredBalance.value = true;
+    persistWalletBalance();
   };
 
   const addBankForm = reactive({
@@ -104,9 +135,7 @@ export const useWalletStore = defineStore('wallet', () => {
 
       const remoteBalance = response?.data?.data?.balance || 0;
 
-      walletBalance.value = remoteBalance;
-      hasStoredBalance.value = true;
-      persistWalletBalance();
+      setWalletBalance(remoteBalance);
 
       linkedAccounts.value = response?.data?.data?.bankAccounts || [];
 
