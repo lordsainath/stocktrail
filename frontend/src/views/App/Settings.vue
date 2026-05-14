@@ -8,9 +8,7 @@ const themeStore = useThemeStore();
 const activeTheme = computed(() => themeStore.theme);
 
 const setTheme = (value) => {
-  if (themeStore.theme !== value) {
-    themeStore.toggleTheme();
-  }
+  themeStore.setTheme(value);
 };
 </script>
 
@@ -21,8 +19,7 @@ const setTheme = (value) => {
   <div class="min-h-[calc(100vh-65px)] bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
     <div class="max-w-6xl mx-auto">
       <section
-        class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8"
-      >
+        class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8">
         <p class="heading-sm">SETTINGS</p>
         <h1 class="mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">
           Theme Preferences
@@ -32,15 +29,10 @@ const setTheme = (value) => {
         </p>
 
         <div class="mt-8 grid sm:grid-cols-2 gap-4">
-          <button
-            class="text-left rounded-2xl border p-5 transition cursor-pointer"
-            :class="
-              activeTheme === 'light'
-                ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/30'
-                : 'border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/70 hover:border-cyan-300'
-            "
-            @click="setTheme('light')"
-          >
+          <button class="text-left rounded-2xl border p-5 transition cursor-pointer" :class="activeTheme === 'light'
+              ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/30'
+              : 'border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/70 hover:border-cyan-300'
+            " @click="setTheme('light')">
             <div class="flex items-center justify-between">
               <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Light Theme</h2>
               <i class="fa-regular fa-sun text-amber-500"></i>
@@ -50,15 +42,10 @@ const setTheme = (value) => {
             </p>
           </button>
 
-          <button
-            class="text-left rounded-2xl border p-5 transition cursor-pointer"
-            :class="
-              activeTheme === 'dark'
-                ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/30'
-                : 'border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/70 hover:border-cyan-300'
-            "
-            @click="setTheme('dark')"
-          >
+          <button class="text-left rounded-2xl border p-5 transition cursor-pointer" :class="activeTheme === 'dark'
+              ? 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/30'
+              : 'border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/70 hover:border-cyan-300'
+            " @click="setTheme('dark')">
             <div class="flex items-center justify-between">
               <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Dark Theme</h2>
               <i class="fa-regular fa-moon text-indigo-400"></i>
@@ -70,8 +57,7 @@ const setTheme = (value) => {
         </div>
 
         <div
-          class="mt-6 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/70 p-4 flex items-center justify-between"
-        >
+          class="mt-6 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/70 p-4 flex items-center justify-between">
           <div>
             <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Current Theme</p>
             <p class="text-xs text-slate-500 dark:text-slate-400">
@@ -79,9 +65,8 @@ const setTheme = (value) => {
             </p>
           </div>
           <span
-            class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"
-            >{{ activeTheme.toUpperCase() }}</span
-          >
+            class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">{{
+              activeTheme.toUpperCase() }}</span>
         </div>
       </section>
     </div>

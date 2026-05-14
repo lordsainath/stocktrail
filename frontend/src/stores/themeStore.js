@@ -23,9 +23,13 @@ export const useThemeStore = defineStore('theme', () => {
   );
 
   // Theme toggle function - [dark <-> light]
+  const setTheme = (value) => {
+    theme.value = value;
+  };
+
   const toggleTheme = () => {
     theme.value = theme.value === 'light' ? 'dark' : 'light';
   };
 
-  return { theme, toggleTheme };
+  return { theme, toggleTheme  , setTheme};
 });
