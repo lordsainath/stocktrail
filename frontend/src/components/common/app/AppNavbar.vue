@@ -24,25 +24,26 @@ const uiStore = useUiStore();
           S
         </div>
 
-        <h1 class="font-semibold tracking-wide text-slate-900 dark:text-white">StockTrail</h1>
+        <h1 class="font-semibold tracking-wide text-slate-900 dark:text-white " title="StockTrail">StockTrail</h1>
       </RouterLink>
 
       <!-- CENTER -->
-      <div class="hidden lg:flex flex-1 justify-center">
+      <div class="hidden lg:flex flex-1 justify-center" title="search stocks">
         <NavbarSearch />
       </div>
 
       <!-- RIGHT -->
       <div class="flex items-center justify-end gap-3">
-        <div class="hidden lg:block">
+        <div class="hidden lg:block" title="Toggle theme">
           <ThemeToggle />
         </div>
         <UserInfo />
         <ProfileDropdown />
 
         <button
-          type="button"
-          class="inline-flex lg:hidden w-9 h-9 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          type="button" 
+          title="Menu"
+          class="inline-flex lg:hidden w-9 h-9 items-center justify-center cursor-pointer rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           aria-label="Toggle menu"
           @click="uiStore.toggleSidebar"
         >

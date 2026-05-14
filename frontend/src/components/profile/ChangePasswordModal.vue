@@ -24,29 +24,39 @@ const closeModal = () => {
 
 <template>
   <BaseModal :show="show" @close="closeModal">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change Password</h3>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
+      Change Password
+    </h3>
 
     <div class="mt-4">
+      <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+        New Password
+      </label>
+
       <BaseInput
         :ref="passwordRef"
         v-model="password"
         type="password"
-        placeholder="New password"
+        placeholder="Enter new password"
         :error="definePasswordError.password"
       />
     </div>
 
-    <div class="mt-3">
+    <div class="mt-4">
+      <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+        Confirm Password
+      </label>
+
       <BaseInput
         :ref="confirmPasswordRef"
         v-model="confirmPassword"
         type="password"
-        placeholder="Confirm password"
+        placeholder="Confirm new password"
         :error="definePasswordError.confirmPassword"
       />
     </div>
 
-    <div class="mt-4 flex justify-end gap-2">
+    <div class="mt-5 flex justify-end gap-2">
       <BaseButton
         variant="secondary"
         :full-width="false"

@@ -1,6 +1,7 @@
 <script setup>
 // imports
 import { storeToRefs } from 'pinia';
+import { Sun, Moon } from '@lucide/vue';
 
 import { useThemeStore } from '@stores/themeStore';
 
@@ -12,11 +13,17 @@ const { theme } = storeToRefs(themeStore);
 
 <template>
   <div
-    class="dark:bg-darksecondary bg-secondary px-3 py-2 rounded-md border dark:text-white border-[#e2e8f0] dark:border-[#30363d] cursor-pointer"
+    class="dark:bg-darksecondary bg-secondary px-3 py-2 rounded-md border dark:text-white border-[#e2e8f0] dark:border-[#30363d] hover:border-primary cursor-pointer transition-colors"
     @click="themeStore.toggleTheme"
   >
-    <i v-show="theme === 'dark'" class="fa-regular fa-sun text-amber-500"></i>
+    <Sun
+      v-show="theme === 'dark'"
+      class="w-5 h-5 text-amber-500"
+    />
 
-    <i v-show="theme === 'light'" class="fa-regular fa-moon text-primary"></i>
+    <Moon
+      v-show="theme === 'light'"
+      class="w-5 h-5 text-primary"
+    />
   </div>
 </template>

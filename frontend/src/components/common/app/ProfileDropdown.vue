@@ -5,13 +5,32 @@ import { toast } from 'vue-sonner';
 
 import useUserStore from '@stores/userStore';
 import useUiStore from '@stores/uiStore';
+import { useProfileStore } from '@/stores/profileStore';
+import { computed } from 'vue';
 
 // stores
 const userStore = useUserStore();
 const uiStore = useUiStore();
+const profileStore = useProfileStore();
 
 // router
 const router = useRouter();
+
+const userInitials = computed(() => {
+  const fullName = profileStore.user?.name?.trim();
+
+  if (!fullName) return 'U';
+
+  const nameParts = fullName.split(' ').filter(Boolean);
+
+  if (nameParts.length === 1) {
+    return nameParts[0][0].toUpperCase();
+  }
+
+  return (
+    nameParts[0][0] + nameParts[nameParts.length - 1][0]
+  ).toUpperCase();
+});
 
 // methods
 const handleLogout = () => {
@@ -32,15 +51,11 @@ const goTo = (path) => {
 <template>
   <div class="relative group/profile hidden sm:block">
     <!-- PROFILE BUTTON -->
-    <button
-      class="w-10 h-10 rounded-full overflow-hidden border border-slate-300 dark:border-slate-700 outline-none ring-2 ring-transparent group-hover/profile:ring-cyan-500 transition"
-    >
-      <img
-        :src="userStore.user?.photoUrl"
-        alt="User profile"
-        class="w-full h-full object-cover cursor-pointer"
-      />
-    </button>
+   <button
+  class="w-10 h-10 rounded-full bg-primary text-white border border-slate-300 dark:border-slate-700 outline-none ring-2 ring-transparent group-hover/profile:ring-primary  transition flex items-center justify-center text-sm font-semibold cursor-pointer"
+>
+  {{ userInitials }}
+</button>
 
     <!-- DROPDOWN -->
     <div

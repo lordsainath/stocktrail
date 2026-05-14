@@ -58,10 +58,6 @@ const confirmPinInputClasses = computed(() => {
         separator=""
         :input-classes="pinInputClasses"
       />
-
-      <p v-if="definePinError.pin" class="mt-2 text-sm text-red-500">
-        {{ definePinError.pin }}
-      </p>
     </div>
 
     <div class="mt-4">
@@ -77,13 +73,20 @@ const confirmPinInputClasses = computed(() => {
         separator=""
         :input-classes="confirmPinInputClasses"
       />
+    </div>
 
-      <p v-if="definePinError.confirmPin" class="mt-2 text-sm text-red-500">
+    <!-- single error area -->
+    <div class="mt-2 h-4">
+      <p v-if="definePinError.pin" class="text-xs text-red-500">
+        {{ definePinError.pin }}
+      </p>
+
+      <p v-else-if="definePinError.confirmPin" class="text-xs text-red-500">
         {{ definePinError.confirmPin }}
       </p>
     </div>
 
-    <div class="mt-6 flex justify-end gap-2">
+    <div class="mt-5 flex justify-end gap-2">
       <BaseButton
         variant="secondary"
         :full-width="false"

@@ -24,6 +24,7 @@ defineProps({
     </dt>
 
     <dd :class="valueClass">
+      
       {{ value || 'Not available' }}
     </dd>
   </div>
