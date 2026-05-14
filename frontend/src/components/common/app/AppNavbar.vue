@@ -24,7 +24,9 @@ const uiStore = useUiStore();
           S
         </div>
 
-        <h1 class="font-semibold tracking-wide text-slate-900 dark:text-white " title="StockTrail">StockTrail</h1>
+        <h1 class="font-semibold tracking-wide text-slate-900 dark:text-white" title="StockTrail">
+          StockTrail
+        </h1>
       </RouterLink>
 
       <!-- CENTER -->
@@ -41,7 +43,7 @@ const uiStore = useUiStore();
         <ProfileDropdown />
 
         <button
-          type="button" 
+          type="button"
           title="Menu"
           class="inline-flex lg:hidden w-9 h-9 items-center justify-center cursor-pointer rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           aria-label="Toggle menu"

@@ -1,6 +1,5 @@
 <script setup>
-import { nextTick, ref } from 'vue';
-import { useForm } from 'vee-validate';
+import { ref } from 'vue';
 
 import { useProfileStore } from '@stores/profileStore';
 
@@ -11,7 +10,10 @@ import { storeToRefs } from 'pinia';
 
 const profileStore = useProfileStore();
 
-const show = defineModel('show');
+const show = defineModel('show', {
+  type: Boolean,
+  default: false,
+});
 
 const passwordRef = ref(null);
 const confirmPasswordRef = ref(null);
@@ -24,9 +26,7 @@ const closeModal = () => {
 
 <template>
   <BaseModal :show="show" @close="closeModal">
-    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">
-      Change Password
-    </h3>
+    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Change Password</h3>
 
     <div class="mt-4">
       <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">

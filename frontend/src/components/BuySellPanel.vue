@@ -51,6 +51,10 @@ const clearQuantity = () => {
   quantity.value = '';
 };
 
+const handleQuantityInput = (value) => {
+  quantity.value = String(value ?? '').replace(/\D+/g, '');
+};
+
 const switchSide = (nextSide) => {
   if (side.value === nextSide) return;
 
@@ -177,8 +181,10 @@ watch(
 
     <div class="mt-4 space-y-4">
       <BaseInput
-        v-model="quantity"
-        type="number"
+        :model-value="quantity"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
         min="1"
         :max="maxQuantity || undefined"
         label="Quantity"
@@ -189,6 +195,7 @@ watch(
             ? `Available: ${availableQuantity}`
             : `Wallet balance: ${formatCurrency(cashBalance)}`
         "
+        @update:model-value="handleQuantityInput"
       />
 
       <div

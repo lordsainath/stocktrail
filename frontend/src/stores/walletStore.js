@@ -21,7 +21,9 @@ export const useWalletStore = defineStore('wallet', () => {
 
   const bankBalance = ref(0);
   const tradeBalanceAdjustment = ref(0);
-  const walletBalance = computed(() => roundMoney(bankBalance.value + tradeBalanceAdjustment.value));
+  const walletBalance = computed(() =>
+    roundMoney(bankBalance.value + tradeBalanceAdjustment.value)
+  );
   const hasStoredBalance = ref(false);
   const linkedAccounts = ref([]);
   const recentTransfers = ref([]);

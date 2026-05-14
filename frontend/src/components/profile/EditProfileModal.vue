@@ -1,6 +1,4 @@
 <script setup>
-import { reactive, watch } from 'vue';
-
 import BaseModal from '@components/base/BaseModal.vue';
 import BaseButton from '@components/base/BaseButton.vue';
 import BaseInput from '@components/base/BaseInput.vue';
@@ -10,7 +8,7 @@ import { storeToRefs } from 'pinia';
 const profileStore = useProfileStore();
 const { photoUrl, defineProfileError } = storeToRefs(profileStore);
 
-const props = defineProps({
+defineProps({
   show: Boolean,
   form: {
     type: Object,
@@ -23,7 +21,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'save']);
 
-const { updateProfile } = useProfileStore();
+// const { updateProfile } = useProfileStore();
 
 // const localForm = reactive({
 //   photoUrl: '',

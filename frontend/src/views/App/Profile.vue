@@ -11,10 +11,8 @@ import ChangePasswordModal from '@/components/profile/ChangePasswordModal.vue';
 import ChangePinModal from '@/components/profile/ChangePinModal.vue';
 import ProfileInfoCard from '@components/profile/ProfileInfoCard.vue';
 import ProfileInfoItem from '@components/profile/ProfileInfoItem.vue';
-import { storeToRefs } from 'pinia';
 
 const profileStore = useProfileStore();
-const { photoUrl, errors } = storeToRefs(profileStore);
 
 const userInitials = computed(() => {
   const fullName = profileStore.user?.name?.trim();
@@ -27,16 +25,14 @@ const userInitials = computed(() => {
     return nameParts[0][0].toUpperCase();
   }
 
-  return (
-    nameParts[0][0] + nameParts[nameParts.length - 1][0]
-  ).toUpperCase();
+  return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
 });
 
 const profileFullName = computed(() => {
-  return ((profileStore.user?.name || 'NiftyNest User')
+  return (profileStore.user?.name || 'NiftyNest User')
     .toLowerCase()
-    .replace(/\b\w/g, char => char.toUpperCase()))
-})
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+});
 
 onMounted(profileStore.fetchCurrentProfile);
 </script>
@@ -48,17 +44,21 @@ onMounted(profileStore.fetchCurrentProfile);
   <div class="min-h-full bg-slate-50 p-5 sm:p-7 dark:bg-slate-950">
     <div class="max-w-6xl mx-auto space-y-5">
       <section
-        class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8">
+        class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/85 dark:bg-slate-900/85 shadow-xl backdrop-blur-sm p-6 sm:p-8"
+      >
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
           <div class="flex items-center gap-4">
             <div class="relative">
               <div
-                class="w-20 h-20 rounded-2xl bg-primary text-white flex items-center justify-center text-2xl font-bold ring-4 ring-white dark:ring-slate-700 shadow-lg">
+                class="w-20 h-20 rounded-2xl bg-primary text-white flex items-center justify-center text-2xl font-bold ring-4 ring-white dark:ring-slate-700 shadow-lg"
+              >
                 {{ userInitials }}
               </div>
 
-              <div v-if="profileStore.loadingProfile"
-                class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-cyan-500 text-white text-[10px] flex items-center justify-center">
+              <div
+                v-if="profileStore.loadingProfile"
+                class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-cyan-500 text-white text-[10px] flex items-center justify-center"
+              >
                 ...
               </div>
             </div>
@@ -67,9 +67,11 @@ onMounted(profileStore.fetchCurrentProfile);
               <p class="heading-sm">ACCOUNT PROFILE</p>
 
               <h1 class="text-3xl font-black text-slate-900 dark:text-slate-100 mt-1">
-                {{(profileStore.user?.name || 'NiftyNest User')
-                  .toLowerCase()
-                  .replace(/\b\w/g, char => char.toUpperCase())}}
+                {{
+                  (profileStore.user?.name || 'NiftyNest User')
+                    .toLowerCase()
+                    .replace(/\b\w/g, (char) => char.toUpperCase())
+                }}
               </h1>
 
               <p class="text-sm text-slate-600 dark:text-slate-300">
@@ -91,7 +93,8 @@ onMounted(profileStore.fetchCurrentProfile);
 
       <section class="grid lg:grid-cols-3 gap-5">
         <article
-          class="lg:col-span-2 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6">
+          class="lg:col-span-2 rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6"
+        >
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Account Details</h2>
 
           <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -107,8 +110,11 @@ onMounted(profileStore.fetchCurrentProfile);
 
                 <ProfileInfoItem label="Email" :value="profileStore.user?.email" />
 
-                <ProfileInfoItem label="KYC Status" :value="profileStore.user?.kycStatus"
-                  value-class="text-sm font-semibold text-emerald-600 dark:text-emerald-400" />
+                <ProfileInfoItem
+                  label="KYC Status"
+                  :value="profileStore.user?.kycStatus"
+                  value-class="text-sm font-semibold text-emerald-600 dark:text-emerald-400"
+                />
               </dl>
             </ProfileInfoCard>
 
@@ -129,7 +135,8 @@ onMounted(profileStore.fetchCurrentProfile);
         </article>
 
         <article
-          class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6">
+          class="rounded-3xl border border-slate-200/70 dark:border-slate-700/70 bg-white/90 dark:bg-slate-900/85 shadow-lg p-5 sm:p-6"
+        >
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Security Controls</h2>
 
           <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -139,8 +146,12 @@ onMounted(profileStore.fetchCurrentProfile);
           <!-- Change Password -->
 
           <div class="mt-5 space-y-3">
-            <BaseButton variant="secondary" class="justify-start p-3 items-start flex-col " title="Change Password"
-              @click="profileStore.openPasswordModal">
+            <BaseButton
+              variant="secondary"
+              class="justify-start p-3 items-start flex-col"
+              title="Change Password"
+              @click="profileStore.openPasswordModal"
+            >
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">
                 Change Password
               </p>
@@ -150,8 +161,12 @@ onMounted(profileStore.fetchCurrentProfile);
               </p>
             </BaseButton>
 
-            <BaseButton variant="secondary" class="justify-start p-3 items-start flex-col" title="Change Transaction PIN"
-              @click="profileStore.openPinModal">
+            <BaseButton
+              variant="secondary"
+              class="justify-start p-3 items-start flex-col"
+              title="Change Transaction PIN"
+              @click="profileStore.openPinModal"
+            >
               <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Change PIN</p>
 
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -162,10 +177,14 @@ onMounted(profileStore.fetchCurrentProfile);
             <div class="rounded-xl border border-dashed border-slate-300 dark:border-slate-700 p-3">
               <p class="text-xs text-slate-500 dark:text-slate-400">PIN Status</p>
 
-              <p class="text-sm font-semibold mt-1" :class="profileStore.user?.isPinSet
-                ? 'text-emerald-600 dark:text-emerald-400'
-                : 'text-amber-600 dark:text-amber-400'
-                ">
+              <p
+                class="text-sm font-semibold mt-1"
+                :class="
+                  profileStore.user?.isPinSet
+                    ? 'text-emerald-600 dark:text-emerald-400'
+                    : 'text-amber-600 dark:text-amber-400'
+                "
+              >
                 {{ profileStore.user?.isPinSet ? 'PIN is configured' : 'PIN is not set yet' }}
               </p>
             </div>

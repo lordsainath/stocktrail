@@ -27,9 +27,7 @@ const userInitials = computed(() => {
     return nameParts[0][0].toUpperCase();
   }
 
-  return (
-    nameParts[0][0] + nameParts[nameParts.length - 1][0]
-  ).toUpperCase();
+  return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
 });
 
 // methods
@@ -51,11 +49,11 @@ const goTo = (path) => {
 <template>
   <div class="relative group/profile hidden sm:block">
     <!-- PROFILE BUTTON -->
-   <button
-  class="w-10 h-10 rounded-full bg-primary text-white border border-slate-300 dark:border-slate-700 outline-none ring-2 ring-transparent group-hover/profile:ring-primary  transition flex items-center justify-center text-sm font-semibold cursor-pointer"
->
-  {{ userInitials }}
-</button>
+    <button
+      class="w-10 h-10 rounded-full bg-primary text-white border border-slate-300 dark:border-slate-700 outline-none ring-2 ring-transparent group-hover/profile:ring-primary transition flex items-center justify-center text-sm font-semibold cursor-pointer"
+    >
+      {{ userInitials }}
+    </button>
 
     <!-- DROPDOWN -->
     <div

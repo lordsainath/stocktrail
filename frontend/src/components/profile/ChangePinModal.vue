@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import VOtpInput from 'vue3-otp-input';
 
@@ -11,7 +11,10 @@ import { storeToRefs } from 'pinia';
 
 const profileStore = useProfileStore();
 
-const show = defineModel('show');
+const show = defineModel('show', {
+  type: Boolean,
+  default: false,
+});
 
 const pinOtpRef = ref(null);
 const confirmOtpRef = ref(null);
