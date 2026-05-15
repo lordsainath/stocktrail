@@ -3,6 +3,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useThemeStore } from '../../stores/themeStore';
+import { Sun, Moon } from '@lucide/vue';
 
 const themeStore = useThemeStore();
 const activeTheme = computed(() => themeStore.theme);
@@ -41,7 +42,7 @@ const setTheme = (value) => {
           >
             <div class="flex items-center justify-between">
               <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Light Theme</h2>
-              <i class="fa-regular fa-sun text-amber-500"></i>
+             <Sun  class="w-5 h-5 text-amber-500" />
             </div>
             <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Crisp and bright layout for daytime use.
@@ -59,7 +60,7 @@ const setTheme = (value) => {
           >
             <div class="flex items-center justify-between">
               <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Dark Theme</h2>
-              <i class="fa-regular fa-moon text-indigo-400"></i>
+             <Moon  class="w-5 h-5 text-primary" />
             </div>
             <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Low-glare interface for focused analysis.
