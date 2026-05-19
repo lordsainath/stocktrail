@@ -27,7 +27,7 @@ const { theme } = storeToRefs(useThemeStore());
     rich-colors
     close-button
     close-button-position="top-right"
-    position="top-right"
+    position="bottom-right"
     duration="1000"
     :offset="70"
     :mobile-offset="16"

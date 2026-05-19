@@ -1,7 +1,7 @@
 // Imports
 
 import { defineStore } from 'pinia';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { apiClient } from '@api/httpClients';
 import { getErrorMessage } from '@composables/useErrorMessage';
 import {
@@ -43,6 +43,24 @@ const normalizeDigitCode = (value) => {
     .trim();
 };
 
+const isEmptyAddress = (address = {}) =>
+  !address.line1 && !address.city && !address.state && !address.country && !address.pincode;
+
+const isEmptyFormData = (data = {}) =>
+  !data.email &&
+  !data.name &&
+  !data.password &&
+  !data.confirmPassword &&
+  !data.username &&
+  isEmptyAddress(data.address) &&
+  !data.panNumber &&
+  !data.aadhaarNumber &&
+  !data.otp &&
+  !data.pin &&
+  !data.confirmPin;
+
+const STORAGE_KEY = 'stocktrail-registration-formdata';
+
 let panTimer = null;
 let aadhaarTimer = null;
 
@@ -53,6 +71,56 @@ export const useRegisterStore = defineStore('register', () => {
   const aadhaarStatus = ref('idle');
   const aadhaarMessage = ref('');
   const loading = ref(false);
+
+  // ===================================
+  // PERSISTENCE FUNCTIONS
+  // ===================================
+
+  const persistFormData = () => {
+    if (isEmptyFormData(formData)) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        ...formData,
+        savedAt: new Date().toISOString(),
+      })
+    );
+  };
+
+  const hydrateFormData = () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        // Remove savedAt property before assigning
+        const { savedAt, ...formDataOnly } = data;
+        Object.assign(formData, formDataOnly);
+      } catch (error) {
+        console.error('Failed to restore registration data:', error);
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+  };
+
+  // ===================================
+  // WATCHER FOR AUTO-PERSISTENCE
+  // ===================================
+
+  watch(
+    () => formData,
+    () => {
+      persistFormData();
+    },
+    { deep: true }
+  );
+
+  // ===================================
+  // FORM METHODS
+  // ===================================
 
   const resetRegisterForm = () => {
     Object.assign(formData, createFormData());
@@ -227,10 +295,10 @@ export const useRegisterStore = defineStore('register', () => {
         aadhaarNumber: normalizeAadhaar(formData.aadhaarNumber),
         address: formData.address,
       });
-
       return response.data;
     } finally {
       loading.value = false;
+
     }
   };
 
@@ -265,6 +333,13 @@ export const useRegisterStore = defineStore('register', () => {
 
     return response.data;
   };
+
+  // ===================================
+  // INITIALIZATION
+  // ===================================
+
+  // Load persisted data on store creation
+  hydrateFormData();
 
   return {
     formData,

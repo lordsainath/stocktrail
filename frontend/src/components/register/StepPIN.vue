@@ -19,7 +19,7 @@ const registerStore = useRegisterStore();
   formData is already reactive
   no need for storeToRefs
 */
-const { formData, setPinCode } = registerStore;
+const { formData, setPinCode, resetRegisterForm } = registerStore;
 
 const loading = ref(false);
 
@@ -53,6 +53,7 @@ const handleFinish = handleSubmit(
       formData.pin = values.pin || '';
       formData.confirmPin = values.confirmPin || '';
       await setPinCode(values.pin);
+      resetRegisterForm();
 
       toast.success('PIN set successfully. Please login to continue.');
 

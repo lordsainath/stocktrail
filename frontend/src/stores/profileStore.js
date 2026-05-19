@@ -156,6 +156,10 @@ export const useProfileStore = defineStore('profile', () => {
    |--------------------------------------------------------------------------
    */
   const fetchCurrentProfile = async () => {
+    if (!userStore.token) {
+      return null;
+    }
+
     try {
       loadingProfile.value = true;
 
@@ -167,6 +171,10 @@ export const useProfileStore = defineStore('profile', () => {
 
       return response.data;
     } catch (error) {
+      if (error?.response?.status === 401 && !userStore.token) {
+        return null;
+      }
+
       toast.error(error?.response?.data?.message || 'Failed to fetch profile');
     } finally {
       loadingProfile.value = false;
